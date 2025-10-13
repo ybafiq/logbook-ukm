@@ -31,6 +31,12 @@ Route::middleware('auth')->group(function () {
     Route::get('profile', [App\Http\Controllers\UserController::class, 'profile'])->name('users.profile');
     Route::put('profile', [App\Http\Controllers\UserController::class, 'updateProfile'])->name('users.updateProfile');
     
+    // Student-only PDF export routes
+    Route::middleware('role:student')->group(function () {
+        Route::get('export', [App\Http\Controllers\UserController::class, 'showExportForm'])->name('users.showExport');
+        Route::get('export/logbook', [App\Http\Controllers\UserController::class, 'exportLogbook'])->name('users.exportLogbook');
+    });
+    
     // Admin-only user management routes
     Route::middleware('role:admin')->group(function () {
         Route::get('users/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');

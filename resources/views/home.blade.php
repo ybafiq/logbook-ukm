@@ -68,6 +68,9 @@
                                         <a href="{{ route('log-entries.create') }}" class="btn btn-outline-primary">{{ __('Add Log Entry') }}</a>
                                         <a href="{{ route('project-entries.create') }}" class="btn btn-outline-success">{{ __('Add Project Entry') }}</a>
                                         <a href="{{ route('reflections.create') }}" class="btn btn-outline-info">{{ __('Add Weekly Reflection') }}</a>
+                                        @if(auth()->user()->isStudent())
+                                            <a href="{{ route('users.showExport') }}" class="btn btn-outline-danger">{{ __('Export PDF') }}</a>
+                                        @endif
                                         <a href="{{ route('users.profile') }}" class="btn btn-outline-secondary">{{ __('Edit Profile') }}</a>
                                     </div>
                                 </div>

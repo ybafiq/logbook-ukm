@@ -5,7 +5,14 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('My Profile') }}</div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>{{ __('My Profile') }}</span>
+                    @if(auth()->user()->isStudent())
+                        <a href="{{ route('users.showExport') }}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-file-pdf"></i> {{ __('Export Logbook') }}
+                        </a>
+                    @endif
+                </div>
 
                 <div class="card-body">
                     @if(session('success'))

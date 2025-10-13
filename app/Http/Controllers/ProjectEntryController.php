@@ -44,6 +44,19 @@ class ProjectEntryController extends Controller
             'comment' => 'nullable|string',
         ]);
         
+        // Check daily limit for students
+        if (auth()->user()->isStudent()) {
+            $existingEntry = ProjectEntry::where('user_id', auth()->id())
+                                       ->whereDate('date', $data['date'])
+                                       ->first();
+            
+            if ($existingEntry) {
+                return redirect()->back()
+                                 ->withInput()
+                                 ->withErrors(['date' => 'You can only create one project entry per day. You already have an entry for ' . $data['date'] . '.']);
+            }
+        }
+        
         $data['user_id'] = auth()->id();
         ProjectEntry::create($data);
     
@@ -81,6 +94,20 @@ class ProjectEntryController extends Controller
             'activity' => 'required|string',
             'comment' => 'nullable|string',
         ]);
+        
+        // Check daily limit for students when changing date
+        if (auth()->user()->isStudent() && $projectEntry->date->format('Y-m-d') !== $data['date']) {
+            $existingEntry = ProjectEntry::where('user_id', auth()->id())
+                                       ->whereDate('date', $data['date'])
+                                       ->where('id', '!=', $projectEntry->id)
+                                       ->first();
+            
+            if ($existingEntry) {
+                return redirect()->back()
+                                 ->withInput()
+                                 ->withErrors(['date' => 'You can only have one project entry per day. You already have an entry for ' . $data['date'] . '.']);
+            }
+        }
         
         $projectEntry->update($data);
         

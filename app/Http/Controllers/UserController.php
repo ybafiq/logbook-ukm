@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use PDF;
 
 class UserController extends Controller
 {
@@ -174,5 +175,91 @@ class UserController extends Controller
         
         return redirect()->route('users.trashed')
                          ->with('success', 'User permanently deleted.');
+    }
+    
+    /**
+     * Export student logbook to PDF
+     */
+    public function exportLogbook(Request $request)
+    {
+        $user = auth()->user();
+        
+        // Only students can export their own logbook
+        if (!$user->isStudent()) {
+            abort(403, 'Only students can export their logbook.');
+        }
+        
+        // Get date range from request or default to all entries
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+        
+        // Get log entries with optional date filtering
+        $logEntriesQuery = $user->logEntries()->orderBy('date', 'desc');
+        if ($startDate) {
+            $logEntriesQuery->whereDate('date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $logEntriesQuery->whereDate('date', '<=', $endDate);
+        }
+        $logEntries = $logEntriesQuery->get();
+        
+        // Get project entries with optional date filtering
+        $projectEntriesQuery = $user->projectEntries()->orderBy('date', 'desc');
+        if ($startDate) {
+            $projectEntriesQuery->whereDate('date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $projectEntriesQuery->whereDate('date', '<=', $endDate);
+        }
+        $projectEntries = $projectEntriesQuery->get();
+        
+        // Get weekly reflections with optional date filtering
+        $reflectionsQuery = $user->weeklyReflections()->orderBy('week_start', 'desc');
+        if ($startDate) {
+            $reflectionsQuery->whereDate('week_start', '>=', $startDate);
+        }
+        if ($endDate) {
+            $reflectionsQuery->whereDate('week_start', '<=', $endDate);
+        }
+        $weeklyReflections = $reflectionsQuery->get();
+        
+        // Prepare data for PDF
+        $data = [
+            'user' => $user,
+            'logEntries' => $logEntries,
+            'projectEntries' => $projectEntries,
+            'weeklyReflections' => $weeklyReflections,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'generatedAt' => now()->format('F d, Y g:i A')
+        ];
+        
+        // Generate PDF
+        $pdf = Pdf::loadView('exports.logbook', $data)
+                  ->setPaper('a4', 'portrait')
+                  ->setOptions([
+                      'isHtml5ParserEnabled' => true,
+                      'isPhpEnabled' => true,
+                      'defaultFont' => 'sans-serif'
+                  ]);
+        
+        $filename = 'logbook_' . $user->matric_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+        
+        return $pdf->download($filename);
+    }
+    
+    /**
+     * Show export form for student logbook
+     */
+    public function showExportForm()
+    {
+        $user = auth()->user();
+        
+        // Only students can export their own logbook
+        if (!$user->isStudent()) {
+            abort(403, 'Only students can export their logbook.');
+        }
+        
+        return view('users.export', compact('user'));
     }
 }

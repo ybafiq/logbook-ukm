@@ -62,6 +62,19 @@ class LogEntryController extends Controller
             'comment' => 'nullable|string',
         ]);
         
+        // Check daily limit for students
+        if (auth()->user()->isStudent()) {
+            $existingEntry = LogEntry::where('user_id', auth()->id())
+                                   ->whereDate('date', $data['date'])
+                                   ->first();
+            
+            if ($existingEntry) {
+                return redirect()->back()
+                                 ->withInput()
+                                 ->withErrors(['date' => 'You can only create one log entry per day. You already have an entry for ' . $data['date'] . '.']);
+            }
+        }
+        
         $data['user_id'] = auth()->id();
         LogEntry::create($data);
     
@@ -98,6 +111,20 @@ class LogEntryController extends Controller
             'activity' => 'required|string',
             'comment' => 'nullable|string',
         ]);
+        
+        // Check daily limit for students when changing date
+        if (auth()->user()->isStudent() && $logEntry->date->format('Y-m-d') !== $data['date']) {
+            $existingEntry = LogEntry::where('user_id', auth()->id())
+                                   ->whereDate('date', $data['date'])
+                                   ->where('id', '!=', $logEntry->id)
+                                   ->first();
+            
+            if ($existingEntry) {
+                return redirect()->back()
+                                 ->withInput()
+                                 ->withErrors(['date' => 'You can only have one log entry per day. You already have an entry for ' . $data['date'] . '.']);
+            }
+        }
         
         $logEntry->update($data);
         
