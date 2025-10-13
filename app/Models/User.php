@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'workplace',
+        'role',
     ];
 
     /**
@@ -60,6 +61,11 @@ class User extends Authenticatable
     
         return $this->hasMany(WeeklyReflection::class);
     
+    }
+    
+    public function projectEntries()
+    {
+        return $this->hasMany(ProjectEntry::class);
     }
 
     public function isSupervisor() { return $this->role === 'supervisor'; }

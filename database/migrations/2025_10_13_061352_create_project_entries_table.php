@@ -11,12 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log-entries', function (Blueprint $table) {
+        Schema::create('project_entries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // student
+            $table->string('project_title'); // Title of the project
             $table->date('date');
-            $table->text('activity');
-            $table->text('comment')->nullable();
+            $table->text('description'); // Project description/what was done
+            $table->text('objectives')->nullable(); // Project objectives
+            $table->text('outcomes')->nullable(); // Project outcomes/results
+            $table->text('challenges')->nullable(); // Challenges faced
+            $table->text('learning_points')->nullable(); // Key learning points
+            $table->text('comment')->nullable(); // Additional comments
             $table->boolean('supervisor_approved')->default(false);
             $table->foreignId('approved_by')->nullable()->constrained('users'); // supervisor
             $table->timestamp('approved_at')->nullable();
@@ -30,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log-entries');
+        Schema::dropIfExists('project_entries');
     }
 };

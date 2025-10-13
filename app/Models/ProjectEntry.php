@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LogEntry extends Model
+class ProjectEntry extends Model
 {
     use SoftDeletes, HasFactory;
 
@@ -19,7 +19,7 @@ class LogEntry extends Model
         'approved_by',
         'approved_at'
     ];
-
+    
     protected $casts = [
         'date' => 'date',
         'approved_at' => 'datetime',

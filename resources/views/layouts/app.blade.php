@@ -89,10 +89,48 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="{{ route('log-entries.create') }}">Log Entries</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Comments</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Weekly Reflection</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Personal Information</a></li>
+                        @auth
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                    {{ __('Log Entries') }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                    {{ __('Project Entries') }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="reflectionsDropdown" role="button" data-bs-toggle="dropdown">
+                                    {{ __('Weekly Reflections') }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('reflections.index') }}">{{ __('View All') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('reflections.create') }}">{{ __('Create New') }}</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a></li>
+                            @if(auth()->user()->isSupervisor())
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="supervisorDropdown" role="button" data-bs-toggle="dropdown">
+                                        {{ __('Supervisor') }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('supervisor.dashboard') }}">{{ __('Dashboard') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingEntries') }}">{{ __('Pending Entries') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingReflections') }}">{{ __('Pending Reflections') }}</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -111,6 +149,9 @@
                                     {{ Auth::user()->name }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('users.profile') }}">{{ __('My Profile') }}</a>
+                                    <a class="dropdown-item" href="{{ route('home') }}">{{ __('Dashboard') }}</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                        document.getElementById('logout-form').submit();">

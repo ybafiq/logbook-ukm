@@ -16,7 +16,11 @@ class LogEntryController extends Controller
      */
     public function index()
     {
-        //
+        $logEntries = LogEntry::where('user_id', auth()->id())
+                             ->orderBy('date', 'desc')
+                             ->paginate(10);
+        
+        return view('log-entries.index', compact('logEntries'));
     }
 
     /**
@@ -52,38 +56,70 @@ class LogEntryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'date' => 'required|date',
+            'activity' => 'required|string',
+            'comment' => 'nullable|string',
+        ]);
+        
+        $data['user_id'] = auth()->id();
+        LogEntry::create($data);
+    
+        return redirect()->route('log-entries.index')->with('success', 'Entry saved successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(LogEntry $logEntry)
     {
-        //
+        $this->authorize('view', $logEntry);
+        return view('log-entries.show', compact('logEntry'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(LogEntry $logEntry)
     {
-        //
+        $this->authorize('update', $logEntry);
+        return view('log-entries.edit', compact('logEntry'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, LogEntry $logEntry)
     {
-        //
+        $this->authorize('update', $logEntry);
+        
+        $data = $request->validate([
+            'date' => 'required|date',
+            'activity' => 'required|string',
+            'comment' => 'nullable|string',
+        ]);
+        
+        $logEntry->update($data);
+        
+        return redirect()->route('log-entries.index')
+                         ->with('success', 'Entry updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(LogEntry $logEntry)
     {
-        //
+        $this->authorize('delete', $logEntry);
+        return view('log-entries.delete', compact('logEntry'));
+    }
+    
+    public function destroy(LogEntry $logEntry)
+    {
+        $this->authorize('delete', $logEntry);
+        $logEntry->delete();
+        
+        return redirect()->route('log-entries.index')
+                         ->with('success', 'Entry deleted successfully.');
     }
 }

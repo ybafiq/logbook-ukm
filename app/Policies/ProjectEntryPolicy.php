@@ -2,26 +2,26 @@
 
 namespace App\Policies;
 
-use App\Models\LogEntry;
+use App\Models\ProjectEntry;
 use App\Models\User;
 
-class LogEntryPolicy
+class ProjectEntryPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return true; // Allow authenticated users to view log entries
+        return true; // Allow authenticated users to view project entries
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, LogEntry $logEntry): bool
+    public function view(User $user, ProjectEntry $projectEntry): bool
     {
         // Users can view their own entries, supervisors can view all
-        return $user->id === $logEntry->user_id || $user->isSupervisor();
+        return $user->id === $projectEntry->user_id || $user->isSupervisor();
     }
 
     /**
@@ -35,25 +35,25 @@ class LogEntryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, LogEntry $logEntry): bool
+    public function update(User $user, ProjectEntry $projectEntry): bool
     {
         // Users can update their own entries only if not approved
-        return $user->id === $logEntry->user_id && !$logEntry->supervisor_approved;
+        return $user->id === $projectEntry->user_id && !$projectEntry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, LogEntry $logEntry): bool
+    public function delete(User $user, ProjectEntry $projectEntry): bool
     {
         // Users can delete their own entries only if not approved
-        return $user->id === $logEntry->user_id && !$logEntry->supervisor_approved;
+        return $user->id === $projectEntry->user_id && !$projectEntry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can approve the model.
      */
-    public function approve(User $user, LogEntry $logEntry): bool
+    public function approve(User $user, ProjectEntry $projectEntry): bool
     {
         return $user->isSupervisor();
     }
@@ -61,7 +61,7 @@ class LogEntryPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, LogEntry $logEntry): bool
+    public function restore(User $user, ProjectEntry $projectEntry): bool
     {
         return $user->isSupervisor();
     }
@@ -69,9 +69,8 @@ class LogEntryPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, LogEntry $logEntry): bool
+    public function forceDelete(User $user, ProjectEntry $projectEntry): bool
     {
         return $user->isSupervisor();
     }
 }
-
