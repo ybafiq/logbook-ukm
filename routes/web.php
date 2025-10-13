@@ -24,10 +24,27 @@ Route::get('log-entries/{log_entry}/delete', [LogEntryController::class, 'delete
 Route::delete('log-entries/{log_entry}', [LogEntryController::class, 'destroy'])->name('log-entries.destroy');
 
 
-Route::get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-Route::get('users/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
-Route::get('profile', [App\Http\Controllers\UserController::class, 'profile'])->name('users.profile');
-Route::put('profile', [App\Http\Controllers\UserController::class, 'updateProfile'])->name('users.updateProfile');
+// User routes with role-based access
+Route::middleware('auth')->group(function () {
+    Route::get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+    Route::get('profile', [App\Http\Controllers\UserController::class, 'profile'])->name('users.profile');
+    Route::put('profile', [App\Http\Controllers\UserController::class, 'updateProfile'])->name('users.updateProfile');
+    
+    // Admin-only user management routes
+    Route::middleware('role:admin')->group(function () {
+        Route::get('users/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
+        Route::post('users', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+        Route::get('users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+        Route::put('users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
+        
+        // Soft delete management
+        Route::get('users/trashed', [App\Http\Controllers\UserController::class, 'trashed'])->name('users.trashed');
+        Route::post('users/{id}/restore', [App\Http\Controllers\UserController::class, 'restore'])->name('users.restore');
+        Route::delete('users/{id}/force', [App\Http\Controllers\UserController::class, 'forceDestroy'])->name('users.force-destroy');
+    });
+});
 
 
 Route::get('reflections', [WeeklyReflectionController::class, 'index'])->name('reflections.index');
@@ -50,13 +67,16 @@ Route::get('project-entries/{projectEntry}/delete', [App\Http\Controllers\Projec
 Route::delete('project-entries/{projectEntry}', [App\Http\Controllers\ProjectEntryController::class, 'destroy'])->name('project-entries.destroy');
 
 
-Route::get('supervisor/dashboard', [SupervisorController::class, 'dashboard'])->name('supervisor.dashboard');
-Route::get('supervisor/pending-entries', [SupervisorController::class, 'pendingEntries'])->name('supervisor.pendingEntries');
-Route::get('supervisor/pending-project-entries', [SupervisorController::class, 'pendingProjectEntries'])->name('supervisor.pendingProjectEntries');
-Route::get('supervisor/pending-reflections', [SupervisorController::class, 'pendingReflections'])->name('supervisor.pendingReflections');
-Route::post('supervisor/approve-entry/{entry}', [SupervisorController::class, 'approveEntry'])->name('supervisor.approveEntry');
-Route::post('supervisor/approve-project-entry/{projectEntry}', [SupervisorController::class, 'approveProjectEntry'])->name('supervisor.approveProjectEntry');
-Route::post('supervisor/sign-reflection/{reflection}', [SupervisorController::class, 'signReflection'])->name('supervisor.signReflection');
+// Supervisor routes
+Route::middleware(['auth', 'role:supervisor,admin'])->group(function () {
+    Route::get('supervisor/dashboard', [SupervisorController::class, 'dashboard'])->name('supervisor.dashboard');
+    Route::get('supervisor/pending-entries', [SupervisorController::class, 'pendingEntries'])->name('supervisor.pendingEntries');
+    Route::get('supervisor/pending-project-entries', [SupervisorController::class, 'pendingProjectEntries'])->name('supervisor.pendingProjectEntries');
+    Route::get('supervisor/pending-reflections', [SupervisorController::class, 'pendingReflections'])->name('supervisor.pendingReflections');
+    Route::post('supervisor/approve-entry/{entry}', [SupervisorController::class, 'approveEntry'])->name('supervisor.approveEntry');
+    Route::post('supervisor/approve-project-entry/{projectEntry}', [SupervisorController::class, 'approveProjectEntry'])->name('supervisor.approveProjectEntry');
+    Route::post('supervisor/sign-reflection/{reflection}', [SupervisorController::class, 'signReflection'])->name('supervisor.signReflection');
+});
 
 
 Route::get('students/{student}/export', [LogEntryController::class, 'exportLogbook'])->name('students.export');

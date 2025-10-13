@@ -5,7 +5,22 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __('Users Directory') }}</div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>
+                        {{ __('Users Directory') }}
+                        @if(auth()->user()->isAdmin())
+                            ({{ $users->total() }} {{ Str::plural('user', $users->total()) }})
+                        @endif
+                    </span>
+                    <div class="d-flex gap-2">
+                        @can('create', App\Models\User::class)
+                            <a href="{{ route('users.create') }}" class="btn btn-success btn-sm">{{ __('Add User') }}</a>
+                        @endcan
+                        @can('viewTrashed', App\Models\User::class)
+                            <a href="{{ route('users.trashed') }}" class="btn btn-secondary btn-sm">{{ __('Deleted Users') }}</a>
+                        @endcan
+                    </div>
+                </div>
 
                 <div class="card-body">
                     @if($users->count() > 0)
@@ -41,7 +56,24 @@
                                         <td>{{ $user->log_entries_count }}</td>
                                         <td>{{ $user->project_entries_count }}</td>
                                         <td>
-                                            <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                            <div class="d-flex gap-1">
+                                                @can('view', $user)
+                                                    <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                                @endcan
+                                                @can('update', $user)
+                                                    <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
+                                                @endcan
+                                                @can('delete', $user)
+                                                    <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                                                onclick="return confirm('{{ __('Are you sure you want to delete this user?') }}')">
+                                                            {{ __('Delete') }}
+                                                        </button>
+                                                    </form>
+                                                @endcan
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
