@@ -18,44 +18,50 @@
                     @endif
                     
                     @if($projectEntries->count() > 0)
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Date') }}</th>
-                                    <th>{{ __('Activity') }}</th>
-                                    <th>{{ __('Comment') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Approved By') }}</th>
-                                    <th>{{ __('Actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($projectEntries as $projectEntry)
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead class="table-light">
                                     <tr>
-                                        <td>{{ $projectEntry->date->format('M d, Y') }}</td>
-                                        <td>{{ Str::limit($projectEntry->activity, 80) }}</td>
-                                        <td>{{ Str::limit($projectEntry->comment, 30) ?: 'N/A' }}</td>
-                                        <td>
-                                            @if($projectEntry->supervisor_approved)
-                                                <span class="badge bg-success">Approved</span>
-                                            @else
-                                                <span class="badge bg-warning">Pending</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $projectEntry->approver->name ?? 'N/A' }}</td>
-                                        <td>
-                                            <a href="{{ route('project-entries.show', $projectEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
-                                            @if(!$projectEntry->supervisor_approved)
-                                                <a href="{{ route('project-entries.edit', $projectEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
-                                                <a href="{{ route('project-entries.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
-                                            @endif
-                                        </td>
+                                        <th>{{ __('Date') }}</th>
+                                        <th>{{ __('Activity') }}</th>
+                                        <th>{{ __('Comment') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                        <th>{{ __('Approved By') }}</th>
+                                        <th>{{ __('Actions') }}</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($projectEntries as $projectEntry)
+                                        <tr>
+                                            <td>{{ $projectEntry->date->format('M d, Y') }}</td>
+                                            <td>{{ Str::limit($projectEntry->activity, 80) }}</td>
+                                            <td>{{ Str::limit($projectEntry->comment, 30) ?: 'N/A' }}</td>
+                                            <td>
+                                                @if($projectEntry->supervisor_approved)
+                                                    <span class="badge bg-success">Approved</span>
+                                                @else
+                                                    <span class="badge bg-warning">Pending</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $projectEntry->approver->name ?? 'N/A' }}</td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ route('project-entries.show', $projectEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                                    @if(!$projectEntry->supervisor_approved)
+                                                        <a href="{{ route('project-entries.edit', $projectEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
+                                                        <a href="{{ route('project-entries.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         
-                        {{ $projectEntries->links() }}
+                        <div class="mt-4">
+                            {{ $projectEntries->links() }}
+                        </div>
                     @else
                         <div class="text-center py-4">
                             <p>{{ __('No project entries found.') }}</p>

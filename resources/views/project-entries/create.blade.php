@@ -21,23 +21,23 @@
                             </div>
                         @endif
                         
-                        <div class="form-group mb-3">
-                            <label for="date">{{ __('Date') }}</label>
-                            <input type="date" name="date" class="form-control" 
+                        <div class="mb-3">
+                            <label for="date" class="form-label">{{ __('Date') }}</label>
+                            <input type="date" name="date" id="date" class="form-control" 
                                    value="{{ old('date', now()->format('Y-m-d')) }}" required>
                         </div>
                         
-                        <div class="form-group mb-3">
-                            <label for="activity">{{ __('Activity') }}</label>
-                            <textarea name="activity" class="form-control" rows="4" required>{{ old('activity') }}</textarea>
+                        <div class="mb-3">
+                            <label for="activity" class="form-label">{{ __('Activity') }}</label>
+                            <textarea name="activity" id="activity" class="form-control" rows="4" required>{{ old('activity') }}</textarea>
                         </div>
                         
-                        <div class="form-group mb-3">
-                            <label for="comment">{{ __('Comment (Optional)') }}</label>
-                            <textarea name="comment" class="form-control" rows="3">{{ old('comment') }}</textarea>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">{{ __('Comment (Optional)') }}</label>
+                            <textarea name="comment" id="comment" class="form-control" rows="3">{{ old('comment') }}</textarea>
                         </div>
                         
-                        <div class="form-group mb-3">
+                        <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">{{ __('Save Project Entry') }}</button>
                             <a href="{{ route('project-entries.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
                         </div>

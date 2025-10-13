@@ -18,48 +18,54 @@
                     @endif
                     
                     @if($logEntries->count() > 0)
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Date') }}</th>
-                                    <th>{{ __('Activity') }}</th>
-                                    <th>{{ __('Comment') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Approved By') }}</th>
-                                    <th>{{ __('Actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($logEntries as $logEntry)
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead class="table-light">
                                     <tr>
-                                        <td>{{ $logEntry->date->format('M d, Y') }}</td>
-                                        <td>{{ Str::limit($logEntry->activity, 50) }}</td>
-                                        <td>{{ Str::limit($logEntry->comment, 30) ?: 'N/A' }}</td>
-                                        <td>
-                                            @if($logEntry->supervisor_approved)
-                                                <span class="badge bg-success">Approved</span>
-                                            @else
-                                                <span class="badge bg-warning">Pending</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $logEntry->approver->name ?? 'N/A' }}</td>
-                                        <td>
-                                            @can('view', $logEntry)
-                                                <a href="{{ route('log-entries.show', $logEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
-                                            @endcan
-                                            @can('update', $logEntry)
-                                                <a href="{{ route('log-entries.edit', $logEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
-                                            @endcan
-                                            @can('delete', $logEntry)
-                                                <a href="{{ route('log-entries.delete', $logEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
-                                            @endcan
-                                        </td>
+                                        <th>{{ __('Date') }}</th>
+                                        <th>{{ __('Activity') }}</th>
+                                        <th>{{ __('Comment') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                        <th>{{ __('Approved By') }}</th>
+                                        <th>{{ __('Actions') }}</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($logEntries as $logEntry)
+                                        <tr>
+                                            <td>{{ $logEntry->date->format('M d, Y') }}</td>
+                                            <td>{{ Str::limit($logEntry->activity, 50) }}</td>
+                                            <td>{{ Str::limit($logEntry->comment, 30) ?: 'N/A' }}</td>
+                                            <td>
+                                                @if($logEntry->supervisor_approved)
+                                                    <span class="badge bg-success">Approved</span>
+                                                @else
+                                                    <span class="badge bg-warning">Pending</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $logEntry->approver->name ?? 'N/A' }}</td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    @can('view', $logEntry)
+                                                        <a href="{{ route('log-entries.show', $logEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                                    @endcan
+                                                    @can('update', $logEntry)
+                                                        <a href="{{ route('log-entries.edit', $logEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
+                                                    @endcan
+                                                    @can('delete', $logEntry)
+                                                        <a href="{{ route('log-entries.delete', $logEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                                                    @endcan
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         
-                        {{ $logEntries->links() }}
+                        <div class="mt-4">
+                            {{ $logEntries->links() }}
+                        </div>
                     @else
                         <div class="text-center py-4">
                             <p>{{ __('No log entries found.') }}</p>

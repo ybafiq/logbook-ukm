@@ -105,6 +105,20 @@ class SupervisorController extends Controller
         return view('supervisor.pending-entries', compact('entries'));
     }
     
+    public function pendingProjectEntries()
+    {
+        if (!auth()->user()->isSupervisor()) {
+            abort(403, 'Access denied. Supervisor role required.');
+        }
+        
+        $projectEntries = ProjectEntry::where('supervisor_approved', false)
+                                    ->with('student')
+                                    ->orderBy('date', 'desc')
+                                    ->paginate(15);
+        
+        return view('supervisor.pending-project-entries', compact('projectEntries'));
+    }
+    
     public function pendingReflections()
     {
         if (!auth()->user()->isSupervisor()) {

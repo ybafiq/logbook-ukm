@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>{{ __('Log Entry Details') }}</span>
-                    <div>
+                    <div class="d-flex gap-1">
                         @can('update', $logEntry)
                             <a href="{{ route('log-entries.edit', $logEntry) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
                         @endcan

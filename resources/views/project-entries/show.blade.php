@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>{{ __('Project Entry Details') }}</span>
-                    <div>
+                    <div class="d-flex gap-1">
                         @if(!$projectEntry->supervisor_approved)
                             <a href="{{ route('project-entries.edit', $projectEntry) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
                             <a href="{{ route('project-entries.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>

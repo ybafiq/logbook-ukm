@@ -52,6 +52,7 @@ Route::delete('project-entries/{projectEntry}', [App\Http\Controllers\ProjectEnt
 
 Route::get('supervisor/dashboard', [SupervisorController::class, 'dashboard'])->name('supervisor.dashboard');
 Route::get('supervisor/pending-entries', [SupervisorController::class, 'pendingEntries'])->name('supervisor.pendingEntries');
+Route::get('supervisor/pending-project-entries', [SupervisorController::class, 'pendingProjectEntries'])->name('supervisor.pendingProjectEntries');
 Route::get('supervisor/pending-reflections', [SupervisorController::class, 'pendingReflections'])->name('supervisor.pendingReflections');
 Route::post('supervisor/approve-entry/{entry}', [SupervisorController::class, 'approveEntry'])->name('supervisor.approveEntry');
 Route::post('supervisor/approve-project-entry/{projectEntry}', [SupervisorController::class, 'approveProjectEntry'])->name('supervisor.approveProjectEntry');
