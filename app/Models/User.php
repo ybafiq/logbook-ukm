@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'matric_no',
         'email',
         'password',
+        'workplace',
     ];
 
     /**
@@ -45,4 +47,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function logEntries()
+    {
+
+        return $this->hasMany(LogEntry::class);
+    
+    }
+
+    public function weeklyReflections()
+    {
+    
+        return $this->hasMany(WeeklyReflection::class);
+    
+    }
+
+    public function isSupervisor() { return $this->role === 'supervisor'; }
+    public function isStudent() { return $this->role === 'student'; }
+    public function isAdmin() { return $this->role === 'admin'; }
+
+
 }
