@@ -26,6 +26,7 @@
                                         <th>{{ __('Activity') }}</th>
                                         <th>{{ __('Comment') }}</th>
                                         <th>{{ __('Status') }}</th>
+                                        <th>{{ __('Reflection') }}</th>
                                         <th>{{ __('Approved By') }}</th>
                                         <th>{{ __('Actions') }}</th>
                                     </tr>
@@ -34,13 +35,24 @@
                                     @foreach ($projectEntries as $projectEntry)
                                         <tr>
                                             <td>{{ $projectEntry->date->format('M d, Y') }}</td>
-                                            <td>{{ Str::limit($projectEntry->activity, 80) }}</td>
-                                            <td>{{ Str::limit($projectEntry->comment, 30) ?: 'N/A' }}</td>
+                                            <td>{{ Str::limit($projectEntry->activity, 60) }}</td>
+                                            <td>{{ Str::limit($projectEntry->comment, 40) ?: 'N/A' }}</td>
                                             <td>
                                                 @if($projectEntry->supervisor_approved)
                                                     <span class="badge bg-success">Approved</span>
                                                 @else
                                                     <span class="badge bg-warning">Pending</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($projectEntry->weekly_reflection_content)
+                                                    @if($projectEntry->reflection_supervisor_signed)
+                                                        <span class="badge bg-success" title="Reflection signed">✓ Signed</span>
+                                                    @else
+                                                        <span class="badge bg-info" title="Reflection present but not signed">📝 Present</span>
+                                                    @endif
+                                                @else
+                                                    <span class="text-muted">N/A</span>
                                                 @endif
                                             </td>
                                             <td>{{ $projectEntry->approver->name ?? 'N/A' }}</td>

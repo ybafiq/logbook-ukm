@@ -90,34 +90,50 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @auth
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                    {{ __('Log Entries') }}
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                    {{ __('Project Entries') }}
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="reflectionsDropdown" role="button" data-bs-toggle="dropdown">
-                                    {{ __('Weekly Reflections') }}
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('reflections.index') }}">{{ __('View All') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('reflections.create') }}">{{ __('Create New') }}</a></li>
-                                </ul>
-                            </li>
+                            @if(auth()->user()->isStudent())
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                        {{ __('Log Entries') }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                        {{ __('Project Entries') }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+                            
+                            @if(auth()->user()->isAdmin())
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                        {{ __('Log Entries') }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                        {{ __('Project Entries') }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+                            
                             <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a></li>
+                            
                             @if(auth()->user()->isSupervisor())
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="supervisorDropdown" role="button" data-bs-toggle="dropdown">
@@ -125,8 +141,8 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('supervisor.dashboard') }}">{{ __('Dashboard') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingEntries') }}">{{ __('Pending Entries') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingReflections') }}">{{ __('Pending Reflections') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingEntries') }}">{{ __('Pending Log Entries') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingProjectEntries') }}">{{ __('Pending Project Entries') }}</a></li>
                                     </ul>
                                 </li>
                             @endif

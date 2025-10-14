@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'workplace',
         'role',
+        'profile_picture',
     ];
 
     /**
@@ -57,12 +58,6 @@ class User extends Authenticatable
     
     }
 
-    public function weeklyReflections()
-    {
-    
-        return $this->hasMany(WeeklyReflection::class);
-    
-    }
     
     public function projectEntries()
     {
@@ -72,6 +67,22 @@ class User extends Authenticatable
     public function isSupervisor() { return $this->role === 'supervisor'; }
     public function isStudent() { return $this->role === 'student'; }
     public function isAdmin() { return $this->role === 'admin'; }
+    
+    public function getProfilePictureUrl()
+    {
+        if ($this->profile_picture && file_exists(public_path('storage/' . $this->profile_picture))) {
+            return asset('storage/' . $this->profile_picture);
+        }
+        
+        // Return default avatar based on role
+        $defaultAvatars = [
+            'admin' => 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=dc3545&color=ffffff&size=120',
+            'supervisor' => 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0d6efd&color=ffffff&size=120',
+            'student' => 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=198754&color=ffffff&size=120',
+        ];
+        
+        return $defaultAvatars[$this->role] ?? $defaultAvatars['student'];
+    }
 
 
 }

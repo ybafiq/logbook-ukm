@@ -60,6 +60,8 @@ class LogEntryController extends Controller
             'date' => 'required|date',
             'activity' => 'required|string',
             'comment' => 'nullable|string',
+            'weekly_reflection_content' => 'nullable|string',
+            'reflection_week_start' => 'nullable|date',
         ]);
         
         // Check daily limit for students
@@ -110,6 +112,8 @@ class LogEntryController extends Controller
             'date' => 'required|date',
             'activity' => 'required|string',
             'comment' => 'nullable|string',
+            'weekly_reflection_content' => 'nullable|string',
+            'reflection_week_start' => 'nullable|date',
         ]);
         
         // Check daily limit for students when changing date

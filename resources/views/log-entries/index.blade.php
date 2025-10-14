@@ -26,6 +26,7 @@
                                         <th>{{ __('Activity') }}</th>
                                         <th>{{ __('Comment') }}</th>
                                         <th>{{ __('Status') }}</th>
+                                        <th>{{ __('Reflection') }}</th>
                                         <th>{{ __('Approved By') }}</th>
                                         <th>{{ __('Actions') }}</th>
                                     </tr>
@@ -41,6 +42,17 @@
                                                     <span class="badge bg-success">Approved</span>
                                                 @else
                                                     <span class="badge bg-warning">Pending</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($logEntry->weekly_reflection_content)
+                                                    @if($logEntry->reflection_supervisor_signed)
+                                                        <span class="badge bg-success" title="Reflection signed">✓ Signed</span>
+                                                    @else
+                                                        <span class="badge bg-info" title="Reflection present but not signed">📝 Present</span>
+                                                    @endif
+                                                @else
+                                                    <span class="text-muted">N/A</span>
                                                 @endif
                                             </td>
                                             <td>{{ $logEntry->approver->name ?? 'N/A' }}</td>

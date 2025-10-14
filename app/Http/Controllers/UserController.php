@@ -63,7 +63,22 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'matric_no' => 'required|string|unique:users,matric_no,' . $user->id,
             'workplace' => 'nullable|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            // Delete old profile picture if exists
+            if ($user->profile_picture && file_exists(public_path('storage/' . $user->profile_picture))) {
+                unlink(public_path('storage/' . $user->profile_picture));
+            }
+            
+            // Store new profile picture
+            $profilePicture = $request->file('profile_picture');
+            $filename = 'profile_' . $user->id . '_' . time() . '.' . $profilePicture->getClientOriginalExtension();
+            $path = $profilePicture->storeAs('profile_pictures', $filename, 'public');
+            $data['profile_picture'] = $path;
+        }
         
         $user->update($data);
         
@@ -189,39 +204,55 @@ class UserController extends Controller
             abort(403, 'Only students can export their logbook.');
         }
         
-        // Get date range from request or default to all entries
+        // Get filters from request
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
+        $entryType = $request->get('entry_type', 'all'); // Default to 'all'
         
-        // Get log entries with optional date filtering
-        $logEntriesQuery = $user->logEntries()->orderBy('date', 'desc');
-        if ($startDate) {
-            $logEntriesQuery->whereDate('date', '>=', $startDate);
-        }
-        if ($endDate) {
-            $logEntriesQuery->whereDate('date', '<=', $endDate);
-        }
-        $logEntries = $logEntriesQuery->get();
+        // Initialize collections
+        $logEntries = collect();
+        $projectEntries = collect();
         
-        // Get project entries with optional date filtering
-        $projectEntriesQuery = $user->projectEntries()->orderBy('date', 'desc');
-        if ($startDate) {
-            $projectEntriesQuery->whereDate('date', '>=', $startDate);
+        // Get log entries based on filter
+        if ($entryType === 'all' || $entryType === 'log') {
+            $logEntriesQuery = $user->logEntries()->orderBy('date', 'desc');
+            if ($startDate) {
+                $logEntriesQuery->whereDate('date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $logEntriesQuery->whereDate('date', '<=', $endDate);
+            }
+            $logEntries = $logEntriesQuery->get();
         }
-        if ($endDate) {
-            $projectEntriesQuery->whereDate('date', '<=', $endDate);
-        }
-        $projectEntries = $projectEntriesQuery->get();
         
-        // Get weekly reflections with optional date filtering
-        $reflectionsQuery = $user->weeklyReflections()->orderBy('week_start', 'desc');
-        if ($startDate) {
-            $reflectionsQuery->whereDate('week_start', '>=', $startDate);
+        // Get project entries based on filter
+        if ($entryType === 'all' || $entryType === 'project') {
+            $projectEntriesQuery = $user->projectEntries()->orderBy('date', 'desc');
+            if ($startDate) {
+                $projectEntriesQuery->whereDate('date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $projectEntriesQuery->whereDate('date', '<=', $endDate);
+            }
+            $projectEntries = $projectEntriesQuery->get();
         }
-        if ($endDate) {
-            $reflectionsQuery->whereDate('week_start', '<=', $endDate);
+        
+        // Weekly reflections are now integrated into log and project entries
+        $weeklyReflections = collect(); // Empty collection for backward compatibility
+        
+        // Generate filename based on filter type
+        $typeLabel = '';
+        switch ($entryType) {
+            case 'log':
+                $typeLabel = '_log-entries';
+                break;
+            case 'project':
+                $typeLabel = '_project-entries';
+                break;
+            default:
+                $typeLabel = '_all-entries';
+                break;
         }
-        $weeklyReflections = $reflectionsQuery->get();
         
         // Prepare data for PDF
         $data = [
@@ -231,6 +262,7 @@ class UserController extends Controller
             'weeklyReflections' => $weeklyReflections,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'entryType' => $entryType,
             'generatedAt' => now()->format('F d, Y g:i A')
         ];
         
@@ -243,7 +275,7 @@ class UserController extends Controller
                       'defaultFont' => 'sans-serif'
                   ]);
         
-        $filename = 'logbook_' . $user->matric_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+        $filename = 'logbook_' . $user->matric_no . $typeLabel . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
         
         return $pdf->download($filename);
     }

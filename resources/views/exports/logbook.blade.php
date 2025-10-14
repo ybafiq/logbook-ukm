@@ -2,254 +2,307 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Logbook Export - {{ $user->name }}</title>
+    <title>Student Logbook - {{ $user->name }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-family: 'Times New Roman', serif;
+            font-size: 11px;
             line-height: 1.4;
-            color: #333;
+            color: #000;
+            margin: 0;
+            padding: 20px;
         }
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #333;
-        }
-        .header h1 {
-            margin: 0;
-            color: #2c3e50;
-            font-size: 24px;
-        }
-        .header h2 {
-            margin: 5px 0;
-            color: #7f8c8d;
-            font-size: 16px;
-            font-weight: normal;
-        }
-        .student-info {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .student-info table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .student-info td {
-            padding: 5px;
-            border: none;
-        }
-        .student-info .label {
-            font-weight: bold;
-            width: 120px;
-        }
-        .section {
             margin-bottom: 25px;
         }
-        .section h3 {
-            color: #2c3e50;
-            font-size: 16px;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #bdc3c7;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
+        .header h1 {
+            font-size: 12px;
             font-weight: bold;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .header h2 {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 5px 0;
+            line-height: 1.2;
+        }
+        .header p {
+            font-size: 10px;
+            margin: 5px 0;
+            line-height: 1.2;
+            font-style: italic;
+        }
+        .student-info {
+            margin-bottom: 20px;
             font-size: 11px;
         }
-        td {
-            font-size: 10px;
+        .student-info .row {
+            margin-bottom: 8px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+        }
+        .logbook-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .logbook-table th {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11px;
+            background-color: #f0f0f0;
+        }
+        .logbook-table td {
+            border: 1px solid #000;
+            padding: 8px;
             vertical-align: top;
+            font-size: 11px;
+            height: 30px;
         }
-        .date-col { width: 80px; }
-        .status-col { width: 70px; }
-        .approved-col { width: 90px; }
-        .activity-col { width: auto; }
-        .comment-col { width: 120px; }
-        .status-approved {
-            color: #27ae60;
+        .date-col { width: 15%; text-align: center; }
+        .activity-col { width: 45%; }
+        .comment-col { width: 40%; }
+        .reflection-section {
+            border: 1px solid #000;
+            margin-bottom: 20px;
+        }
+        .reflection-header {
+            background-color: #f0f0f0;
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-bottom: 1px solid #000;
+        }
+        .reflection-content {
+            padding: 15px;
+            min-height: 100px;
+        }
+        .supervisor-section {
+            border: 1px solid #000;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+        .supervisor-header {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .signature-space {
+            height: 80px;
+            margin-bottom: 15px;
+        }
+        .footer-fields {
+            display: flex;
+            justify-content: space-between;
+        }
+        .footer-field {
+            width: 48%;
+        }
+        .footer-field strong {
             font-weight: bold;
         }
-        .status-pending {
-            color: #e67e22;
+        .footer-field .underline {
+            border-bottom: 1px solid #000;
+            margin-top: 5px;
+            height: 20px;
+        }
+        .footer-text {
             font-weight: bold;
-        }
-        .status-signed {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        .no-entries {
-            text-align: center;
-            color: #7f8c8d;
-            font-style: italic;
-            padding: 20px;
-        }
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 10px;
-            color: #7f8c8d;
-            border-top: 1px solid #bdc3c7;
-            padding-top: 10px;
-        }
-        .break-page {
-            page-break-before: always;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>LOGBOOK REPORT</h1>
-        <h2>{{ $user->name }} - {{ $user->matric_no }}</h2>
-        @if($startDate || $endDate)
-            <p>
-                Period: 
-                @if($startDate && $endDate)
-                    {{ \Carbon\Carbon::parse($startDate)->format('F d, Y') }} to {{ \Carbon\Carbon::parse($endDate)->format('F d, Y') }}
-                @elseif($startDate)
-                    From {{ \Carbon\Carbon::parse($startDate)->format('F d, Y') }}
-                @elseif($endDate)
-                    Until {{ \Carbon\Carbon::parse($endDate)->format('F d, Y') }}
-                @endif
+        <h1>STBC4866 Latihan Tempat Kerja Bioinformatik</h1>
+        <h2>Templat Buku Log / Student's Logbook Template{{ $entryTypeLabel ?? '' }}</h2>
+        <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+        @if(isset($startDate) || isset($endDate))
+            <p style="font-size: 10px; margin-top: 5px; color: #666;">
+                <strong>Date Range:</strong> 
+                {{ $startDate ? date('d/m/Y', strtotime($startDate)) : 'All dates' }} - 
+                {{ $endDate ? date('d/m/Y', strtotime($endDate)) : 'Present' }}
             </p>
-        @else
-            <p>Complete Logbook</p>
         @endif
     </div>
 
     <div class="student-info">
-        <table>
-            <tr>
-                <td class="label">Student Name:</td>
-                <td>{{ $user->name }}</td>
-                <td class="label">Matric No:</td>
-                <td>{{ $user->matric_no }}</td>
-            </tr>
-            <tr>
-                <td class="label">Email:</td>
-                <td>{{ $user->email }}</td>
-                <td class="label">Workplace:</td>
-                <td>{{ $user->workplace ?: 'N/A' }}</td>
-            </tr>
-            <tr>
-                <td class="label">Generated At:</td>
-                <td colspan="3">{{ $generatedAt }}</td>
-            </tr>
-        </table>
+        <div class="row">
+            Nama Pelajar/Name of Student: {{ $user->name }}
+        </div>
+        <div class="row">
+            No. Pendaftaran/Matric No.: {{ $user->matric_no }}
+        </div>
+        <div class="row">
+            Tempat kerja/Working place: {{ $user->workplace ?: '' }}
+        </div>
     </div>
 
-    <!-- Log Entries Section -->
-    <div class="section">
-        <h3>Log Entries ({{ $logEntries->count() }} entries)</h3>
-        @if($logEntries->count() > 0)
-            <table>
-                <thead>
-                    <tr>
-                        <th class="date-col">Date</th>
-                        <th class="activity-col">Activity</th>
-                        <th class="comment-col">Comment</th>
-                        <th class="status-col">Status</th>
-                        <th class="approved-col">Approved By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($logEntries as $entry)
-                    <tr>
-                        <td>{{ $entry->date->format('M d, Y') }}</td>
-                        <td>{{ $entry->activity }}</td>
-                        <td>{{ $entry->comment ?: 'N/A' }}</td>
-                        <td class="{{ $entry->supervisor_approved ? 'status-approved' : 'status-pending' }}">
-                            {{ $entry->supervisor_approved ? 'Approved' : 'Pending' }}
-                        </td>
-                        <td>{{ $entry->approver->name ?? 'N/A' }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @else
-            <div class="no-entries">No log entries found for the selected period.</div>
-        @endif
-    </div>
-
-    <!-- Project Entries Section -->
-    <div class="section">
-        <h3>Project Entries ({{ $projectEntries->count() }} entries)</h3>
-        @if($projectEntries->count() > 0)
-            <table>
-                <thead>
-                    <tr>
-                        <th class="date-col">Date</th>
-                        <th class="activity-col">Activity</th>
-                        <th class="comment-col">Comment</th>
-                        <th class="status-col">Status</th>
-                        <th class="approved-col">Approved By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($projectEntries as $entry)
-                    <tr>
-                        <td>{{ $entry->date->format('M d, Y') }}</td>
-                        <td>{{ $entry->activity }}</td>
-                        <td>{{ $entry->comment ?: 'N/A' }}</td>
-                        <td class="{{ $entry->supervisor_approved ? 'status-approved' : 'status-pending' }}">
-                            {{ $entry->supervisor_approved ? 'Approved' : 'Pending' }}
-                        </td>
-                        <td>{{ $entry->approver->name ?? 'N/A' }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @else
-            <div class="no-entries">No project entries found for the selected period.</div>
-        @endif
-    </div>
-
-    <!-- Weekly Reflections Section -->
-    @if($weeklyReflections->count() > 0)
-    <div class="section break-page">
-        <h3>Weekly Reflections ({{ $weeklyReflections->count() }} reflections)</h3>
-        @foreach($weeklyReflections as $reflection)
-        <div style="margin-bottom: 20px; page-break-inside: avoid;">
-            <table style="margin-bottom: 10px;">
+    <!-- Main Logbook Table -->
+    <table class="logbook-table">
+        <thead>
+            <tr>
+                <th class="date-col">Tarikh / Date</th>
+                <th class="activity-col">Aktiviti / Activity</th>
+                <th class="comment-col">Komen / Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                // Combine and sort all entries by date
+                $allEntries = collect();
+                
+                // Add log entries if they exist
+                if ($logEntries && $logEntries->count() > 0) {
+                    foreach($logEntries as $entry) {
+                        $allEntries->push([
+                            'date' => $entry->date,
+                            'activity' => $entry->activity,
+                            'comment' => $entry->comment ?: '',
+                            'type' => 'log'
+                        ]);
+                    }
+                }
+                
+                // Add project entries if they exist
+                if ($projectEntries && $projectEntries->count() > 0) {
+                    foreach($projectEntries as $entry) {
+                        $allEntries->push([
+                            'date' => $entry->date,
+                            'activity' => $entry->activity,
+                            'comment' => $entry->comment ?: '',
+                            'type' => 'project'
+                        ]);
+                    }
+                }
+                
+                // Sort by date
+                $allEntries = $allEntries->sortBy('date');
+                $totalEntries = $allEntries->count();
+                
+                // Determine entry type label for display
+                $entryTypeLabel = '';
+                if (isset($entryType)) {
+                    switch($entryType) {
+                        case 'log':
+                            $entryTypeLabel = ' (Log Entries Only)';
+                            break;
+                        case 'project':
+                            $entryTypeLabel = ' (Project Entries Only)';
+                            break;
+                        case 'all':
+                        default:
+                            $entryTypeLabel = ' (All Entries)';
+                            break;
+                    }
+                }
+            @endphp
+            
+            @if($totalEntries > 0)
+                @foreach($allEntries as $entry)
                 <tr>
-                    <td class="label" style="background-color: #f8f9fa; font-weight: bold; width: 100px;">Week Start:</td>
-                    <td style="background-color: #f8f9fa;">{{ $reflection->week_start->format('F d, Y') }}</td>
-                    <td class="label" style="background-color: #f8f9fa; font-weight: bold; width: 80px;">Status:</td>
-                    <td style="background-color: #f8f9fa;" class="{{ $reflection->supervisor_signed ? 'status-signed' : 'status-pending' }}">
-                        {{ $reflection->supervisor_signed ? 'Signed' : 'Pending' }}
+                    <td class="date-col">{{ $entry['date']->format('d/m/Y') }}</td>
+                    <td class="activity-col">{{ $entry['activity'] }}</td>
+                    <td class="comment-col">{{ $entry['comment'] }}</td>
+                </tr>
+                @endforeach
+                
+                @php
+                    // Fill remaining rows to make consistent format (minimum 8 rows)
+                    $remainingRows = max(0, 8 - $totalEntries);
+                @endphp
+                
+                @for($i = 0; $i < $remainingRows; $i++)
+                <tr>
+                    <td class="date-col">&nbsp;</td>
+                    <td class="activity-col">&nbsp;</td>
+                    <td class="comment-col">&nbsp;</td>
+                </tr>
+                @endfor
+            @else
+                <!-- Show message when no entries found due to filtering -->
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 20px; font-style: italic; color: #666;">
+                        @if(isset($entryType) && $entryType !== 'all')
+                            No {{ $entryType === 'log' ? 'log' : 'project' }} entries found for the selected criteria.
+                        @else
+                            No entries found for the selected date range.
+                        @endif
                     </td>
                 </tr>
-            </table>
-            <div style="border: 1px solid #ddd; padding: 10px; background-color: #fdfdfd;">
-                <strong>Content:</strong><br>
-                <div style="white-space: pre-wrap; margin-top: 5px;">{{ $reflection->content }}</div>
-            </div>
-            @if($reflection->supervisor_signed && $reflection->signer)
-            <p style="margin-top: 5px; font-size: 10px; color: #666;">
-                Signed by: {{ $reflection->signer->name }} on {{ $reflection->signed_at->format('F d, Y g:i A') }}
-            </p>
+                @for($i = 0; $i < 7; $i++)
+                <tr>
+                    <td class="date-col">&nbsp;</td>
+                    <td class="activity-col">&nbsp;</td>
+                    <td class="comment-col">&nbsp;</td>
+                </tr>
+                @endfor
+            @endif
+        </tbody>
+    </table>
+
+    <!-- Weekly Reflection Section -->
+    <div class="reflection-section">
+        <div class="reflection-header">
+            Refleksi Mingguan / Weekly reflection:
+        </div>
+        <div class="reflection-content">
+            @php
+                $reflections = collect();
+                // Add log entry reflections if log entries exist
+                if ($logEntries && $logEntries->count() > 0) {
+                    foreach($logEntries->whereNotNull('weekly_reflection_content') as $entry) {
+                        $reflections->push($entry->weekly_reflection_content);
+                    }
+                }
+                // Add project entry reflections if project entries exist
+                if ($projectEntries && $projectEntries->count() > 0) {
+                    foreach($projectEntries->whereNotNull('weekly_reflection_content') as $entry) {
+                        $reflections->push($entry->weekly_reflection_content);
+                    }
+                }
+            @endphp
+            
+            @if($reflections->count() > 0)
+                @foreach($reflections->unique() as $reflection)
+                    <p style="margin-bottom: 10px; line-height: 1.4;">{{ $reflection }}</p>
+                @endforeach
+            @else
+                <!-- Empty space for manual completion -->
+                &nbsp;
             @endif
         </div>
-        @endforeach
     </div>
-    @endif
 
-    <div class="footer">
-        <p>This document was generated automatically from the UKM Logbook System on {{ $generatedAt }}</p>
-        <p>For verification purposes, please contact the system administrator.</p>
+    <!-- Supervisor Section -->
+    <div class="supervisor-section">
+        <div class="supervisor-header">
+            Cap dan tandatangan penyelia industri (setiap 3 minggu) / Industry supervisor's cap and signature (every 3 weeks):
+        </div>
+        <div class="signature-space">
+            <!-- Empty space for signature -->
+            &nbsp;
+        </div>
+        <div class="footer-fields">
+            <div class="footer-field">
+                <strong>Tarikh / Date:</strong>
+                <div class="underline"></div>
+            </div>
+            <div class="footer-field">
+                <strong>Komen / Comments:</strong>
+                <div class="underline"></div>
+            </div>
+        </div>
     </div>
+
+    <!-- Footer -->
+    <div class="footer-text">
+        Untuk kegunaan Pelajar UKM.
+    </div>
+
 </body>
 </html>

@@ -13,10 +13,54 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i>
-                        {{ __('You can export all your entries or filter by date range. The PDF will include your log entries, project entries, and weekly reflections.') }}
+                        {{ __('You can export all your entries or filter by entry type and date range. Choose what to include in your PDF logbook.') }}
                     </div>
 
                     <form action="{{ route('users.exportLogbook') }}" method="GET">
+                        <!-- Entry Type Filter -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">{{ __('Entry Types to Include') }}</label>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_all" value="all" 
+                                                           {{ request('entry_type', 'all') == 'all' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="entry_type_all">
+                                                        <strong>{{ __('All Entries') }}</strong>
+                                                        <br><small class="text-muted">{{ __('Include both log and project entries') }}</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_log" value="log" 
+                                                           {{ request('entry_type') == 'log' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="entry_type_log">
+                                                        <strong>{{ __('Log Entries Only') }}</strong>
+                                                        <br><small class="text-muted">{{ __('Include only daily log entries') }}</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_project" value="project" 
+                                                           {{ request('entry_type') == 'project' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="entry_type_project">
+                                                        <strong>{{ __('Project Entries Only') }}</strong>
+                                                        <br><small class="text-muted">{{ __('Include only project-related entries') }}</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date Range Filter -->
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="start_date" class="form-label">{{ __('Start Date (Optional)') }}</label>
@@ -36,25 +80,33 @@
                             <div class="col-md-12">
                                 <div class="card bg-light">
                                     <div class="card-body">
-                                        <h6 class="card-title">{{ __('Export Summary') }}</h6>
+                                        <h6 class="card-title">{{ __('Available Entries') }}</h6>
                                         <div class="row text-center">
                                             <div class="col-md-4">
                                                 <div class="bg-primary text-white rounded p-2">
-                                                    <h5>{{ auth()->user()->logEntries()->count() }}</h5>
-                                                    <small>{{ __('Total Log Entries') }}</small>
+                                                    <h5 id="log-count">{{ auth()->user()->logEntries()->count() }}</h5>
+                                                    <small>{{ __('Log Entries') }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="bg-success text-white rounded p-2">
-                                                    <h5>{{ auth()->user()->projectEntries()->count() }}</h5>
-                                                    <small>{{ __('Total Project Entries') }}</small>
+                                                    <h5 id="project-count">{{ auth()->user()->projectEntries()->count() }}</h5>
+                                                    <small>{{ __('Project Entries') }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="bg-info text-white rounded p-2">
-                                                    <h5>{{ auth()->user()->weeklyReflections()->count() }}</h5>
-                                                    <small>{{ __('Total Reflections') }}</small>
+                                                    <h5 id="reflection-count">{{ auth()->user()->logEntries()->whereNotNull('weekly_reflection_content')->count() + auth()->user()->projectEntries()->whereNotNull('weekly_reflection_content')->count() }}</h5>
+                                                    <small>{{ __('Reflections') }}</small>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <div class="alert alert-light mb-0" id="filter-info">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-filter"></i> 
+                                                    <span id="filter-text">{{ __('All entry types will be included in the PDF') }}</span>
+                                                </small>
                                             </div>
                                         </div>
                                     </div>
@@ -85,10 +137,11 @@
                 <div class="card-body">
                     <ul class="mb-0">
                         <li>{{ __('The PDF will be automatically downloaded when generated') }}</li>
-                        <li>{{ __('All entries will be sorted by date in descending order') }}</li>
-                        <li>{{ __('The PDF includes your student information, approval status, and supervisor signatures') }}</li>
+                        <li>{{ __('Choose between all entries, log entries only, or project entries only') }}</li>
+                        <li>{{ __('All entries will be sorted by date in chronological order') }}</li>
                         <li>{{ __('Use date filters to export specific periods (e.g., monthly reports)') }}</li>
-                        <li>{{ __('The generated file will be named with your matric number and timestamp') }}</li>
+                        <li>{{ __('The PDF includes your student information and space for supervisor signatures') }}</li>
+                        <li>{{ __('The filename will indicate the entry type and include your matric number') }}</li>
                     </ul>
                 </div>
             </div>
@@ -101,5 +154,35 @@ function clearDates() {
     document.getElementById('start_date').value = '';
     document.getElementById('end_date').value = '';
 }
+
+// Update filter info when entry type changes
+document.addEventListener('DOMContentLoaded', function() {
+    const entryTypeRadios = document.querySelectorAll('input[name="entry_type"]');
+    const filterText = document.getElementById('filter-text');
+    
+    function updateFilterInfo() {
+        const selectedType = document.querySelector('input[name="entry_type"]:checked').value;
+        
+        switch(selectedType) {
+            case 'all':
+                filterText.textContent = '{{ __('All entry types will be included in the PDF') }}';
+                break;
+            case 'log':
+                filterText.textContent = '{{ __('Only log entries will be included in the PDF') }}';
+                break;
+            case 'project':
+                filterText.textContent = '{{ __('Only project entries will be included in the PDF') }}';
+                break;
+        }
+    }
+    
+    // Add event listeners to radio buttons
+    entryTypeRadios.forEach(radio => {
+        radio.addEventListener('change', updateFilterInfo);
+    });
+    
+    // Set initial filter text
+    updateFilterInfo();
+});
 </script>
 @endsection

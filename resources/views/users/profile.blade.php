@@ -21,7 +21,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('users.updateProfile') }}" method="post">
+                    <form action="{{ route('users.updateProfile') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -34,6 +34,33 @@
                                 </ul>
                             </div>
                         @endif
+                        
+                        <!-- Profile Picture Section -->
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">{{ __('Profile Picture') }}</label>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <img src="{{ $user->getProfilePictureUrl() }}" 
+                                         alt="{{ $user->name }}" 
+                                         class="rounded-circle" 
+                                         width="80" height="80"
+                                         style="object-fit: cover; border: 3px solid #dee2e6;">
+                                </div>
+                                <div class="flex-grow-1">
+                                    <input type="file" name="profile_picture" id="profile_picture" 
+                                           class="form-control @error('profile_picture') is-invalid @enderror" 
+                                           accept="image/*">
+                                    <small class="form-text text-muted">
+                                        {{ __('Upload a new profile picture (JPG, PNG, GIF - Max: 2MB). Leave empty to keep current picture.') }}
+                                    </small>
+                                    @error('profile_picture')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                         
                         <div class="form-group mb-3">
                             <label for="name">{{ __('Full Name') }}</label>

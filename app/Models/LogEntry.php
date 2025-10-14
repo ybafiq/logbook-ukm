@@ -17,13 +17,21 @@ class LogEntry extends Model
         'comment',
         'supervisor_approved',
         'approved_by',
-        'approved_at'
+        'approved_at',
+        'weekly_reflection_content',
+        'reflection_week_start',
+        'reflection_supervisor_signed',
+        'reflection_signed_by',
+        'reflection_signed_at'
     ];
 
     protected $casts = [
         'date' => 'date',
         'approved_at' => 'datetime',
         'supervisor_approved' => 'boolean',
+        'reflection_week_start' => 'date',
+        'reflection_signed_at' => 'datetime',
+        'reflection_supervisor_signed' => 'boolean',
     ];
 
     public function student() 
@@ -34,5 +42,10 @@ class LogEntry extends Model
     public function approver() 
     { 
         return $this->belongsTo(User::class, 'approved_by'); 
+    }
+
+    public function reflectionSigner() 
+    { 
+        return $this->belongsTo(User::class, 'reflection_signed_by'); 
     }
 }

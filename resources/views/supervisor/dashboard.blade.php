@@ -6,7 +6,19 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>{{ __('Supervisor Dashboard') }}</h4>
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <img src="{{ auth()->user()->getProfilePictureUrl() }}" 
+                                 alt="{{ auth()->user()->name }}" 
+                                 class="rounded-circle" 
+                                 width="60" height="60"
+                                 style="object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        </div>
+                        <div>
+                            <h4 class="mb-0">{{ __('Supervisor Dashboard') }}</h4>
+                            <small class="text-muted">{{ __('Welcome, :name', ['name' => auth()->user()->name]) }}</small>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body">

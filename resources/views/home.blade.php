@@ -6,8 +6,19 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>{{ __('Welcome, :name!', ['name' => auth()->user()->name]) }}</h4>
-                    <small class="text-muted">{{ __('Your Personal Dashboard') }}</small>
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <img src="{{ auth()->user()->getProfilePictureUrl() }}" 
+                                 alt="{{ auth()->user()->name }}" 
+                                 class="rounded-circle" 
+                                 width="60" height="60"
+                                 style="object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        </div>
+                        <div>
+                            <h4 class="mb-0">{{ __('Welcome, :name!', ['name' => auth()->user()->name]) }}</h4>
+                            <small class="text-muted">{{ __('Your Personal Dashboard') }}</small>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -42,7 +53,7 @@
                                 <div class="card-body">
                                     <h3 class="card-title text-info">{{ $stats['total_reflections'] }}</h3>
                                     <p class="card-text">{{ __('Weekly Reflections') }}</p>
-                                    <a href="{{ route('reflections.index') }}" class="btn btn-info btn-sm">{{ __('View All') }}</a>
+                                    <small class="text-muted">{{ __('Integrated with entries') }}</small>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +78,6 @@
                                     <div class="d-flex flex-wrap gap-2">
                                         <a href="{{ route('log-entries.create') }}" class="btn btn-outline-primary">{{ __('Add Log Entry') }}</a>
                                         <a href="{{ route('project-entries.create') }}" class="btn btn-outline-success">{{ __('Add Project Entry') }}</a>
-                                        <a href="{{ route('reflections.create') }}" class="btn btn-outline-info">{{ __('Add Weekly Reflection') }}</a>
                                         @if(auth()->user()->isStudent())
                                             <a href="{{ route('users.showExport') }}" class="btn btn-outline-danger">{{ __('Export PDF') }}</a>
                                         @endif
@@ -171,7 +181,7 @@
                                         <table class="table table-striped mb-0">
                                             <thead class="table-light">
                                                 <tr>
-                                                    <th>{{ __('Week Start') }}</th>
+                                                    <th>{{ __('Type') }}</th>
                                                     <th>{{ __('Content') }}</th>
                                                     <th>{{ __('Status') }}</th>
                                                 </tr>
@@ -179,10 +189,21 @@
                                             <tbody>
                                                 @foreach($recentReflections as $reflection)
                                                 <tr>
-                                                    <td>{{ $reflection->week_start->format('M d') }}</td>
-                                                    <td>{{ Str::limit($reflection->content, 40) }}</td>
                                                     <td>
-                                                        @if($reflection->supervisor_signed)
+                                                        @if($reflection->type === 'log')
+                                                            <span class="badge bg-primary">Log Entry</span>
+                                                        @else
+                                                            <span class="badge bg-success">Project</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ Str::limit($reflection->content, 40) }}
+                                                        @if($reflection->type === 'project' && $reflection->activity)
+                                                            <br><small class="text-muted">{{ $reflection->activity }}</small>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($reflection->signed)
                                                             <span class="badge bg-success">Signed</span>
                                                         @else
                                                             <span class="badge bg-warning">Pending</span>
