@@ -4,14 +4,21 @@
     <meta charset="utf-8">
     <title>Student Logbook - {{ $user->name }}</title>
     <style>
+        /* ---------- General Page Setup ---------- */
+        @page {
+            margin: 25px 20px;
+        }
         body {
             font-family: 'Times New Roman', serif;
             font-size: 11px;
             line-height: 1.4;
             color: #000;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            word-wrap: break-word; /* ✅ ensures long words wrap */
         }
+
+        /* ---------- Header ---------- */
         .header {
             text-align: center;
             margin-bottom: 25px;
@@ -34,70 +41,90 @@
             line-height: 1.2;
             font-style: italic;
         }
+
+        /* ---------- Student Info ---------- */
         .student-info {
             margin-bottom: 20px;
             font-size: 11px;
         }
         .student-info .row {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             border-bottom: 1px solid #000;
             padding-bottom: 2px;
+            white-space: normal; /* ✅ allow line wrapping */
+            word-break: break-word;
         }
+
+        /* ---------- Logbook Table ---------- */
         .logbook-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed; /* ✅ make columns fixed width */
             margin-top: 10px;
             margin-bottom: 20px;
         }
-        .logbook-table th {
+        .logbook-table th, .logbook-table td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 6px;
+            font-size: 11px;
+            vertical-align: top;
+            word-wrap: break-word;
+            white-space: normal; /* ✅ wraps text */
+            word-break: break-word;
+        }
+        .logbook-table th {
             text-align: center;
             font-weight: bold;
-            font-size: 11px;
             background-color: #f0f0f0;
         }
-        .logbook-table td {
-            border: 1px solid #000;
-            padding: 8px;
-            vertical-align: top;
-            font-size: 11px;
-            height: 30px;
-        }
-        .date-col { width: 15%; text-align: center; }
-        .activity-col { width: 45%; }
-        .comment-col { width: 40%; }
+
+        /* ✅ Adjusted column widths for better proportion */
+        .date-col { width: 18%; text-align: center; }
+        .activity-col { width: 47%; }
+        .comment-col { width: 35%; }
+
+        /* ---------- Reflection Section ---------- */
         .reflection-section {
             border: 1px solid #000;
             margin-bottom: 20px;
+            page-break-inside: avoid;
         }
         .reflection-header {
             background-color: #f0f0f0;
-            padding: 8px;
+            padding: 6px 8px;
             font-size: 11px;
             font-weight: bold;
             border-bottom: 1px solid #000;
         }
         .reflection-content {
-            padding: 15px;
-            min-height: 100px;
+            padding: 10px;
+            min-height: 80px;
+            white-space: pre-wrap; /* ✅ maintain line breaks */
+            word-break: break-word;
         }
+
+        /* ---------- Supervisor Section ---------- */
         .supervisor-section {
             border: 1px solid #000;
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 10px 15px;
+            page-break-inside: avoid;
         }
         .supervisor-header {
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .signature-space {
-            height: 80px;
-            margin-bottom: 15px;
+            height: 60px;
+            border: 1px dashed #999;
+            margin-bottom: 10px;
         }
+
+        /* ---------- Footer ---------- */
         .footer-fields {
             display: flex;
             justify-content: space-between;
+            gap: 10px;
         }
         .footer-field {
             width: 48%;
@@ -107,12 +134,13 @@
         }
         .footer-field .underline {
             border-bottom: 1px solid #000;
-            margin-top: 5px;
+            margin-top: 3px;
             height: 20px;
         }
         .footer-text {
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 15px;
+            text-align: center;
         }
     </style>
 </head>
@@ -123,8 +151,9 @@
         <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
         @if(isset($startDate) || isset($endDate))
             <p style="font-size: 10px; margin-top: 5px; color: #666;">
-                <strong>Date Range:</strong> 
-                {{ $startDate ? date('d/m/Y', strtotime($startDate)) : 'All dates' }} - 
+                <strong>Date Range:</strong>
+                {{ $startDate ? date('d/m/Y', strtotime($startDate)) : 'All dates' }}
+                -
                 {{ $endDate ? date('d/m/Y', strtotime($endDate)) : 'Present' }}
             </p>
         @endif
@@ -132,17 +161,17 @@
 
     <div class="student-info">
         <div class="row">
-            Nama Pelajar/Name of Student: {{ $user->name }}
+            <strong>Nama Pelajar / Name of Student:</strong> {{ $user->name }}
         </div>
         <div class="row">
-            No. Pendaftaran/Matric No.: {{ $user->matric_no }}
+            <strong>No. Pendaftaran / Matric No.:</strong> {{ $user->matric_no }}
         </div>
         <div class="row">
-            Tempat kerja/Working place: {{ $user->workplace ?: '' }}
+            <strong>Tempat kerja / Working place:</strong> {{ $user->workplace ?: '' }}
         </div>
     </div>
 
-    <!-- Main Logbook Table -->
+    <!-- ---------- Main Logbook Table ---------- -->
     <table class="logbook-table">
         <thead>
             <tr>
@@ -153,156 +182,90 @@
         </thead>
         <tbody>
             @php
-                // Combine and sort all entries by date
                 $allEntries = collect();
-                
-                // Add log entries if they exist
-                if ($logEntries && $logEntries->count() > 0) {
+                if ($logEntries && $logEntries->count()) {
                     foreach($logEntries as $entry) {
                         $allEntries->push([
                             'date' => $entry->date,
                             'activity' => $entry->activity,
-                            'comment' => $entry->comment ?: '',
-                            'type' => 'log'
+                            'comment' => $entry->comment ?? '',
                         ]);
                     }
                 }
-                
-                // Add project entries if they exist
-                if ($projectEntries && $projectEntries->count() > 0) {
+                if ($projectEntries && $projectEntries->count()) {
                     foreach($projectEntries as $entry) {
                         $allEntries->push([
                             'date' => $entry->date,
                             'activity' => $entry->activity,
-                            'comment' => $entry->comment ?: '',
-                            'type' => 'project'
+                            'comment' => $entry->comment ?? '',
                         ]);
                     }
                 }
-                
-                // Sort by date
                 $allEntries = $allEntries->sortBy('date');
-                $totalEntries = $allEntries->count();
-                
-                // Determine entry type label for display
-                $entryTypeLabel = '';
-                if (isset($entryType)) {
-                    switch($entryType) {
-                        case 'log':
-                            $entryTypeLabel = ' (Log Entries Only)';
-                            break;
-                        case 'project':
-                            $entryTypeLabel = ' (Project Entries Only)';
-                            break;
-                        case 'all':
-                        default:
-                            $entryTypeLabel = ' (All Entries)';
-                            break;
-                    }
-                }
             @endphp
-            
-            @if($totalEntries > 0)
-                @foreach($allEntries as $entry)
+
+            @forelse($allEntries as $entry)
                 <tr>
                     <td class="date-col">{{ $entry['date']->format('d/m/Y') }}</td>
                     <td class="activity-col">{{ $entry['activity'] }}</td>
                     <td class="comment-col">{{ $entry['comment'] }}</td>
                 </tr>
-                @endforeach
-                
-                @php
-                    // Fill remaining rows to make consistent format (minimum 8 rows)
-                    $remainingRows = max(0, 8 - $totalEntries);
-                @endphp
-                
-                @for($i = 0; $i < $remainingRows; $i++)
+            @empty
                 <tr>
-                    <td class="date-col">&nbsp;</td>
-                    <td class="activity-col">&nbsp;</td>
-                    <td class="comment-col">&nbsp;</td>
+                    <td colspan="3" style="text-align:center; padding:20px; font-style:italic;">No entries found.</td>
                 </tr>
-                @endfor
-            @else
-                <!-- Show message when no entries found due to filtering -->
-                <tr>
-                    <td colspan="3" style="text-align: center; padding: 20px; font-style: italic; color: #666;">
-                        @if(isset($entryType) && $entryType !== 'all')
-                            No {{ $entryType === 'log' ? 'log' : 'project' }} entries found for the selected criteria.
-                        @else
-                            No entries found for the selected date range.
-                        @endif
-                    </td>
-                </tr>
-                @for($i = 0; $i < 7; $i++)
-                <tr>
-                    <td class="date-col">&nbsp;</td>
-                    <td class="activity-col">&nbsp;</td>
-                    <td class="comment-col">&nbsp;</td>
-                </tr>
-                @endfor
-            @endif
+            @endforelse
         </tbody>
     </table>
 
-    <!-- Weekly Reflection Section -->
+    <!-- ---------- Weekly Reflection ---------- -->
     <div class="reflection-section">
-        <div class="reflection-header">
-            Refleksi Mingguan / Weekly reflection:
-        </div>
+        <div class="reflection-header">Refleksi Mingguan / Weekly Reflection:</div>
         <div class="reflection-content">
             @php
                 $reflections = collect();
-                // Add log entry reflections if log entries exist
-                if ($logEntries && $logEntries->count() > 0) {
+                if ($logEntries) {
                     foreach($logEntries->whereNotNull('weekly_reflection_content') as $entry) {
                         $reflections->push($entry->weekly_reflection_content);
                     }
                 }
-                // Add project entry reflections if project entries exist
-                if ($projectEntries && $projectEntries->count() > 0) {
+                if ($projectEntries) {
                     foreach($projectEntries->whereNotNull('weekly_reflection_content') as $entry) {
                         $reflections->push($entry->weekly_reflection_content);
                     }
                 }
             @endphp
-            
-            @if($reflections->count() > 0)
+            @if($reflections->count())
                 @foreach($reflections->unique() as $reflection)
-                    <p style="margin-bottom: 10px; line-height: 1.4;">{{ $reflection }}</p>
+                    <p>{{ $reflection }}</p>
                 @endforeach
             @else
-                <!-- Empty space for manual completion -->
-                &nbsp;
+                <p style="color:#666;">&nbsp;</p>
             @endif
         </div>
     </div>
 
-    <!-- Supervisor Section -->
+    <!-- ---------- Supervisor Section ---------- -->
     <div class="supervisor-section">
         <div class="supervisor-header">
-            Cap dan tandatangan penyelia industri (setiap 3 minggu) / Industry supervisor's cap and signature (every 3 weeks):
+            Cap dan tandatangan penyelia industri (setiap 3 minggu) /
+            Industry supervisor's cap and signature (every 3 weeks):
         </div>
-        <div class="signature-space">
-            <!-- Empty space for signature -->
-            &nbsp;
-        </div>
+        <div class="signature-space">&nbsp;</div>
         <div class="footer-fields">
             <div class="footer-field">
                 <strong>Tarikh / Date:</strong>
-                <div class="underline"></div>
+                <div class="signature-space">&nbsp;</div>
             </div>
             <div class="footer-field">
                 <strong>Komen / Comments:</strong>
-                <div class="underline"></div>
+                <div class="signature-space">&nbsp;</div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer-text">
         Untuk kegunaan Pelajar UKM.
     </div>
-
 </body>
 </html>
