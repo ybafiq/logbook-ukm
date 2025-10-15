@@ -186,15 +186,14 @@
     <div class="reflection-section">
         <div class="reflection-header">Refleksi Mingguan / Weekly Reflection:</div>
         <div class="reflection-content">
-        @if(!empty($weeklyReflection))
-            @if(is_object($weeklyReflection) && !empty($weeklyReflection->content))
-                <p>{{ $weeklyReflection->content }}</p>
-            @elseif(is_string($weeklyReflection))
-                <p>{{ $weeklyReflection }}</p>
-            @endif
-            @else
-                <br><br><br><br><br><br><br>
+        @if(!empty($weeklyReflections))
+            <div style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">
+                {{ $weeklyReflections }}
+            </div>
+        @else
+            <br><br><br><br><br><br><br>
         @endif
+
         </div>
     </div>
 

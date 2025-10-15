@@ -238,7 +238,10 @@ class UserController extends Controller
         }
         
         // Weekly reflections are now integrated into log and project entries
-        $weeklyReflections = collect(); // Empty collection for backward compatibility
+        $weeklyReflections = $logEntries
+            ->pluck('weekly_reflection')
+            ->filter() // removes null or empty values
+            ->implode("\n\n");
         
         // Generate filename based on filter type
         $typeLabel = '';
