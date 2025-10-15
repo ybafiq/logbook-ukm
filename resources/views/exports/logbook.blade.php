@@ -40,12 +40,20 @@
         }
 
         .student-info {
-            margin-bottom: 15px;
+        margin-bottom: 15px;
+        font-size: 11px;
+        line-height: 1.8;
         }
-        .student-info .row {
+
+        .student-info .info-line {
+            margin-bottom: 8px;
+        }
+
+        .student-info .underline {
+            display: inline-block;
             border-bottom: 1px solid #000;
-            margin-bottom: 5px;
-            padding-bottom: 3px;
+            width: 65%; /* adjust width as needed */
+            margin-left: 5px;
         }
 
         table.logbook-table {
@@ -56,7 +64,7 @@
             margin-bottom: 20px;
         }
         .logbook-table th, .logbook-table td {
-            border: 1px solid #000;
+            border: 0.5px solid #000;
             padding: 6px;
             vertical-align: top;
             font-size: 11px;
@@ -65,7 +73,6 @@
         }
         .logbook-table th {
             text-align: center;
-            background-color: #f0f0f0;
             font-weight: bold;
         }
         .date-col { width: 18%; text-align: center; }
@@ -78,7 +85,6 @@
             page-break-inside: avoid;
         }
         .reflection-header, .supervisor-header {
-            background-color: #f0f0f0;
             padding: 6px 8px;
             font-size: 11px;
             font-weight: bold;
@@ -133,9 +139,19 @@
 
     <!-- Student Info -->
     <div class="student-info">
-        <div class="row">Nama Pelajar / Name of Student: {{ $user->name }}</div>
-        <div class="row">No. Pendaftaran / Matric No.: {{ $user->matric_no }}</div>
-        <div class="row">Tempat kerja / Working place: {{ $user->workplace }}</div>
+        <div class="info-line">
+            Nama Pelajar / <i>Name of Student:</i>
+            <span class="underline">{{ $user->name ?? ' ' }}</span>
+        </div>
+        <div class="info-line">
+            No. Pendaftaran / <i>Matric No.:</i>
+            <span class="underline">{{ $user->matric_no ?? ' ' }}</span>
+        </div>
+        <div class="info-line">
+            Tempat kerja / <i>Working place:</i>
+            <span class="underline">{{ $user->workplace ?? ' ' }}</span>
+        </div>
+</div>
     </div>
 
     <!-- Logbook Table -->
@@ -148,7 +164,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($logEntries as $entry)
+            @forelse($logEntries->sortBy('date') as $entry)
                 <tr>
                     <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
                     <td class="activity-col">{{ $entry->activity }}</td>
@@ -170,11 +186,15 @@
     <div class="reflection-section">
         <div class="reflection-header">Refleksi Mingguan / Weekly Reflection:</div>
         <div class="reflection-content">
-            @if(isset($weeklyReflection) && $weeklyReflection->content)
+        @if(!empty($weeklyReflection))
+            @if(is_object($weeklyReflection) && !empty($weeklyReflection->content))
                 <p>{{ $weeklyReflection->content }}</p>
+            @elseif(is_string($weeklyReflection))
+                <p>{{ $weeklyReflection }}</p>
+            @endif
             @else
                 <br><br><br><br><br><br><br>
-            @endif
+        @endif
         </div>
     </div>
 
