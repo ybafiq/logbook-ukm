@@ -214,9 +214,9 @@
     <div class="reflection-section">
         <div class="reflection-header">Refleksi Mingguan / Weekly Reflection:</div>
         <div class="reflection-content">
-        @if(!empty($weeklyReflections))
+        @if(!empty($weeklyReflectionsContents))
             <div style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">
-                {{ $weeklyReflections }}
+                {{ ltrim ($weeklyReflectionsContents) }}
             </div>
         @else
             <br><br><br><br><br><br><br>
