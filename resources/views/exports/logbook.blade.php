@@ -131,10 +131,20 @@
 <body>
 
     <!-- Header -->
-    <div class="header">
-        <h1>STBC4866 Latihan Tempat Kerja Bioinformatik</h1>
-        <h2>Templat Buku Log / Student’s Logbook Template</h2>
-        <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+    <div class="header"> 
+        @if($entryType === 'project')
+            <h1>STBC4966 Bioinformatik Dalam Industri</h1>
+            <h2>Templat Buku Log / Student’s Logbook Template</h2>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+        @elseif($entryType === 'log')
+            <h1>STBC4866 Latihan Tempat Kerja Bioinformatik</h1>
+            <h2>Templat Buku Log / Student’s Logbook Template</h2>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+        @else
+            <h1>STBC4866 & STBC4966 Logbook dan Projek Bioinformatik</h1>
+            <h2>Templat Gabungan Buku Log & Projek / Combined Log & Project Template</h2>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+        @endif
     </div>
 
     <!-- Student Info -->
@@ -164,21 +174,39 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($logEntries->sortBy('date') as $entry)
-                <tr>
-                    <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
-                    <td class="activity-col">{{ $entry->activity }}</td>
-                    <td class="comment-col">{{ $entry->comment ?? '' }}</td>
-                </tr>
-            @empty
-                @for($i = 0; $i < 8; $i++)
-                <tr>
-                    <td class="date-col">&nbsp;</td>
-                    <td class="activity-col">&nbsp;</td>
-                    <td class="comment-col">&nbsp;</td>
-                </tr>
-                @endfor
-            @endforelse
+            @if($entryType === 'log')
+                @forelse($logEntries->sortBy('date') as $entry)
+                    <tr>
+                        <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
+                        <td class="activity-col">{{ $entry->activity }}</td>
+                        <td class="comment-col">{{ $entry->comment ?? '' }}</td>
+                    </tr>
+                @empty
+                    @for($i = 0; $i < 8; $i++)
+                    <tr>
+                        <td class="date-col">&nbsp;</td>
+                        <td class="activity-col">&nbsp;</td>
+                        <td class="comment-col">&nbsp;</td>
+                    </tr>
+                    @endfor
+                @endforelse
+            @else($entryType === 'project')
+                @forelse($projectEntries->sortBy('date') as $entry)
+                    <tr>
+                        <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
+                        <td class="activity-col">{{ $entry->activity }}</td>
+                        <td class="comment-col">{{ $entry->comment ?? '' }}</td>
+                    </tr>
+                @empty
+                    @for($i = 0; $i < 8; $i++)
+                    <tr>
+                        <td class="date-col">&nbsp;</td>
+                        <td class="activity-col">&nbsp;</td>
+                        <td class="comment-col">&nbsp;</td>
+                    </tr>
+                    @endfor
+                @endforelse
+            @endif
         </tbody>
     </table>
 
