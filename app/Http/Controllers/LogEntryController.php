@@ -17,7 +17,7 @@ class LogEntryController extends Controller
     public function index()
     {
         $logEntries = LogEntry::where('user_id', auth()->id())
-                             ->orderBy('date', 'desc')
+                             ->orderBy('date', 'asc')
                              ->paginate(10);
         
         return view('log-entries.index', compact('logEntries'));
