@@ -238,8 +238,9 @@ class UserController extends Controller
         }
         
         // Weekly reflections are now integrated into log and project entries
-        $weeklyReflections = $logEntries
-            ->pluck('weekly_reflection')
+        $weeklyReflectionsContents = $logEntries
+            ->pluck('weekly_reflection_content')
+            ->map(fn($text) => ltrim($text)) 
             ->filter() // removes null or empty values
             ->implode("\n\n");
         
@@ -262,7 +263,7 @@ class UserController extends Controller
             'user' => $user,
             'logEntries' => $logEntries,
             'projectEntries' => $projectEntries,
-            'weeklyReflections' => $weeklyReflections,
+            'weeklyReflectionsContents' => $weeklyReflectionsContents,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'entryType' => $entryType,
