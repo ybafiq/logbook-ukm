@@ -190,7 +190,7 @@
                     </tr>
                     @endfor
                 @endforelse
-            @else($entryType === 'project')
+            @elseif($entryType === 'project')
                 @forelse($projectEntries->sortBy('date') as $entry)
                     <tr>
                         <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
@@ -215,8 +215,8 @@
         <div class="reflection-header">Refleksi Mingguan / Weekly Reflection:</div>
         <div class="reflection-content">
         @if(!empty($weeklyReflectionsContents))
-            <div style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">
-                {{ ltrim ($weeklyReflectionsContents) }}
+            <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
+                {{ ltrim($weeklyReflectionsContents) }}
             </div>
         @else
             <br><br><br><br><br><br><br>
