@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <title>Student Logbook - {{ $user->name }}</title>
     <style>
-        @page { margin: 25px 20px; }
+        /* === PAGE LAYOUT === */
+        @page {
+            margin: 2.5cm 2cm 2.5cm 2cm; /* Top, Right, Bottom, Left */
+        }
 
         body {
             font-family: 'Times New Roman', serif;
@@ -16,54 +19,53 @@
             word-wrap: break-word;
         }
 
+        /* === HEADER === */
         .header {
             text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1, .header h2 {
-            margin: 0;
-            line-height: 1.3;
+            margin-bottom: 15px;
         }
         .header h1 {
             font-size: 13px;
             font-weight: bold;
+            margin: 0;
         }
         .header h2 {
             font-size: 12px;
             font-weight: bold;
-            margin-top: 4px;
+            margin: 3px 0;
         }
         .header p {
             font-size: 10px;
             font-style: italic;
-            margin: 3px 0;
+            margin: 2px 0;
         }
 
+        /* === STUDENT INFO === */
         .student-info {
-        margin-bottom: 15px;
-        font-size: 11px;
-        line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 11px;
+            line-height: 1.8;
         }
-
-        .student-info .info-line {
-            margin-bottom: 8px;
+        .info-line {
+            margin-bottom: 6px;
         }
-
-        .student-info .underline {
+        .underline {
             display: inline-block;
             border-bottom: 1px solid #000;
-            width: 65%; /* adjust width as needed */
+            width: 65%;
             margin-left: 5px;
         }
 
+        /* === TABLE === */
         table.logbook-table {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            margin-top: 5px;
-            margin-bottom: 20px;
+            margin-top: 10px;
+            margin-bottom: 25px;
         }
-        .logbook-table th, .logbook-table td {
+        .logbook-table th,
+        .logbook-table td {
             border: 0.5px solid #000;
             padding: 6px;
             vertical-align: top;
@@ -75,35 +77,44 @@
             text-align: center;
             font-weight: bold;
         }
-        .date-col { width: 18%; text-align: center; }
-        .activity-col { width: 47%; }
-        .comment-col { width: 35%; }
 
-        .reflection-section, .supervisor-section {
+        /* Adjust column widths — matches the official UKM template proportions */
+        .date-col {
+            width: 15%;
+            text-align: center;
+        }
+        .activity-col {
+            width: 50%;
+        }
+        .comment-col {
+            width: 35%;
+        }
+
+        /* === REFLECTION & SUPERVISOR SECTIONS === */
+        .reflection-section,
+        .supervisor-section {
             border: 1px solid #000;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             page-break-inside: avoid;
         }
-        .reflection-header, .supervisor-header {
+        .reflection-header,
+        .supervisor-header {
             padding: 6px 8px;
             font-size: 11px;
             font-weight: bold;
             border-bottom: 1px solid #000;
         }
         .reflection-content {
-            padding: 10px;
+            padding: 12px;
             min-height: 100px;
             white-space: pre-wrap;
             word-break: break-word;
         }
         .supervisor-content {
-            padding: 10px;
+            padding: 12px;
         }
-        .signature-space {
-            height: 60px;
-            border: 1px dashed #999;
-            margin: 10px 0;
-        }
+
+        /* === FOOTER === */
         .footer-fields {
             display: flex;
             justify-content: space-between;
@@ -117,20 +128,17 @@
             font-weight: bold;
             margin-bottom: 3px;
         }
-        .footer-field .underline {
-            border-bottom: 1px solid #000;
-            height: 20px;
-        }
         .footer-text {
             font-weight: bold;
             text-align: left;
-            margin-top: 15px;
+            margin-top: 10px;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Header -->
+    <!-- HEADER -->
     <div class="header"> 
         @if($entryType === 'project')
             <h1>STBC4966 Bioinformatik Dalam Industri</h1>
@@ -147,7 +155,7 @@
         @endif
     </div>
 
-    <!-- Student Info -->
+    <!-- STUDENT INFO -->
     <div class="student-info">
         <div class="info-line">
             Nama Pelajar / <i>Name of Student:</i>
@@ -161,10 +169,9 @@
             Tempat kerja / <i>Working place:</i>
             <span class="underline">{{ $user->workplace ?? ' ' }}</span>
         </div>
-</div>
     </div>
 
-    <!-- Logbook Table -->
+    <!-- LOGBOOK TABLE -->
     <table class="logbook-table">
         <thead>
             <tr>
@@ -184,9 +191,7 @@
                 @empty
                     @for($i = 0; $i < 8; $i++)
                     <tr>
-                        <td class="date-col">&nbsp;</td>
-                        <td class="activity-col">&nbsp;</td>
-                        <td class="comment-col">&nbsp;</td>
+                        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
                     </tr>
                     @endfor
                 @endforelse
@@ -200,9 +205,7 @@
                 @empty
                     @for($i = 0; $i < 8; $i++)
                     <tr>
-                        <td class="date-col">&nbsp;</td>
-                        <td class="activity-col">&nbsp;</td>
-                        <td class="comment-col">&nbsp;</td>
+                        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
                     </tr>
                     @endfor
                 @endforelse
@@ -210,37 +213,41 @@
         </tbody>
     </table>
 
-    <!-- Weekly Reflection -->
+    <!-- REFLECTION SECTION -->
     <div class="reflection-section">
-        <div class="reflection-header">Refleksi Mingguan / Weekly Reflection:</div>
+        <div class="reflection-header">
+            @if($entryType === 'project')
+                Cadangan penambahbaikan dan perancangan / Suggestion for improvement and planning for the upcoming week:
+            @else
+                Refleksi Mingguan / Weekly Reflection:
+            @endif
+        </div>
         <div class="reflection-content">
-        @if(!empty($weeklyReflectionsContents))
-            <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
-                {{ ltrim($weeklyReflectionsContents) }}
-            </div>
-        @else
-            <br><br><br><br><br><br><br>
-        @endif
-
+            @if(!empty($weeklyReflectionsContents))
+                <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
+                    {{ ltrim($weeklyReflectionsContents) }}
+                </div>
+            @else
+                <br><br><br><br><br><br><br>
+            @endif
         </div>
     </div>
 
-    <!-- Supervisor Section -->
+    <!-- SUPERVISOR SECTION -->
     <div class="supervisor-section">
         <div class="supervisor-header">
             Cop dan tandatangan penyelia industri (setiap 3 minggu) /
             Industry supervisor’s cop and signature (every 3 weeks):
         </div>
         <div class="supervisor-content">
-            <div class="signature-space">&nbsp;</div>
+            <br><br><br><br><br>
             <div class="footer-fields">
                 <div class="footer-field">
                     <strong>Tarikh / Date:</strong>
-                    
                 </div>
                 <div class="footer-field">
                     <strong>Komen / Comments:</strong>
-                    <div class="signature-space">&nbsp;</div>
+                    <br><br><br><br><br>
                 </div>
             </div>
         </div>

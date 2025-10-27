@@ -45,7 +45,7 @@
                                     <input class="form-check-input" type="checkbox" id="include_reflection" 
                                            {{ old('weekly_reflection_content', $projectEntry->weekly_reflection_content) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="include_reflection">
-                                        {{ __('Include Weekly Reflection') }}
+                                        {{ __('Include Suggestion') }}
                                     </label>
                                 </div>
                             </div>
@@ -58,7 +58,8 @@
                                            value="{{ old('reflection_week_start', $projectEntry->reflection_week_start ? $projectEntry->reflection_week_start->format('Y-m-d') : '') }}">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="weekly_reflection_content" class="form-label">{{ __('Weekly Reflection Content') }}</label>
+                                    <label for="weekly_reflection_content" class="form-label">{{ __('Suggestion for improvement and planning for
+                                        the upcoming week') }}</label>
                                     <textarea name="weekly_reflection_content" id="weekly_reflection_content" 
                                               class="form-control" rows="5" 
                                               placeholder="Reflect on your learning progress, challenges faced, and insights gained this week...">{{ old('weekly_reflection_content', $projectEntry->weekly_reflection_content) }}</textarea>
