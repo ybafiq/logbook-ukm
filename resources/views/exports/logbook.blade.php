@@ -233,29 +233,71 @@
         </div>
     </div>
 
+    @if($includeReflection)
     <!-- SUPERVISOR SECTION -->
     <div class="supervisor-section">
         <div class="supervisor-header">
             Cop dan tandatangan penyelia industri (setiap 3 minggu) /
-            Industry supervisor’s cop and signature (every 3 weeks):
+            Industry supervisor's cop and signature (every 3 weeks):
         </div>
         <div class="supervisor-content">
-            <br><br><br><br><br>
-            <div class="footer-fields">
-                <div class="footer-field">
-                    <strong>Tarikh / Date:</strong>
+            @php
+                // Get the most recent approved entry with signature
+                $signedEntry = null;
+                if ($entryType === 'log' || $entryType === 'all') {
+                    $signedEntry = $logEntries->where('supervisor_approved', true)
+                                              ->whereNotNull('supervisor_signature')
+                                              ->sortByDesc('approved_at')
+                                              ->first();
+                }
+                if (!$signedEntry && ($entryType === 'project' || $entryType === 'all')) {
+                    $signedEntry = $projectEntries->where('supervisor_approved', true)
+                                                  ->whereNotNull('supervisor_signature')
+                                                  ->sortByDesc('approved_at')
+                                                  ->first();
+                }
+            @endphp
+            
+            @if($signedEntry && $signedEntry->supervisor_signature)
+                <!-- Display signature -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="{{ public_path('storage/' . $signedEntry->supervisor_signature) }}" 
+                         alt="Supervisor Signature" 
+                         style="max-width: 300px; max-height: 100px; border: 1px solid #ddd; padding: 5px;">
                 </div>
-                <div class="footer-field">
-                    <strong>Komen / Comments:</strong>
-                    <br><br><br><br><br>
+                
+                <div class="footer-fields">
+                    <div class="footer-field">
+                        <strong>Tarikh / Date:</strong> 
+                        {{ $signedEntry->approved_at ? $signedEntry->approved_at->format('d/m/Y') : '' }}
+                    </div>
+                    <div class="footer-field">
+                        <strong>Komen / Comments:</strong>
+                        <div style="margin-top: 5px; min-height: 50px; white-space: pre-wrap;">
+                            {{ $signedEntry->supervisor_comment ?? '' }}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            @else
+                <!-- Empty signature section if not signed -->
+                <br><br><br><br><br>
+                <div class="footer-fields">
+                    <div class="footer-field">
+                        <strong>Tarikh / Date:</strong>
+                    </div>
+                    <div class="footer-field">
+                        <strong>Komen / Comments:</strong>
+                        <br><br><br><br><br>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
     <div class="footer-text">
         Untuk kegunaan Pelajar UKM.
     </div>
+    @endif
 
 </body>
 </html>

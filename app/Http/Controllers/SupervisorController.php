@@ -39,34 +39,136 @@ class SupervisorController extends Controller
         return view('supervisor.dashboard', compact('pendingEntries', 'pendingProjectEntries', 'stats'));
     }
     
-    public function approveEntry(LogEntry $entry)
+    public function approveEntry(Request $request, LogEntry $entry)
     {
         if (!auth()->user()->isSupervisor()) {
             abort(403, 'Access denied. Supervisor role required.');
         }
 
-        $entry->update([
-            'supervisor_approved' => true,
-            'approved_by' => auth()->id(),
-            'approved_at' => now()
+        $request->validate([
+            'supervisor_comment' => 'nullable|string',
+            'signature' => 'nullable|string',
         ]);
 
-        return redirect()->back()->with('success', 'Entry approved successfully.');
+        $data = [
+            'supervisor_approved' => true,
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'supervisor_comment' => $request->input('supervisor_comment')
+        ];
+
+        // Handle signature upload (optional - validate base64 + PNG magic header)
+        if ($request->filled('signature')) {
+            $signatureData = $request->input('signature');
+
+            if (!preg_match('/^data:image\/png;base64,/', $signatureData)) {
+                return redirect()->back()->with('error', 'Signature must be a PNG data URL.');
+            }
+
+            $image = preg_replace('/^data:image\/png;base64,/', '', $signatureData);
+            $image = str_replace(' ', '+', $image);
+            $decoded = base64_decode($image, true);
+
+            if ($decoded === false) {
+                return redirect()->back()->with('error', 'Invalid base64 signature data.');
+            }
+
+            // PNG magic bytes: \x89 P N G \r \n \x1a \n
+            if (substr($decoded, 0, 8) !== "\x89PNG\x0D\x0A\x1A\x0A") {
+                return redirect()->back()->with('error', 'Signature is not a valid PNG image.');
+            }
+
+            $imageName = 'signature_' . time() . '_' . $entry->id . '.png';
+            $path = 'signatures/' . $imageName;
+
+            $disk = \Storage::disk('public');
+
+            if (!$disk->exists('signatures')) {
+                $disk->makeDirectory('signatures');
+            }
+
+            $stored = $disk->put($path, $decoded);
+
+            if (!$stored) {
+                return redirect()->back()->with('error', 'Failed to save signature file.');
+            }
+
+            $data['supervisor_signature'] = $path;
+        }
+
+        $entry->update($data);
+
+        $message = $request->filled('signature') 
+            ? 'Entry approved and signed successfully.' 
+            : 'Entry approved successfully.';
+
+        return redirect()->back()->with('success', $message);
     }
     
-    public function approveProjectEntry(ProjectEntry $projectEntry)
+    public function approveProjectEntry(Request $request, ProjectEntry $projectEntry)
     {
         if (!auth()->user()->isSupervisor()) {
             abort(403, 'Access denied. Supervisor role required.');
         }
 
-        $projectEntry->update([
-            'supervisor_approved' => true,
-            'approved_by' => auth()->id(),
-            'approved_at' => now()
+        $request->validate([
+            'supervisor_comment' => 'nullable|string',
+            'signature' => 'nullable|string',
         ]);
 
-        return redirect()->back()->with('success', 'Project entry approved successfully.');
+        $data = [
+            'supervisor_approved' => true,
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'supervisor_comment' => $request->input('supervisor_comment')
+        ];
+
+        // Handle signature upload (optional - validate base64 + PNG magic header)
+        if ($request->filled('signature')) {
+            $signatureData = $request->input('signature');
+
+            if (!preg_match('/^data:image\/png;base64,/', $signatureData)) {
+                return redirect()->back()->with('error', 'Signature must be a PNG data URL.');
+            }
+
+            $image = preg_replace('/^data:image\/png;base64,/', '', $signatureData);
+            $image = str_replace(' ', '+', $image);
+            $decoded = base64_decode($image, true);
+
+            if ($decoded === false) {
+                return redirect()->back()->with('error', 'Invalid base64 signature data.');
+            }
+
+            // PNG magic bytes: \x89 P N G \r \n \x1a \n
+            if (substr($decoded, 0, 8) !== "\x89PNG\x0D\x0A\x1A\x0A") {
+                return redirect()->back()->with('error', 'Signature is not a valid PNG image.');
+            }
+
+            $imageName = 'signature_' . time() . '_' . $projectEntry->id . '.png';
+            $path = 'signatures/' . $imageName;
+
+            $disk = \Storage::disk('public');
+
+            if (!$disk->exists('signatures')) {
+                $disk->makeDirectory('signatures');
+            }
+
+            $stored = $disk->put($path, $decoded);
+
+            if (!$stored) {
+                return redirect()->back()->with('error', 'Failed to save signature file.');
+            }
+
+            $data['supervisor_signature'] = $path;
+        }
+
+        $projectEntry->update($data);
+
+        $message = $request->filled('signature') 
+            ? 'Project entry approved and signed successfully.' 
+            : 'Project entry approved successfully.';
+
+        return redirect()->back()->with('success', $message);
     }
     
     
@@ -96,6 +198,17 @@ class SupervisorController extends Controller
                                     ->paginate(15);
         
         return view('supervisor.pending-project-entries', compact('projectEntries'));
+    }
+    
+    public function markAllRead()
+    {
+        if (!auth()->user()->isSupervisor()) {
+            abort(403, 'Access denied. Supervisor role required.');
+        }
+        
+        auth()->user()->unreadNotifications->markAsRead();
+        
+        return redirect()->back()->with('success', 'All notifications marked as read.');
     }
     
 }

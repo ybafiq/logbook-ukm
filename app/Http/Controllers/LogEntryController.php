@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LogEntry;
+use App\Models\User;
+use App\Notifications\NewEntrySubmitted;
 
 class LogEntryController extends Controller
 {
@@ -17,7 +19,7 @@ class LogEntryController extends Controller
     public function index()
     {
         $logEntries = LogEntry::where('user_id', auth()->id())
-                             ->orderBy('date', 'asc')
+                             ->orderBy('date', 'desc')
                              ->paginate(10);
         
         return view('log-entries.index', compact('logEntries'));
@@ -78,8 +80,14 @@ class LogEntryController extends Controller
         }
         
         $data['user_id'] = auth()->id();
-        LogEntry::create($data);
+        $entry = LogEntry::create($data);
     
+        // Notify all supervisors about the new entry
+        $supervisors = User::where('role', 'supervisor')->get();
+        foreach ($supervisors as $supervisor) {
+            $supervisor->notify(new NewEntrySubmitted($entry, auth()->user(), 'log'));
+        }
+
         return redirect()->route('log-entries.index')->with('success', 'Entry saved successfully.');
     }
 

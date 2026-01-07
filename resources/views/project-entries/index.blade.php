@@ -72,7 +72,7 @@
                         </div>
                         
                         <div class="mt-4">
-                            {{ $projectEntries->links() }}
+                            {{ $projectEntries->links('pagination::bootstrap-5') }}
                         </div>
                     @else
                         <div class="text-center py-4">
