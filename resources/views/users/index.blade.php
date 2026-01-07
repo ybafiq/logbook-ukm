@@ -16,6 +16,11 @@
                         @can('create', App\Models\User::class)
                             <a href="{{ route('users.create') }}" class="btn btn-success btn-sm">{{ __('Add User') }}</a>
                         @endcan
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.manageSignatures') }}" class="btn btn-info btn-sm">
+                                <i class="fas fa-signature"></i> {{ __('Manage Signatures') }}
+                            </a>
+                        @endif
                         @can('viewTrashed', App\Models\User::class)
                             <a href="{{ route('users.trashed') }}" class="btn btn-secondary btn-sm">{{ __('Deleted Users') }}</a>
                         @endcan

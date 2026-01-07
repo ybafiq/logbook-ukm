@@ -236,6 +236,9 @@ class UserController extends Controller
             }
             $projectEntries = $projectEntriesQuery->get();
         }
+
+        $includeReflection = $request->boolean('include_reflection', false); // default false
+
         
         // Weekly reflections are now integrated into log and project entries
         // Collect weekly reflections from both log and project entries
@@ -270,6 +273,7 @@ class UserController extends Controller
             'startDate' => $startDate,
             'endDate' => $endDate,
             'entryType' => $entryType,
+            'includeReflection' => $includeReflection, 
             'generatedAt' => now()->format('F d, Y g:i A')
         ];
         

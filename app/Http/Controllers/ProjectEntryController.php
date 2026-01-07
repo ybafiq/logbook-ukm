@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProjectEntry;
+use App\Models\User;
+use App\Notifications\NewEntrySubmitted;
 
 class ProjectEntryController extends Controller
 {
@@ -60,8 +62,14 @@ class ProjectEntryController extends Controller
         }
         
         $data['user_id'] = auth()->id();
-        ProjectEntry::create($data);
+        $entry = ProjectEntry::create($data);
     
+        // Notify all supervisors about the new entry
+        $supervisors = User::where('role', 'supervisor')->get();
+        foreach ($supervisors as $supervisor) {
+            $supervisor->notify(new NewEntrySubmitted($entry, auth()->user(), 'project'));
+        }
+
         return redirect()->route('project-entries.index')
                          ->with('success', 'Project entry saved successfully.');
     }

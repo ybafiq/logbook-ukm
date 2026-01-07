@@ -28,10 +28,16 @@
         body {
             background-color: var(--ukm-gray);
             font-family: 'Nunito', sans-serif;
+            padding-bottom: 70px; 
         }
 
         .navbar {
             background: linear-gradient(90deg, var(--ukm-blue), var(--ukm-red));
+        }
+        .navbar-logo {
+            height: 30px;
+            margin-right: 5px;
+            filter: grayscale(50%);
         }
 
         .navbar-brand {
@@ -57,22 +63,76 @@
         }
 
         main {
-            background-color: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin: 2rem auto;
-            width: 90%;
-            max-width: 1200px;
+            color: #f0f0f0;
+            padding-top: 1rem; /* Adjust this padding as needed */
+            padding-bottom: 1rem;
         }
 
         footer {
             background: var(--ukm-blue);
             color: white;
-            text-align: center;
-            padding: 1rem;
-            margin-top: 3rem;
+
+            display: flex;
+            justify-content: center;   
+            align-items: center;       
+
+            padding: 0.5rem 0;         
+
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+
+            z-index: 999;
         }
+
+        footer p {
+            margin: 0;                 
+        }
+
+        .auth-background {
+            min-height: 40vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* optional: makes it stay in place */
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9); /* transparent white */
+            backdrop-filter: blur(10px); /* optional: smooth glass effect */
+        }
+
+        .card-container {
+            /* This is the key change for vertical centering */
+            min-height: calc(80vh - 56px); /* 100vh minus navbar height (approx 56px) */
+            display: flex;
+            justify-content: center; /* Centers the card horizontally */
+            align-items: center;     /* Centers the card vertically */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .login-card {
+            max-width: 420px; 
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25); 
+        }
+
+        .card-header {
+            font-size: 1rem;
+            padding: 1rem;
+        }
+
+
     </style>
 </head>
 <body>
@@ -80,6 +140,7 @@
         <nav class="navbar navbar-expand-md shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
+                    <!-- <img src="/images/ukm3.png" alt="UKM Logo" class="navbar-logo"> -->
                     {{ config('app.name', 'UKM Logbook') }}
                 </a>
                 <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -138,6 +199,9 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="supervisorDropdown" role="button" data-bs-toggle="dropdown">
                                         {{ __('Supervisor') }}
+                                        @if(auth()->user()->unreadNotifications->count() > 0)
+                                            <span class="badge bg-danger">{{ auth()->user()->unreadNotifications->count() }}</span>
+                                        @endif
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('supervisor.dashboard') }}">{{ __('Dashboard') }}</a></li>
@@ -189,7 +253,7 @@
         </main>
 
         <footer>
-            <p>© {{ date('Y') }} Universiti Kebangsaan Malaysia | Logbook System</p>
+            <p>© {{ date('Y') }} Universiti Kebangsaan Malaysia</p>
         </footer>
     </div>
 </body>

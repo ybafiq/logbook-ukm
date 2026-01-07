@@ -28,6 +28,54 @@
                         </div>
                     @endif
 
+                    <!-- Recent Notifications -->
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-info">
+                                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-bell"></i> {{ __('Recent Notifications') }} 
+                                        <span class="badge bg-light text-dark">{{ auth()->user()->unreadNotifications->count() }}</span>
+                                    </h5>
+                                    <form action="{{ route('supervisor.markAllRead') }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-light">{{ __('Mark All as Read') }}</button>
+                                    </form>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="list-group list-group-flush">
+                                        @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <i class="fas fa-file-alt text-info me-2"></i>
+                                                    <strong>{{ $notification->data['student_name'] ?? 'Student' }}</strong>
+                                                    {{ __('submitted a new') }} {{ $notification->data['entry_type'] === 'log' ? __('log entry') : __('project entry') }}
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        <i class="far fa-calendar"></i> {{ $notification->data['entry_date'] ?? '' }}
+                                                        - {{ $notification->created_at->diffForHumans() }}
+                                                    </small>
+                                                    @if(isset($notification->data['activity']))
+                                                    <br>
+                                                    <small class="text-muted">{{ $notification->data['activity'] }}</small>
+                                                    @endif
+                                                </div>
+                                                <div>
+                                                    <a href="{{ $notification->data['entry_type'] === 'log' ? route('supervisor.pendingEntries') : route('supervisor.pendingProjectEntries') }}" 
+                                                       class="btn btn-sm btn-info">{{ __('Review') }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <!-- Statistics Cards -->
                     <div class="row mb-4">
                         <div class="col-md-4">
@@ -86,13 +134,9 @@
                                                     <td>{{ $entry->date->format('M d') }}</td>
                                                     <td>{{ Str::limit($entry->activity, 40) }}</td>
                                                     <td>
-                                                        <form action="{{ route('supervisor.approveEntry', $entry) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-success btn-sm" 
-                                                                    onclick="return confirm('{{ __('Approve this entry?') }}')">
-                                                                {{ __('Approve') }}
-                                                            </button>
-                                                        </form>
+                                                        <a href="{{ route('supervisor.pendingEntries') }}" class="btn btn-success btn-sm">
+                                                            {{ __('Review') }}
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -137,13 +181,9 @@
                                                     <td>{{ $entry->date->format('M d') }}</td>
                                                     <td>{{ Str::limit($entry->activity, 40) }}</td>
                                                     <td>
-                                                        <form action="{{ route('supervisor.approveProjectEntry', $entry) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-success btn-sm" 
-                                                                    onclick="return confirm('{{ __('Approve this project entry?') }}')">
-                                                                {{ __('Approve') }}
-                                                            </button>
-                                                        </form>
+                                                        <a href="{{ route('supervisor.pendingProjectEntries') }}" class="btn btn-success btn-sm">
+                                                            {{ __('Review') }}
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 @endforeach
