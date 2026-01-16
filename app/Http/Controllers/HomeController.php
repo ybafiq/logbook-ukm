@@ -51,7 +51,7 @@ class HomeController extends Controller
         ];
         
         $recentEntries = $user->logEntries()->latest()->limit(5)->get();
-        $recentProjectEntries = $user->projectEntries()->latest()->limit(3)->get();
+        $recentProjectEntries = $user->projectEntries()->latest()->limit(5)->get();
 
         // Prepare last 30 days combined daily counts for a contribution-style chart
         $days = 30;

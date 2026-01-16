@@ -26,7 +26,7 @@
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
-                    @endif
+                    @endif  
 
                     <!-- Statistics Cards -->
                     <div class="row mb-4">
@@ -153,10 +153,11 @@
                         </div>
                     </div>
 
-                    <!-- Recent Activity -->
-                    @if($recentEntries->count() > 0)
+                    <!-- Recent Activity: Log and Project Entries side-by-side -->
+                    @if($recentEntries->count() > 0 || $recentProjectEntries->count() > 0)
                     <div class="row mb-4">
                         <div class="col-md-6">
+                            @if($recentEntries->count() > 0)
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="mb-0">{{ __('Recent Log Entries') }}</h5>
@@ -190,13 +191,15 @@
                                     </div>
                                 </div>
                             </div>
+                            @else
+                            <div class="card">
+                                <div class="card-body text-center text-muted py-4">{{ __('No recent log entries') }}</div>
+                            </div>
+                            @endif
                         </div>
-                    </div>
-                    @endif
 
-                    @if($recentProjectEntries->count() > 0)
-                    <div class="row mb-4">
                         <div class="col-md-6">
+                            @if($recentProjectEntries->count() > 0)
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="mb-0">{{ __('Recent Project Entries') }}</h5>
@@ -230,6 +233,11 @@
                                     </div>
                                 </div>
                             </div>
+                            @else
+                            <div class="card">
+                                <div class="card-body text-center text-muted py-4">{{ __('No recent project entries') }}</div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                     @endif
@@ -636,4 +644,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- contribution grid script will be handled inline next to the pie chart -->
