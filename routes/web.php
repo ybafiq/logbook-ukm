@@ -13,6 +13,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Endpoint for AJAX polling of recent daily counts (used by dashboard charts)
+Route::get('/home/daily-counts', [HomeController::class, 'dailyCounts'])->name('home.dailyCounts')->middleware('auth');
 
 Route::get('log-entries', [LogEntryController::class, 'index'])->name('log-entries.index');
 Route::get('log-entries/create', [LogEntryController::class, 'create'])->name('log-entries.create');
