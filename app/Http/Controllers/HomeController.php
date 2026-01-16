@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LogEntry;
 use App\Models\ProjectEntry;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -51,6 +52,52 @@ class HomeController extends Controller
         
         $recentEntries = $user->logEntries()->latest()->limit(5)->get();
         $recentProjectEntries = $user->projectEntries()->latest()->limit(3)->get();
+
+        // Prepare last 30 days combined daily counts for a contribution-style chart
+        $days = 30;
+        $dailyCounts = collect();
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i)->toDateString();
+            $logCount = $user->logEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $projectCount = $user->projectEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $dailyCounts[$date] = $logCount + $projectCount;
+        }
+
+        // Prepare 52-week contribution data (7 rows x 52 columns). Use grouped queries for performance.
+        $end = Carbon::today();
+        // start at the beginning of the week 51 weeks ago so we have 52 weeks total
+        $start = $end->copy()->startOfWeek(Carbon::SUNDAY)->subWeeks(51);
+
+        // Fetch grouped counts for logs and projects in one query each
+        $logGrouped = $user->logEntries()
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+            ->selectRaw("DATE(`date`) as day, COUNT(*) as cnt")
+            ->groupBy('day')
+            ->pluck('cnt', 'day')
+            ->toArray();
+
+        $projGrouped = $user->projectEntries()
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+            ->selectRaw("DATE(`date`) as day, COUNT(*) as cnt")
+            ->groupBy('day')
+            ->pluck('cnt', 'day')
+            ->toArray();
+
+        // Build weeks array: each week is array of 7 day arrays ['date'=>..., 'count'=>...]
+        $contribWeeks = [];
+        $contribMax = 0;
+        $cursor = $start->copy();
+        for ($w = 0; $w < 52; $w++) {
+            $week = [];
+            for ($d = 0; $d < 7; $d++) {
+                $dateStr = $cursor->toDateString();
+                $count = (int) ( ($logGrouped[$dateStr] ?? 0) + ($projGrouped[$dateStr] ?? 0) );
+                $week[] = ['date' => $dateStr, 'count' => $count];
+                if ($count > $contribMax) $contribMax = $count;
+                $cursor->addDay();
+            }
+            $contribWeeks[] = $week;
+        }
         
         // Get recent reflections from both log entries and project entries
         $recentLogReflections = $user->logEntries()
@@ -91,6 +138,24 @@ class HomeController extends Controller
             ->sortByDesc('created_at')
             ->take(3);
         
-        return view('home', compact('stats', 'recentEntries', 'recentProjectEntries', 'recentReflections'));
+        return view('home', compact('stats', 'recentEntries', 'recentProjectEntries', 'recentReflections', 'dailyCounts', 'contribWeeks', 'contribMax'));
+    }
+
+    /**
+     * Return last 30 days daily counts as JSON for chart polling.
+     */
+    public function dailyCounts(Request $request)
+    {
+        $user = auth()->user();
+        $days = 30;
+        $dailyCounts = collect();
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i)->toDateString();
+            $logCount = $user->logEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $projectCount = $user->projectEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $dailyCounts[$date] = $logCount + $projectCount;
+        }
+
+        return response()->json($dailyCounts);
     }
 }
