@@ -65,5 +65,9 @@ Open `http://localhost:8000/home` and log in as a student to see the dashboard.
 ## Contributing
 Contributions are welcome. Please open issues or pull requests for enhancements or bug fixes.
 
+## Repository cleanup
+- Date: 2026-02-03 — Removed two stray interactive/debug output files that were accidentally committed to the repository root. These files were leftover PsySH/Tinker traces and are not part of the application.
+- Recommendation: avoid committing interactive REPL outputs; use `storage/` or a local-only `tmp/` folder for temporary debug files and add them to `.gitignore`.
+
 ## License
 This project follows the MIT license.
