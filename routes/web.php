@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogEntryController;
 use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\MergePdfController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,6 +13,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Endpoint for AJAX polling of recent daily counts (used by dashboard charts)
+Route::get('/home/daily-counts', [HomeController::class, 'dailyCounts'])->name('home.dailyCounts')->middleware('auth');
 
 Route::get('log-entries', [LogEntryController::class, 'index'])->name('log-entries.index');
 Route::get('log-entries/create', [LogEntryController::class, 'create'])->name('log-entries.create');
@@ -69,7 +72,26 @@ Route::middleware(['auth', 'role:supervisor'])->group(function () {
     Route::get('supervisor/pending-project-entries', [SupervisorController::class, 'pendingProjectEntries'])->name('supervisor.pendingProjectEntries');
     Route::post('supervisor/approve-entry/{entry}', [SupervisorController::class, 'approveEntry'])->name('supervisor.approveEntry');
     Route::post('supervisor/approve-project-entry/{projectEntry}', [SupervisorController::class, 'approveProjectEntry'])->name('supervisor.approveProjectEntry');
+    Route::post('supervisor/mark-all-read', [SupervisorController::class, 'markAllRead'])->name('supervisor.markAllRead');
+});
+
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('admin/signatures', [App\Http\Controllers\AdminController::class, 'manageSignatures'])->name('admin.manageSignatures');
+    Route::delete('admin/signatures/log/{entry}', [App\Http\Controllers\AdminController::class, 'deleteLogSignature'])->name('admin.deleteLogSignature');
+    Route::delete('admin/signatures/project/{entry}', [App\Http\Controllers\AdminController::class, 'deleteProjectSignature'])->name('admin.deleteProjectSignature');
 });
 
 
 Route::get('students/{student}/export', [LogEntryController::class, 'exportLogbook'])->name('students.export');
+
+Route::get('/pdf/merge', [MergePdfController::class, 'showForm'])->name('pdf.merge.form');
+Route::get('/pdf/merge', function() {
+    return view('pdf.merge-form'); // adjust to your actual view
+})->name('pdf.merge.form');
+
+Route::post('/pdf/merge', [MergePdfController::class, 'merge'])->name('pdf.merge');
+Route::post('/pdf/merge/preview', [MergePdfController::class, 'preview'])->name('pdf.merge.preview');
+
+
+

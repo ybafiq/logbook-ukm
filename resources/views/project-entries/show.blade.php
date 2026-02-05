@@ -46,7 +46,8 @@
 
                     @if($projectEntry->weekly_reflection_content)
                         <hr>
-                        <h5 class="mb-3">{{ __('Weekly Reflection') }}</h5>
+                        <h5 class="mb-3">{{ __('Suggestion for improvement and planning for
+                            the upcoming week') }}</h5>
                         
                         @if($projectEntry->reflection_week_start)
                         <div class="row mb-3">
@@ -58,7 +59,7 @@
                         @endif
 
                         <div class="row mb-3">
-                            <label class="col-sm-3 col-form-label fw-bold">{{ __('Reflection Content') }}:</label>
+                            <label class="col-sm-3 col-form-label fw-bold">{{ __('Improvement') }}:</label>
                             <div class="col-sm-9">
                                 <div class="card">
                                     <div class="card-body">
@@ -69,7 +70,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-sm-3 col-form-label fw-bold">{{ __('Reflection Status') }}:</label>
+                            <label class="col-sm-3 col-form-label fw-bold">{{ __('Improvement Status') }}:</label>
                             <div class="col-sm-9">
                                 @if($projectEntry->reflection_supervisor_signed)
                                     <span class="badge bg-success">{{ __('Signed by Supervisor') }}</span>

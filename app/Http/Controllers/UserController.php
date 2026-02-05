@@ -236,9 +236,19 @@ class UserController extends Controller
             }
             $projectEntries = $projectEntriesQuery->get();
         }
+
+        $includeReflection = $request->boolean('include_reflection', false); // default false
+
         
         // Weekly reflections are now integrated into log and project entries
-        $weeklyReflections = collect(); // Empty collection for backward compatibility
+        // Collect weekly reflections from both log and project entries
+        $weeklyReflectionsContents = collect()
+        ->merge($logEntries->pluck('weekly_reflection_content'))
+        ->merge($projectEntries->pluck('weekly_reflection_content'))
+        ->map(fn($text) => ltrim($text))
+        ->filter() // removes null or empty values
+        ->implode("\n\n");
+
         
         // Generate filename based on filter type
         $typeLabel = '';
@@ -259,10 +269,11 @@ class UserController extends Controller
             'user' => $user,
             'logEntries' => $logEntries,
             'projectEntries' => $projectEntries,
-            'weeklyReflections' => $weeklyReflections,
+            'weeklyReflectionsContents' => $weeklyReflectionsContents,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'entryType' => $entryType,
+            'includeReflection' => $includeReflection, 
             'generatedAt' => now()->format('F d, Y g:i A')
         ];
         

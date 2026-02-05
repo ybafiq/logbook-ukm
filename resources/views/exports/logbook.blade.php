@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <title>Student Logbook - {{ $user->name }}</title>
     <style>
-        /* ---------- General Page Setup ---------- */
+        /* === PAGE LAYOUT === */
         @page {
-            margin: 25px 20px;
+            margin: 2.5cm 2cm 2.5cm 2cm; /* Top, Right, Bottom, Left */
         }
+
         body {
             font-family: 'Times New Roman', serif;
             font-size: 11px;
@@ -15,112 +16,105 @@
             color: #000;
             margin: 0;
             padding: 0;
-            word-wrap: break-word; /* ✅ ensures long words wrap */
+            word-wrap: break-word;
         }
 
-        /* ---------- Header ---------- */
+        /* === HEADER === */
         .header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         .header h1 {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             margin: 0;
-            line-height: 1.2;
         }
         .header h2 {
             font-size: 12px;
             font-weight: bold;
-            margin: 5px 0;
-            line-height: 1.2;
+            margin: 3px 0;
         }
         .header p {
             font-size: 10px;
-            margin: 5px 0;
-            line-height: 1.2;
             font-style: italic;
+            margin: 2px 0;
         }
 
-        /* ---------- Student Info ---------- */
+        /* === STUDENT INFO === */
         .student-info {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-size: 11px;
+            line-height: 1.8;
         }
-        .student-info .row {
+        .info-line {
             margin-bottom: 6px;
+        }
+        .underline {
+            display: inline-block;
             border-bottom: 1px solid #000;
-            padding-bottom: 2px;
-            white-space: normal; /* ✅ allow line wrapping */
-            word-break: break-word;
+            width: 65%;
+            margin-left: 5px;
         }
 
-        /* ---------- Logbook Table ---------- */
-        .logbook-table {
+        /* === TABLE === */
+        table.logbook-table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed; /* ✅ make columns fixed width */
+            table-layout: fixed;
             margin-top: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
-        .logbook-table th, .logbook-table td {
-            border: 1px solid #000;
+        .logbook-table th,
+        .logbook-table td {
+            border: 0.5px solid #000;
             padding: 6px;
-            font-size: 11px;
             vertical-align: top;
-            word-wrap: break-word;
-            white-space: normal; /* ✅ wraps text */
+            font-size: 11px;
             word-break: break-word;
+            white-space: normal;
         }
         .logbook-table th {
             text-align: center;
             font-weight: bold;
-            background-color: #f0f0f0;
         }
 
-        /* ✅ Adjusted column widths for better proportion */
-        .date-col { width: 18%; text-align: center; }
-        .activity-col { width: 47%; }
-        .comment-col { width: 35%; }
+        /* Adjust column widths — matches the official UKM template proportions */
+        .date-col {
+            width: 15%;
+            text-align: center;
+        }
+        .activity-col {
+            width: 50%;
+        }
+        .comment-col {
+            width: 35%;
+        }
 
-        /* ---------- Reflection Section ---------- */
-        .reflection-section {
+        /* === REFLECTION & SUPERVISOR SECTIONS === */
+        .reflection-section,
+        .supervisor-section {
             border: 1px solid #000;
             margin-bottom: 20px;
             page-break-inside: avoid;
         }
-        .reflection-header {
-            background-color: #f0f0f0;
+        .reflection-header,
+        .supervisor-header {
             padding: 6px 8px;
             font-size: 11px;
             font-weight: bold;
             border-bottom: 1px solid #000;
         }
         .reflection-content {
-            padding: 10px;
-            min-height: 80px;
-            white-space: pre-wrap; /* ✅ maintain line breaks */
+            padding: 12px;
+            min-height: 100px;
+            white-space: pre-wrap;
             word-break: break-word;
         }
-
-        /* ---------- Supervisor Section ---------- */
-        .supervisor-section {
-            border: 1px solid #000;
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            page-break-inside: avoid;
-        }
-        .supervisor-header {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .signature-space {
-            height: 60px;
-            border: 1px dashed #999;
-            margin-bottom: 10px;
+        .supervisor-content {
+            padding: 12px;
         }
 
-        /* ---------- Footer ---------- */
+        /* === FOOTER === */
         .footer-fields {
             display: flex;
             justify-content: space-between;
@@ -130,48 +124,54 @@
             width: 48%;
         }
         .footer-field strong {
+            display: block;
             font-weight: bold;
-        }
-        .footer-field .underline {
-            border-bottom: 1px solid #000;
-            margin-top: 3px;
-            height: 20px;
+            margin-bottom: 3px;
         }
         .footer-text {
             font-weight: bold;
-            margin-top: 15px;
-            text-align: center;
+            text-align: left;
+            margin-top: 10px;
         }
     </style>
 </head>
+
 <body>
-    <div class="header">
-        <h1>STBC4866 Latihan Tempat Kerja Bioinformatik</h1>
-        <h2>Templat Buku Log / Student's Logbook Template{{ $entryTypeLabel ?? '' }}</h2>
-        <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
-        @if(isset($startDate) || isset($endDate))
-            <p style="font-size: 10px; margin-top: 5px; color: #666;">
-                <strong>Date Range:</strong>
-                {{ $startDate ? date('d/m/Y', strtotime($startDate)) : 'All dates' }}
-                -
-                {{ $endDate ? date('d/m/Y', strtotime($endDate)) : 'Present' }}
-            </p>
+
+    <!-- HEADER -->
+    <div class="header"> 
+        @if($entryType === 'project')
+            <h1>STBC4966 Bioinformatik Dalam Industri</h1>
+            <h2>Templat Buku Log / Student’s Logbook Template</h2>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+        @elseif($entryType === 'log')
+            <h1>STBC4866 Latihan Tempat Kerja Bioinformatik</h1>
+            <h2>Templat Buku Log / Student’s Logbook Template</h2>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+        @else
+            <h1>STBC4866 & STBC4966 Logbook dan Projek Bioinformatik</h1>
+            <h2>Templat Gabungan Buku Log & Projek / Combined Log & Project Template</h2>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
         @endif
     </div>
 
+    <!-- STUDENT INFO -->
     <div class="student-info">
-        <div class="row">
-            <strong>Nama Pelajar / Name of Student:</strong> {{ $user->name }}
+        <div class="info-line">
+            Nama Pelajar / <i>Name of Student:</i>
+            <span class="underline">{{ $user->name ?? ' ' }}</span>
         </div>
-        <div class="row">
-            <strong>No. Pendaftaran / Matric No.:</strong> {{ $user->matric_no }}
+        <div class="info-line">
+            No. Pendaftaran / <i>Matric No.:</i>
+            <span class="underline">{{ $user->matric_no ?? ' ' }}</span>
         </div>
-        <div class="row">
-            <strong>Tempat kerja / Working place:</strong> {{ $user->workplace ?: '' }}
+        <div class="info-line">
+            Tempat kerja / <i>Working place:</i>
+            <span class="underline">{{ $user->workplace ?? ' ' }}</span>
         </div>
     </div>
 
-    <!-- ---------- Main Logbook Table ---------- -->
+    <!-- LOGBOOK TABLE -->
     <table class="logbook-table">
         <thead>
             <tr>
@@ -181,91 +181,123 @@
             </tr>
         </thead>
         <tbody>
-            @php
-                $allEntries = collect();
-                if ($logEntries && $logEntries->count()) {
-                    foreach($logEntries as $entry) {
-                        $allEntries->push([
-                            'date' => $entry->date,
-                            'activity' => $entry->activity,
-                            'comment' => $entry->comment ?? '',
-                        ]);
-                    }
-                }
-                if ($projectEntries && $projectEntries->count()) {
-                    foreach($projectEntries as $entry) {
-                        $allEntries->push([
-                            'date' => $entry->date,
-                            'activity' => $entry->activity,
-                            'comment' => $entry->comment ?? '',
-                        ]);
-                    }
-                }
-                $allEntries = $allEntries->sortBy('date');
-            @endphp
-
-            @forelse($allEntries as $entry)
-                <tr>
-                    <td class="date-col">{{ $entry['date']->format('d/m/Y') }}</td>
-                    <td class="activity-col">{{ $entry['activity'] }}</td>
-                    <td class="comment-col">{{ $entry['comment'] }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="3" style="text-align:center; padding:20px; font-style:italic;">No entries found.</td>
-                </tr>
-            @endforelse
+            @if($entryType === 'log')
+                @forelse($logEntries->sortBy('date') as $entry)
+                    <tr>
+                        <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
+                        <td class="activity-col">{{ $entry->activity }}</td>
+                        <td class="comment-col">{{ $entry->comment ?? '' }}</td>
+                    </tr>
+                @empty
+                    @for($i = 0; $i < 8; $i++)
+                    <tr>
+                        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    </tr>
+                    @endfor
+                @endforelse
+            @elseif($entryType === 'project')
+                @forelse($projectEntries->sortBy('date') as $entry)
+                    <tr>
+                        <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
+                        <td class="activity-col">{{ $entry->activity }}</td>
+                        <td class="comment-col">{{ $entry->comment ?? '' }}</td>
+                    </tr>
+                @empty
+                    @for($i = 0; $i < 8; $i++)
+                    <tr>
+                        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    </tr>
+                    @endfor
+                @endforelse
+            @endif
         </tbody>
     </table>
 
-    <!-- ---------- Weekly Reflection ---------- -->
+    <!-- REFLECTION SECTION -->
     <div class="reflection-section">
-        <div class="reflection-header">Refleksi Mingguan / Weekly Reflection:</div>
-        <div class="reflection-content">
-            @php
-                $reflections = collect();
-                if ($logEntries) {
-                    foreach($logEntries->whereNotNull('weekly_reflection_content') as $entry) {
-                        $reflections->push($entry->weekly_reflection_content);
-                    }
-                }
-                if ($projectEntries) {
-                    foreach($projectEntries->whereNotNull('weekly_reflection_content') as $entry) {
-                        $reflections->push($entry->weekly_reflection_content);
-                    }
-                }
-            @endphp
-            @if($reflections->count())
-                @foreach($reflections->unique() as $reflection)
-                    <p>{{ $reflection }}</p>
-                @endforeach
+        <div class="reflection-header">
+            @if($entryType === 'project')
+                Cadangan penambahbaikan dan perancangan / Suggestion for improvement and planning for the upcoming week:
             @else
-                <p style="color:#666;">&nbsp;</p>
+                Refleksi Mingguan / Weekly Reflection:
+            @endif
+        </div>
+        <div class="reflection-content">
+            @if(!empty($weeklyReflectionsContents))
+                <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
+                    {{ ltrim($weeklyReflectionsContents) }}
+                </div>
+            @else
+                <br><br><br><br><br><br><br>
             @endif
         </div>
     </div>
 
-    <!-- ---------- Supervisor Section ---------- -->
+    @if($includeReflection)
+    <!-- SUPERVISOR SECTION -->
     <div class="supervisor-section">
         <div class="supervisor-header">
-            Cap dan tandatangan penyelia industri (setiap 3 minggu) /
-            Industry supervisor's cap and signature (every 3 weeks):
+            Cop dan tandatangan penyelia industri (setiap 3 minggu) /
+            Industry supervisor's cop and signature (every 3 weeks):
         </div>
-        <div class="signature-space">&nbsp;</div>
-        <div class="footer-fields">
-            <div class="footer-field">
-                <strong>Tarikh / Date:</strong>
-                <div class="signature-space">&nbsp;</div>
-            </div>
-            <div class="footer-field">
-                <strong>Komen / Comments:</strong>
-                <div class="signature-space">&nbsp;</div>
-            </div>
+        <div class="supervisor-content">
+            @php
+                // Get the most recent approved entry with signature
+                $signedEntry = null;
+                if ($entryType === 'log' || $entryType === 'all') {
+                    $signedEntry = $logEntries->where('supervisor_approved', true)
+                                              ->whereNotNull('supervisor_signature')
+                                              ->sortByDesc('approved_at')
+                                              ->first();
+                }
+                if (!$signedEntry && ($entryType === 'project' || $entryType === 'all')) {
+                    $signedEntry = $projectEntries->where('supervisor_approved', true)
+                                                  ->whereNotNull('supervisor_signature')
+                                                  ->sortByDesc('approved_at')
+                                                  ->first();
+                }
+            @endphp
+            
+            @if($signedEntry && $signedEntry->supervisor_signature)
+                <!-- Display signature -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="{{ public_path('storage/' . $signedEntry->supervisor_signature) }}" 
+                         alt="Supervisor Signature" 
+                         style="max-width: 300px; max-height: 100px; border: 1px solid #ddd; padding: 5px;">
+                </div>
+                
+                <div class="footer-fields">
+                    <div class="footer-field">
+                        <strong>Tarikh / Date:</strong> 
+                        {{ $signedEntry->approved_at ? $signedEntry->approved_at->format('d/m/Y') : '' }}
+                    </div>
+                    <div class="footer-field">
+                        <strong>Komen / Comments:</strong>
+                        <div style="margin-top: 5px; min-height: 50px; white-space: pre-wrap;">
+                            {{ $signedEntry->supervisor_comment ?? '' }}
+                        </div>
+                    </div>
+                </div>
+            @else
+                <!-- Empty signature section if not signed -->
+                <br><br><br><br><br>
+                <div class="footer-fields">
+                    <div class="footer-field">
+                        <strong>Tarikh / Date:</strong>
+                    </div>
+                    <div class="footer-field">
+                        <strong>Komen / Comments:</strong>
+                        <br><br><br><br><br>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
     <div class="footer-text">
         Untuk kegunaan Pelajar UKM.
     </div>
+    @endif
+
 </body>
 </html>

@@ -8,7 +8,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>{{ __('My Profile') }}</span>
                     @if(auth()->user()->isStudent())
-                        <a href="{{ route('users.showExport') }}" class="btn btn-danger btn-sm">
+                        <a href="{{ route('users.showExport') }}" class="btn btn-success btn-sm">
                             <i class="fas fa-file-pdf"></i> {{ __('Export Logbook') }}
                         </a>
                     @endif
@@ -102,8 +102,8 @@
                         </div>
                         
                         <div class="form-group mb-3">
-                            <button type="submit" class="btn btn-primary">{{ __('Update Profile') }}</button>
-                            <a href="{{ route('home') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            <button type="submit" class="btn btn-primary me-2">{{ __('Update Profile') }}</button>
+                            <a href="{{ route('home') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
                         </div>
                     </form>
                 </div>

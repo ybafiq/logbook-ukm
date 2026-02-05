@@ -26,7 +26,7 @@
                                         <th>{{ __('Activity') }}</th>
                                         <th>{{ __('Comment') }}</th>
                                         <th>{{ __('Status') }}</th>
-                                        <th>{{ __('Reflection') }}</th>
+                                        <th>{{ __('Improvement') }}</th>
                                         <th>{{ __('Approved By') }}</th>
                                         <th>{{ __('Actions') }}</th>
                                     </tr>
@@ -72,7 +72,7 @@
                         </div>
                         
                         <div class="mt-4">
-                            {{ $projectEntries->links() }}
+                            {{ $projectEntries->links('pagination::bootstrap-5') }}
                         </div>
                     @else
                         <div class="text-center py-4">
