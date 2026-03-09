@@ -157,35 +157,20 @@
                             @if(auth()->user()->isStudent())
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('STBC4866') }}
+                                        {{ __('Log Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
                                         <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ route('users.showExport', ['template' => 4866, 'entry_type' => 'log']) }}">{{ __('Export (4866)') }}</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('STBC4966') }}
+                                        {{ __('Project Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
                                         <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ route('users.showExport', ['template' => 4966, 'entry_type' => 'project']) }}">{{ __('Export (4966)') }}</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="custom4886Dropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('STBC4886') }}
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ route('users.showExport4886') }}">{{ __('Export (4886)') }}</a></li>
                                     </ul>
                                 </li>
                             @endif
@@ -193,7 +178,7 @@
                             @if(auth()->user()->isAdmin())
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('STBC4866') }}
+                                        {{ __('Log Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
@@ -202,24 +187,11 @@
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('STBC4966') }}
+                                        {{ __('Project Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
                                         <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ route('users.showExport', ['template' => 4966, 'entry_type' => 'project']) }}">{{ __('Export (4966)') }}</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="custom4886Dropdown2" role="button" data-bs-toggle="dropdown">
-                                        {{ __('STBC4886') }}
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{{ route('users.showExport4886') }}">{{ __('Export (4886)') }}</a></li>
                                     </ul>
                                 </li>
                             @endif

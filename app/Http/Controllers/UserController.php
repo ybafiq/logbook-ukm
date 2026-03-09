@@ -207,19 +207,7 @@ class UserController extends Controller
         // Get filters from request
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
-        // Allow template codes to override entry type (4866 -> log, 4966 -> project, 4886 -> combined/all)
-        $template = $request->get('template');
-        $entryType = $request->get('entry_type', null);
-        if ($template && !$entryType) {
-            if ((int)$template === 4866) {
-                $entryType = 'log';
-            } elseif ((int)$template === 4966) {
-                $entryType = 'project';
-            } elseif ((int)$template === 4886) {
-                $entryType = 'all';
-            }
-        }
-        $entryType = $entryType ?? 'all'; // Default to 'all'
+        $entryType = $request->get('entry_type', 'all'); // Default to 'all'
         
         // Initialize collections
         $logEntries = collect();
@@ -315,81 +303,6 @@ class UserController extends Controller
             abort(403, 'Only students can export their logbook.');
         }
         
-        // Pass through any template param so the view can pre-select options
-        $template = request()->get('template');
-        return view('users.export', compact('user', 'template'));
-    }
-
-    /**
-     * Show dedicated form for STBC4886 output
-     */
-    public function showExport4886Form()
-    {
-        $user = auth()->user();
-        if (!$user->isStudent()) {
-            abort(403, 'Only students can access this page.');
-        }
-
-        return view('users.export4886', compact('user'));
-    }
-
-    /**
-     * Generate STBC4886 PDF based on selected sources/filters
-     */
-    public function export4886(Request $request)
-    {
-        $user = auth()->user();
-        if (!$user->isStudent()) {
-            abort(403, 'Only students can generate this PDF.');
-        }
-
-        $startDate = $request->get('start_date');
-        $endDate = $request->get('end_date');
-        $includeLogs = $request->boolean('include_logs');
-        $includeProjects = $request->boolean('include_projects');
-        $includeReflection = $request->boolean('include_reflection', false);
-
-        $logEntries = collect();
-        $projectEntries = collect();
-
-        if ($includeLogs) {
-            $q = $user->logEntries()->orderBy('date', 'desc');
-            if ($startDate) $q->whereDate('date', '>=', $startDate);
-            if ($endDate) $q->whereDate('date', '<=', $endDate);
-            $logEntries = $q->get();
-        }
-
-        if ($includeProjects) {
-            $q = $user->projectEntries()->orderBy('date', 'desc');
-            if ($startDate) $q->whereDate('date', '>=', $startDate);
-            if ($endDate) $q->whereDate('date', '<=', $endDate);
-            $projectEntries = $q->get();
-        }
-
-        $weeklyReflectionsContents = collect()
-            ->merge($logEntries->pluck('weekly_reflection_content'))
-            ->merge($projectEntries->pluck('weekly_reflection_content'))
-            ->map(fn($text) => ltrim($text))
-            ->filter()
-            ->implode("\n\n");
-
-        $data = [
-            'user' => $user,
-            'logEntries' => $logEntries,
-            'projectEntries' => $projectEntries,
-            'weeklyReflectionsContents' => $weeklyReflectionsContents,
-            'includeReflection' => $includeReflection,
-        ];
-
-        $pdf = Pdf::loadView('exports.4886', $data)
-                  ->setPaper('a4', 'portrait')
-                  ->setOptions([
-                      'isHtml5ParserEnabled' => true,
-                      'isPhpEnabled' => true,
-                      'defaultFont' => 'sans-serif'
-                  ]);
-
-        $filename = 'stbc4886_' . $user->matric_no . '_' . now()->format('Y-m-d_H-i-s') . '.pdf';
-        return $pdf->download($filename);
+        return view('users.export', compact('user'));
     }
 }
