@@ -160,8 +160,8 @@
                                         {{ __('Log Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4866.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4866.create') }}">{{ __('Create New') }}</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -169,8 +169,8 @@
                                         {{ __('Project Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4966.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4966.create') }}">{{ __('Create New') }}</a></li>
                                     </ul>
                                 </li>
                             @endif
@@ -181,8 +181,8 @@
                                         {{ __('Log Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('log-entries.index') }}">{{ __('View All') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('log-entries.create') }}">{{ __('Create New') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4866.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4866.create') }}">{{ __('Create New') }}</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown">
@@ -190,8 +190,8 @@
                                         {{ __('Project Entries') }}
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('project-entries.index') }}">{{ __('View All') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('project-entries.create') }}">{{ __('Create New') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4966.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4966.create') }}">{{ __('Create New') }}</a></li>
                                     </ul>
                                 </li>
                             @endif

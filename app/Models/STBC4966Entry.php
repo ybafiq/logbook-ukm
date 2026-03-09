@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LogEntry extends Model
+class STBC4966Entry extends Model
 {
     use SoftDeletes, HasFactory;
+
+    protected $table = 'project_entries';
 
     protected $fillable = [
         'user_id',
@@ -29,7 +31,7 @@ class LogEntry extends Model
         'reflection_signed_by',
         'reflection_signed_at'
     ];
-
+    
     protected $casts = [
         'date' => 'date',
         'approved_at' => 'datetime',

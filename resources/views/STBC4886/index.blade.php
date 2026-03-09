@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>{{ __('Log Entries') }}</span>
-                    <a href="{{ route('log-entries.create') }}" class="btn btn-primary">{{ __('Add New Entry') }}</a>
+                    <a href="{{ route('STBC4886.create') }}" class="btn btn-primary">{{ __('Add New Entry') }}</a>
                 </div>
 
                 <div class="card-body">

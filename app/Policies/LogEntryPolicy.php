@@ -2,11 +2,13 @@
 
 namespace App\Policies;
 
-use App\Models\LogEntry;
+use App\Models\STBC4866Entry;
 use App\Models\User;
 
 class LogEntryPolicy
 {
+    // Model: STBC4866Entry (formerly LogEntry)
+
     /**
      * Determine whether the user can view any models.
      */
@@ -18,9 +20,8 @@ class LogEntryPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, LogEntry $logEntry): bool
+    public function view(User $user, STBC4866Entry $logEntry): bool
     {
-        // Users can view their own entries, supervisors can view all
         return $user->id === $logEntry->user_id || $user->isSupervisor();
     }
 
@@ -35,25 +36,23 @@ class LogEntryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, LogEntry $logEntry): bool
+    public function update(User $user, STBC4866Entry $logEntry): bool
     {
-        // Users can update their own entries only if not approved
         return $user->id === $logEntry->user_id && !$logEntry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, LogEntry $logEntry): bool
+    public function delete(User $user, STBC4866Entry $logEntry): bool
     {
-        // Users can delete their own entries only if not approved
         return $user->id === $logEntry->user_id && !$logEntry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can approve the model.
      */
-    public function approve(User $user, LogEntry $logEntry): bool
+    public function approve(User $user, STBC4866Entry $logEntry): bool
     {
         return $user->isSupervisor();
     }

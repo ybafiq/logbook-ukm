@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Edit Project Entry') }}</div>
 
                 <div class="card-body">
-                    <form action="{{ route('project-entries.update', $projectEntry) }}" method="post">
+                    <form action="{{ route('STBC4966.update', $projectEntry) }}" method="post">
                         @csrf
                         @method('POST')
                         
@@ -75,7 +75,7 @@
                         
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">{{ __('Update Project Entry') }}</button>
-                            <a href="{{ route('project-entries.show', $projectEntry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            <a href="{{ route('STBC4966.show', $projectEntry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
                         </div>
                     </form>
                 </div>

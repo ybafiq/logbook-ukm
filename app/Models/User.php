@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\STBC4866Entry;
+use App\Models\STBC4966Entry;
 
 class User extends Authenticatable
 {
@@ -53,15 +55,12 @@ class User extends Authenticatable
 
     public function logEntries()
     {
-
-        return $this->hasMany(LogEntry::class);
-    
+        return $this->hasMany(STBC4866Entry::class);
     }
 
-    
     public function projectEntries()
     {
-        return $this->hasMany(ProjectEntry::class);
+        return $this->hasMany(STBC4966Entry::class);
     }
 
     public function isSupervisor() { return $this->role === 'supervisor'; }

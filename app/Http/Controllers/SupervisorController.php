@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\LogEntry;
-use App\Models\ProjectEntry;
+use App\Models\STBC4866Entry;
+use App\Models\STBC4966Entry;
 use App\Models\User;
 
 class SupervisorController extends Controller
@@ -20,26 +20,26 @@ class SupervisorController extends Controller
             abort(403, 'Access denied. Supervisor role required.');
         }
         
-        $pendingEntries = LogEntry::where('supervisor_approved', false)
+        $pendingEntries = STBC4866Entry::where('supervisor_approved', false)
                                  ->with('student')
                                  ->latest()
                                  ->paginate(10, ['*'], 'entries_page');
         
-        $pendingProjectEntries = ProjectEntry::where('supervisor_approved', false)
+        $pendingProjectEntries = STBC4966Entry::where('supervisor_approved', false)
                                            ->with('student')
                                            ->latest()
                                            ->paginate(10, ['*'], 'project_entries_page');
         
         $stats = [
-            'pending_entries' => LogEntry::where('supervisor_approved', false)->count(),
-            'pending_project_entries' => ProjectEntry::where('supervisor_approved', false)->count(),
+            'pending_entries' => STBC4866Entry::where('supervisor_approved', false)->count(),
+            'pending_project_entries' => STBC4966Entry::where('supervisor_approved', false)->count(),
             'total_students' => User::where('role', 'student')->count(),
         ];
         
         return view('supervisor.dashboard', compact('pendingEntries', 'pendingProjectEntries', 'stats'));
     }
     
-    public function approveEntry(Request $request, LogEntry $entry)
+    public function approveEntry(Request $request, STBC4866Entry $entry)
     {
         if (!auth()->user()->isSupervisor()) {
             abort(403, 'Access denied. Supervisor role required.');
@@ -105,7 +105,7 @@ class SupervisorController extends Controller
         return redirect()->back()->with('success', $message);
     }
     
-    public function approveProjectEntry(Request $request, ProjectEntry $projectEntry)
+    public function approveProjectEntry(Request $request, STBC4966Entry $projectEntry)
     {
         if (!auth()->user()->isSupervisor()) {
             abort(403, 'Access denied. Supervisor role required.');
@@ -178,7 +178,7 @@ class SupervisorController extends Controller
             abort(403, 'Access denied. Supervisor role required.');
         }
         
-        $entries = LogEntry::where('supervisor_approved', false)
+        $entries = STBC4866Entry::where('supervisor_approved', false)
                           ->with('student')
                           ->orderBy('date', 'desc')
                           ->paginate(15);
@@ -192,7 +192,7 @@ class SupervisorController extends Controller
             abort(403, 'Access denied. Supervisor role required.');
         }
         
-        $projectEntries = ProjectEntry::where('supervisor_approved', false)
+        $projectEntries = STBC4966Entry::where('supervisor_approved', false)
                                     ->with('student')
                                     ->orderBy('date', 'desc')
                                     ->paginate(15);

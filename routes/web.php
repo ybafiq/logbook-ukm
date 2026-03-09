@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LogEntryController;
+use App\Http\Controllers\STBC4866EntryController;
+use App\Http\Controllers\STBC4966EntryController;
+use App\Http\Controllers\STBC4886EntryController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\MergePdfController;
 
@@ -15,15 +17,32 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/home/daily-counts', [HomeController::class, 'dailyCounts'])->name('home.dailyCounts')->middleware('auth');
 
-Route::get('log-entries', [LogEntryController::class, 'index'])->name('log-entries.index');
-Route::get('log-entries/create', [LogEntryController::class, 'create'])->name('log-entries.create');
-Route::post('log-entries', [LogEntryController::class, 'store'])->name('log-entries.store');
-Route::get('log-entries/{log_entry}', [LogEntryController::class, 'show'])->name('log-entries.show');
-Route::get('log-entries/{log_entry}/edit', [LogEntryController::class, 'edit'])->name('log-entries.edit');
-Route::post('log-entries/{log_entry}/edit', [LogEntryController::class, 'update'])->name('log-entries.update');
-Route::get('log-entries/{log_entry}/delete', [LogEntryController::class, 'delete'])->name('log-entries.delete');
-Route::delete('log-entries/{log_entry}', [LogEntryController::class, 'destroy'])->name('log-entries.destroy');
+Route::get('STBC4866', [STBC4866EntryController::class, 'index'])->name('STBC4866.index');
+Route::get('STBC4866/create', [STBC4866EntryController::class, 'create'])->name('STBC4866.create');
+Route::post('STBC4866', [STBC4866EntryController::class, 'store'])->name('STBC4866.store');
+Route::get('STBC4866/{stbc4866Entry}', [STBC4866EntryController::class, 'show'])->name('STBC4866.show');
+Route::get('STBC4866/{stbc4866Entry}/edit', [STBC4866EntryController::class, 'edit'])->name('STBC4866.edit');
+Route::post('STBC4866/{stbc4866Entry}/edit', [STBC4866EntryController::class, 'update'])->name('STBC4866.update');
+Route::get('STBC4866/{stbc4866Entry}/delete', [STBC4866EntryController::class, 'delete'])->name('STBC4866.delete');
+Route::delete('STBC4866/{stbc4866Entry}', [STBC4866EntryController::class, 'destroy'])->name('STBC4866.destroy');
 
+Route::get('STBC4966', [STBC4966EntryController::class, 'index'])->name('STBC4966.index');
+Route::get('STBC4966/create', [STBC4966EntryController::class, 'create'])->name('STBC4966.create');
+Route::post('STBC4966', [STBC4966EntryController::class, 'store'])->name('STBC4966.store');
+Route::get('STBC4966/{stbc4966Entry}', [STBC4966EntryController::class, 'show'])->name('STBC4966.show');
+Route::get('STBC4966/{stbc4966Entry}/edit', [STBC4966EntryController::class, 'edit'])->name('STBC4966.edit');
+Route::post('STBC4966/{stbc4966Entry}/edit', [STBC4966EntryController::class, 'update'])->name('STBC4966.update');
+Route::get('STBC4966/{stbc4966Entry}/delete', [STBC4966EntryController::class, 'delete'])->name('STBC4966.delete');
+Route::delete('STBC4966/{stbc4966Entry}', [STBC4966EntryController::class, 'destroy'])->name('STBC4966.destroy');
+
+Route::get('STBC4886', [STBC4886EntryController::class, 'index'])->name('STBC4886.index');
+Route::get('STBC4886/create', [STBC4886EntryController::class, 'create'])->name('STBC4886.create');
+Route::post('STBC4886', [STBC4886EntryController::class, 'store'])->name('STBC4886.store');
+Route::get('STBC4886/{stbc4886Entry}', [STBC4886EntryController::class, 'show'])->name('STBC4886.show');
+Route::get('STBC4886/{stbc4886Entry}/edit', [STBC4886EntryController::class, 'edit'])->name('STBC4886.edit');
+Route::post('STBC4886/{stbc4886Entry}/edit', [STBC4886EntryController::class, 'update'])->name('STBC4886.update');
+Route::get('STBC4886/{stbc4886Entry}/delete', [STBC4886EntryController::class, 'delete'])->name('STBC4886.delete');
+Route::delete('STBC4886/{stbc4886Entry}', [STBC4886EntryController::class, 'destroy'])->name('STBC4886.destroy');
 
 // User routes with role-based access
 Route::middleware('auth')->group(function () {
@@ -54,14 +73,14 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('project-entries', [App\Http\Controllers\ProjectEntryController::class, 'index'])->name('project-entries.index');
-Route::get('project-entries/create', [App\Http\Controllers\ProjectEntryController::class, 'create'])->name('project-entries.create');
-Route::post('project-entries', [App\Http\Controllers\ProjectEntryController::class, 'store'])->name('project-entries.store');
-Route::get('project-entries/{projectEntry}', [App\Http\Controllers\ProjectEntryController::class, 'show'])->name('project-entries.show');
-Route::get('project-entries/{projectEntry}/edit', [App\Http\Controllers\ProjectEntryController::class, 'edit'])->name('project-entries.edit');
-Route::post('project-entries/{projectEntry}/edit', [App\Http\Controllers\ProjectEntryController::class, 'update'])->name('project-entries.update');
-Route::get('project-entries/{projectEntry}/delete', [App\Http\Controllers\ProjectEntryController::class, 'delete'])->name('project-entries.delete');
-Route::delete('project-entries/{projectEntry}', [App\Http\Controllers\ProjectEntryController::class, 'destroy'])->name('project-entries.destroy');
+Route::get('project-entries', [STBC4966EntryController::class, 'index'])->name('project-entries.index');
+Route::get('project-entries/create', [STBC4966EntryController::class, 'create'])->name('project-entries.create');
+Route::post('project-entries', [STBC4966EntryController::class, 'store'])->name('project-entries.store');
+Route::get('project-entries/{stbc4966Entry}', [STBC4966EntryController::class, 'show'])->name('project-entries.show');
+Route::get('project-entries/{stbc4966Entry}/edit', [STBC4966EntryController::class, 'edit'])->name('project-entries.edit');
+Route::post('project-entries/{stbc4966Entry}/edit', [STBC4966EntryController::class, 'update'])->name('project-entries.update');
+Route::get('project-entries/{stbc4966Entry}/delete', [STBC4966EntryController::class, 'delete'])->name('project-entries.delete');
+Route::delete('project-entries/{stbc4966Entry}', [STBC4966EntryController::class, 'destroy'])->name('project-entries.destroy');
 
 
 // Supervisor routes
@@ -82,7 +101,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 
-Route::get('students/{student}/export', [LogEntryController::class, 'exportLogbook'])->name('students.export');
+Route::get('students/{student}/export', [STBC4866EntryController::class, 'exportLogbook'])->name('students.export');
 
 Route::get('/pdf/merge', [MergePdfController::class, 'showForm'])->name('pdf.merge.form');
 Route::get('/pdf/merge', function() {

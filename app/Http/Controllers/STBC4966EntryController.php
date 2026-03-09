@@ -3,41 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ProjectEntry;
+use App\Models\STBC4966Entry;
 use App\Models\User;
 use App\Notifications\NewEntrySubmitted;
 
-class ProjectEntryController extends Controller
+class STBC4966EntryController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
     }
-    
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $projectEntries = ProjectEntry::where('user_id', auth()->id())
+        $projectEntries = STBC4966Entry::where('user_id', auth()->id())
                                      ->orderBy('date', 'desc')
                                      ->paginate(10);
         
-        return view('project-entries.index', compact('projectEntries'));
+        return view('STBC4966.index', compact('projectEntries'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $this->authorize('create', ProjectEntry::class);
-        return view('project-entries.create');
+        $this->authorize('create', STBC4966Entry::class);
+        return view('STBC4966.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -48,9 +39,8 @@ class ProjectEntryController extends Controller
             'reflection_week_start' => 'nullable|date',
         ]);
         
-        // Check daily limit for students
         if (auth()->user()->isStudent()) {
-            $existingEntry = ProjectEntry::where('user_id', auth()->id())
+            $existingEntry = STBC4966Entry::where('user_id', auth()->id())
                                        ->whereDate('date', $data['date'])
                                        ->first();
             
@@ -62,42 +52,32 @@ class ProjectEntryController extends Controller
         }
         
         $data['user_id'] = auth()->id();
-        $entry = ProjectEntry::create($data);
+        $entry = STBC4966Entry::create($data);
     
-        // Notify all supervisors about the new entry
         $supervisors = User::where('role', 'supervisor')->get();
         foreach ($supervisors as $supervisor) {
             $supervisor->notify(new NewEntrySubmitted($entry, auth()->user(), 'project'));
         }
 
-        return redirect()->route('project-entries.index')
+        return redirect()->route('STBC4966.index')
                          ->with('success', 'Project entry saved successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProjectEntry $projectEntry)
+    public function show(STBC4966Entry $stbc4966Entry)
     {
-        $this->authorize('view', $projectEntry);
-        return view('project-entries.show', compact('projectEntry'));
+        $this->authorize('view', $stbc4966Entry);
+        return view('STBC4966.show', compact('stbc4966Entry'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProjectEntry $projectEntry)
+    public function edit(STBC4966Entry $stbc4966Entry)
     {
-        $this->authorize('update', $projectEntry);
-        return view('project-entries.edit', compact('projectEntry'));
+        $this->authorize('update', $stbc4966Entry);
+        return view('STBC4966.edit', compact('stbc4966Entry'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ProjectEntry $projectEntry)
+    public function update(Request $request, STBC4966Entry $stbc4966Entry)
     {
-        $this->authorize('update', $projectEntry);
+        $this->authorize('update', $stbc4966Entry);
         
         $data = $request->validate([
             'date' => 'required|date',
@@ -107,11 +87,10 @@ class ProjectEntryController extends Controller
             'reflection_week_start' => 'nullable|date',
         ]);
         
-        // Check daily limit for students when changing date
-        if (auth()->user()->isStudent() && $projectEntry->date->format('Y-m-d') !== $data['date']) {
-            $existingEntry = ProjectEntry::where('user_id', auth()->id())
+        if (auth()->user()->isStudent() && $stbc4966Entry->date->format('Y-m-d') !== $data['date']) {
+            $existingEntry = STBC4966Entry::where('user_id', auth()->id())
                                        ->whereDate('date', $data['date'])
-                                       ->where('id', '!=', $projectEntry->id)
+                                       ->where('id', '!=', $stbc4966Entry->id)
                                        ->first();
             
             if ($existingEntry) {
@@ -121,27 +100,24 @@ class ProjectEntryController extends Controller
             }
         }
         
-        $projectEntry->update($data);
+        $stbc4966Entry->update($data);
         
-        return redirect()->route('project-entries.index')
+        return redirect()->route('STBC4966.index')
                          ->with('success', 'Project entry updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function delete(ProjectEntry $projectEntry)
+    public function delete(STBC4966Entry $stbc4966Entry)
     {
-        $this->authorize('delete', $projectEntry);
-        return view('project-entries.delete', compact('projectEntry'));
+        $this->authorize('delete', $stbc4966Entry);
+        return view('STBC4966.delete', compact('stbc4966Entry'));
     }
     
-    public function destroy(ProjectEntry $projectEntry)
+    public function destroy(STBC4966Entry $stbc4966Entry)
     {
-        $this->authorize('delete', $projectEntry);
-        $projectEntry->delete();
+        $this->authorize('delete', $stbc4966Entry);
+        $stbc4966Entry->delete();
         
-        return redirect()->route('project-entries.index')
+        return redirect()->route('STBC4966.index')
                          ->with('success', 'Project entry deleted successfully.');
     }
 }

@@ -9,12 +9,12 @@
                     <span>{{ __('Log Entry Details') }}</span>
                     <div class="d-flex gap-1">
                         @can('update', $logEntry)
-                            <a href="{{ route('log-entries.edit', $logEntry) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
+                            <a href="{{ route('STBC4866.edit', $logEntry) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
                         @endcan
                         @can('delete', $logEntry)
-                            <a href="{{ route('log-entries.delete', $logEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                            <a href="{{ route('STBC4866.delete', $logEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
                         @endcan
-                        <a href="{{ route('log-entries.index') }}" class="btn btn-sm btn-secondary">{{ __('Back to List') }}</a>
+                        <a href="{{ route('STBC4866.index') }}" class="btn btn-sm btn-secondary">{{ __('Back to List') }}</a>
                     </div>
                 </div>
 

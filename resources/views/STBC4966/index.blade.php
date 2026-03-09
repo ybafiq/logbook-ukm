@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>{{ __('Project Entries') }}</span>
-                    <a href="{{ route('project-entries.create') }}" class="btn btn-primary">{{ __('Add New Project Entry') }}</a>
+                    <a href="{{ route('STBC4966.create') }}" class="btn btn-primary">{{ __('Add New Project Entry') }}</a>
                 </div>
 
                 <div class="card-body">
@@ -58,10 +58,10 @@
                                             <td>{{ $projectEntry->approver->name ?? 'N/A' }}</td>
                                             <td>
                                                 <div class="d-flex gap-1">
-                                                    <a href="{{ route('project-entries.show', $projectEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                                    <a href="{{ route('STBC4966.show', $projectEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
                                                     @if(!$projectEntry->supervisor_approved)
-                                                        <a href="{{ route('project-entries.edit', $projectEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
-                                                        <a href="{{ route('project-entries.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                                                        <a href="{{ route('STBC4966.edit', $projectEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
+                                                        <a href="{{ route('STBC4966.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
                                                     @endif
                                                 </div>
                                             </td>

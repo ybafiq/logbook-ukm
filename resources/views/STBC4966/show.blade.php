@@ -9,10 +9,10 @@
                     <span>{{ __('Project Entry Details') }}</span>
                     <div class="d-flex gap-1">
                         @if(!$projectEntry->supervisor_approved)
-                            <a href="{{ route('project-entries.edit', $projectEntry) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
-                            <a href="{{ route('project-entries.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                            <a href="{{ route('STBC4966.edit', $projectEntry) }}" class="btn btn-sm btn-warning">{{ __('Edit') }}</a>
+                            <a href="{{ route('STBC4966.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
                         @endif
-                        <a href="{{ route('project-entries.index') }}" class="btn btn-sm btn-secondary">{{ __('Back to List') }}</a>
+                        <a href="{{ route('STBC4966.index') }}" class="btn btn-sm btn-secondary">{{ __('Back to List') }}</a>
                     </div>
                 </div>
 

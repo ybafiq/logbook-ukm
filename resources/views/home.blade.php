@@ -35,7 +35,7 @@
                                 <div class="card-body">
                                     <h3 class="card-title text-primary">{{ $stats['total_entries'] }}</h3>
                                     <p class="card-text">{{ __('Log Entries') }}</p>
-                                    <a href="{{ route('log-entries.index') }}" class="btn btn-primary btn-sm">{{ __('View All') }}</a>
+                                    <a href="{{ route('STBC4866.index') }}" class="btn btn-primary btn-sm">{{ __('View All') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                                 <div class="card-body">
                                     <h3 class="card-title text-success">{{ $stats['total_project_entries'] }}</h3>
                                     <p class="card-text">{{ __('Project Entries') }}</p>
-                                    <a href="{{ route('project-entries.index') }}" class="btn btn-success btn-sm">{{ __('View All') }}</a>
+                                    <a href="{{ route('STBC4966.index') }}" class="btn btn-success btn-sm">{{ __('View All') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -141,8 +141,8 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap gap-2">
-                                        <a href="{{ route('log-entries.create') }}" class="btn btn-outline-primary">{{ __('Add Log Entry') }}</a>
-                                        <a href="{{ route('project-entries.create') }}" class="btn btn-outline-success">{{ __('Add Project Entry') }}</a>
+                                        <a href="{{ route('STBC4866.create') }}" class="btn btn-outline-primary">{{ __('Add Log Entry') }}</a>
+                                        <a href="{{ route('STBC4966.create') }}" class="btn btn-outline-success">{{ __('Add Project Entry') }}</a>
                                         @if(auth()->user()->isStudent())
                                             <a href="{{ route('users.showExport') }}" class="btn btn-outline-danger">{{ __('Export PDF') }}</a>
                                         @endif
@@ -302,8 +302,8 @@
                                     <h5>{{ __('Get Started!') }}</h5>
                                     <p class="mb-4">{{ __('Welcome to your logbook system. Start by creating your first log entry, project entry, or weekly reflection.') }}</p>
                                     <div class="d-flex flex-wrap gap-2 justify-content-center">
-                                        <a href="{{ route('log-entries.create') }}" class="btn btn-primary">{{ __('Create Log Entry') }}</a>
-                                        <a href="{{ route('project-entries.create') }}" class="btn btn-success">{{ __('Create Project Entry') }}</a>
+                                        <a href="{{ route('STBC4866.create') }}" class="btn btn-primary">{{ __('Create Log Entry') }}</a>
+                                        <a href="{{ route('STBC4966.create') }}" class="btn btn-success">{{ __('Create Project Entry') }}</a>
                                     </div>
                                 </div>
                             </div>

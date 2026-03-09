@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\LogEntry;
-use App\Models\ProjectEntry;
+use App\Models\STBC4866Entry;
+use App\Models\STBC4966Entry;
 
 class AdminController extends Controller
 {
@@ -24,12 +24,12 @@ class AdminController extends Controller
         }
         
         // Get all entries with signatures
-        $logEntriesWithSignatures = LogEntry::whereNotNull('supervisor_signature')
+        $logEntriesWithSignatures = STBC4866Entry::whereNotNull('supervisor_signature')
             ->with(['student', 'approver'])
             ->orderBy('approved_at', 'desc')
             ->paginate(10, ['*'], 'log_page');
             
-        $projectEntriesWithSignatures = ProjectEntry::whereNotNull('supervisor_signature')
+        $projectEntriesWithSignatures = STBC4966Entry::whereNotNull('supervisor_signature')
             ->with(['student', 'approver'])
             ->orderBy('approved_at', 'desc')
             ->paginate(10, ['*'], 'project_page');
@@ -40,7 +40,7 @@ class AdminController extends Controller
     /**
      * Delete a signature from log entry
      */
-    public function deleteLogSignature(LogEntry $entry)
+    public function deleteLogSignature(STBC4866Entry $entry)
     {
         if (!auth()->user()->isAdmin()) {
             abort(403, 'Access denied. Admin role required.');
@@ -62,7 +62,7 @@ class AdminController extends Controller
     /**
      * Delete a signature from project entry
      */
-    public function deleteProjectSignature(ProjectEntry $entry)
+    public function deleteProjectSignature(STBC4966Entry $entry)
     {
         if (!auth()->user()->isAdmin()) {
             abort(403, 'Access denied. Admin role required.');

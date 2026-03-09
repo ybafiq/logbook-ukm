@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\LogEntry;
-use App\Models\ProjectEntry;
+use App\Models\STBC4866Entry;
+use App\Models\STBC4966Entry;
 use Carbon\Carbon;
 
 class HomeController extends Controller

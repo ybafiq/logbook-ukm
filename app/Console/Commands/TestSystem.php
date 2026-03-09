@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\User;
-use App\Models\LogEntry;
-use App\Models\ProjectEntry;
+use App\Models\STBC4866Entry;
+use App\Models\STBC4966Entry;
 use App\Models\WeeklyReflection;
 
 class TestSystem extends Command
@@ -34,8 +34,8 @@ class TestSystem extends Command
         // Test database connections
         $this->info('📊 Database Status:');
         $this->line('  Users: ' . User::count());
-        $this->line('  Log Entries: ' . LogEntry::count());
-        $this->line('  Project Entries: ' . ProjectEntry::count());
+        $this->line('  Log Entries: ' . STBC4866Entry::count());
+        $this->line('  Project Entries: ' . STBC4966Entry::count());
         $this->line('  Weekly Reflections: ' . WeeklyReflection::count());
         
         // Test relationships
@@ -63,13 +63,13 @@ class TestSystem extends Command
         }
         
         // Test recent entries
-        $logEntry = LogEntry::first();
+        $logEntry = STBC4866Entry::first();
         if ($logEntry) {
             $this->line('  Log entry owner: ' . $logEntry->student->name);
             $this->line('  Log entry approved: ' . ($logEntry->supervisor_approved ? '✅' : '⏳'));
         }
         
-        $projectEntry = ProjectEntry::first();
+        $projectEntry = STBC4966Entry::first();
         if ($projectEntry) {
             $this->line('  Project entry owner: ' . $projectEntry->student->name);
             $this->line('  Project entry approved: ' . ($projectEntry->supervisor_approved ? '✅' : '⏳'));

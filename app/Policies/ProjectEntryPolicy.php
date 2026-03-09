@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\ProjectEntry;
+use App\Models\STBC4966Entry;
 use App\Models\User;
 
 class ProjectEntryPolicy
@@ -18,9 +18,8 @@ class ProjectEntryPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ProjectEntry $projectEntry): bool
+    public function view(User $user, STBC4966Entry $projectEntry): bool
     {
-        // Users can view their own entries, supervisors can view all
         return $user->id === $projectEntry->user_id || $user->isSupervisor();
     }
 
@@ -35,25 +34,23 @@ class ProjectEntryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ProjectEntry $projectEntry): bool
+    public function update(User $user, STBC4966Entry $projectEntry): bool
     {
-        // Users can update their own entries only if not approved
         return $user->id === $projectEntry->user_id && !$projectEntry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ProjectEntry $projectEntry): bool
+    public function delete(User $user, STBC4966Entry $projectEntry): bool
     {
-        // Users can delete their own entries only if not approved
         return $user->id === $projectEntry->user_id && !$projectEntry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can approve the model.
      */
-    public function approve(User $user, ProjectEntry $projectEntry): bool
+    public function approve(User $user, STBC4966Entry $projectEntry): bool
     {
         return $user->isSupervisor();
     }
