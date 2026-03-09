@@ -173,6 +173,15 @@
                                         <li><a class="dropdown-item" href="{{ route('STBC4966.create') }}">{{ __('Create New') }}</a></li>
                                     </ul>
                                 </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                        {{ __('STBC4886') }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('STBC4886.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4886.create') }}">{{ __('Create New') }}</a></li>
+                                    </ul>
+                                </li>
                             @endif
                             
                             @if(auth()->user()->isAdmin())
@@ -192,6 +201,15 @@
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('STBC4966.index') }}">{{ __('View All') }}</a></li>
                                         <li><a class="dropdown-item" href="{{ route('STBC4966.create') }}">{{ __('Create New') }}</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
+                                        {{ __('STBC4886') }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('STBC4886.index') }}">{{ __('View All') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('STBC4886.create') }}">{{ __('Create New') }}</a></li>
                                     </ul>
                                 </li>
                             @endif
