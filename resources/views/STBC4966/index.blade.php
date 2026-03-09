@@ -77,7 +77,7 @@
                     @else
                         <div class="text-center py-4">
                             <p>{{ __('No project entries found.') }}</p>
-                            <a href="{{ route('project-entries.create') }}" class="btn btn-primary">{{ __('Create your first project entry') }}</a>
+                            <a href="{{ route('STBC4966.create') }}" class="btn btn-primary">{{ __('Create your first project entry') }}</a>
                         </div>
                     @endif
                 </div>

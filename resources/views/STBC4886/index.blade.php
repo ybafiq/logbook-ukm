@@ -59,13 +59,13 @@
                                             <td>
                                                 <div class="d-flex gap-1">
                                                     @can('view', $logEntry)
-                                                        <a href="{{ route('log-entries.show', $logEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                                        <a href="{{ route('STBC4886.show', $logEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
                                                     @endcan
                                                     @can('update', $logEntry)
-                                                        <a href="{{ route('log-entries.edit', $logEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
+                                                        <a href="{{ route('STBC4886.edit', $logEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
                                                     @endcan
                                                     @can('delete', $logEntry)
-                                                        <a href="{{ route('log-entries.delete', $logEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                                                        <a href="{{ route('STBC4886.delete', $logEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
                                                     @endcan
                                                 </div>
                                             </td>
