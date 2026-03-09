@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:student')->group(function () {
         Route::get('export', [App\Http\Controllers\UserController::class, 'showExportForm'])->name('users.showExport');
         Route::get('export/logbook', [App\Http\Controllers\UserController::class, 'exportLogbook'])->name('users.exportLogbook');
+        // Dedicated 4886 export page and generation
+        Route::get('export/4886', [App\Http\Controllers\UserController::class, 'showExport4886Form'])->name('users.showExport4886');
+        Route::get('export/4886/generate', [App\Http\Controllers\UserController::class, 'export4886'])->name('users.export4886');
     });
     
     // Admin-only user management routes - SPECIFIC ROUTES FIRST

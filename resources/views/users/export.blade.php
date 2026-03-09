@@ -19,6 +19,21 @@
                     </div>
 
                     <form id="export-form" action="{{ route('users.exportLogbook') }}" method="GET">
+                        <input type="hidden" name="template" value="{{ $template ?? request('template') }}">
+                        @php
+                            $templateParam = $template ?? request('template');
+                            $selectedEntryType = request('entry_type', null);
+                            if ($templateParam && !$selectedEntryType) {
+                                if ((int)$templateParam === 4866) {
+                                    $selectedEntryType = 'log';
+                                } elseif ((int)$templateParam === 4966) {
+                                    $selectedEntryType = 'project';
+                                } elseif ((int)$templateParam === 4886) {
+                                    $selectedEntryType = 'all';
+                                }
+                            }
+                            $selectedEntryType = $selectedEntryType ?? 'all';
+                        @endphp
                         <!-- Entry Type Filter -->
                         <div class="row mb-3">
                             <div class="col-md-12">
@@ -28,8 +43,8 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_all" value="all" 
-                                                           {{ request('entry_type', 'all') == 'all' ? 'checked' : '' }}>
+                                                       <input class="form-check-input" type="radio" name="entry_type" id="entry_type_all" value="all" 
+                                                           {{ $selectedEntryType == 'all' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_all">
                                                         <strong>{{ __('All Entries') }}</strong>
                                                         <br><small class="text-muted">{{ __('Include both log and project entries') }}</small>
@@ -38,8 +53,8 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_log" value="log" 
-                                                           {{ request('entry_type') == 'log' ? 'checked' : '' }}>
+                                                       <input class="form-check-input" type="radio" name="entry_type" id="entry_type_log" value="log" 
+                                                           {{ $selectedEntryType == 'log' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_log">
                                                         <strong>{{ __('Log Entries Only') }}</strong>
                                                         <br><small class="text-muted">{{ __('Include only daily log entries') }}</small>
@@ -48,8 +63,8 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_project" value="project" 
-                                                           {{ request('entry_type') == 'project' ? 'checked' : '' }}>
+                                                       <input class="form-check-input" type="radio" name="entry_type" id="entry_type_project" value="project" 
+                                                           {{ $selectedEntryType == 'project' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_project">
                                                         <strong>{{ __('Project Entries Only') }}</strong>
                                                         <br><small class="text-muted">{{ __('Include only project-related entries') }}</small>
