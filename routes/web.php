@@ -88,8 +88,10 @@ Route::middleware(['auth', 'role:supervisor'])->group(function () {
     Route::get('supervisor/dashboard', [SupervisorController::class, 'dashboard'])->name('supervisor.dashboard');
     Route::get('supervisor/pending-entries', [SupervisorController::class, 'pendingEntries'])->name('supervisor.pendingEntries');
     Route::get('supervisor/pending-project-entries', [SupervisorController::class, 'pendingProjectEntries'])->name('supervisor.pendingProjectEntries');
+    Route::get('supervisor/pending-stbc4886-entries', [SupervisorController::class, 'pendingStbc4886Entries'])->name('supervisor.pendingStbc4886Entries');
     Route::post('supervisor/approve-entry/{entry}', [SupervisorController::class, 'approveEntry'])->name('supervisor.approveEntry');
     Route::post('supervisor/approve-project-entry/{projectEntry}', [SupervisorController::class, 'approveProjectEntry'])->name('supervisor.approveProjectEntry');
+    Route::post('supervisor/approve-stbc4886-entry/{stbc4886Entry}', [SupervisorController::class, 'approveStbc4886Entry'])->name('supervisor.approveStbc4886Entry');
     Route::post('supervisor/mark-all-read', [SupervisorController::class, 'markAllRead'])->name('supervisor.markAllRead');
 });
 

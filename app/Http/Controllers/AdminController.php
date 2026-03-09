@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\STBC4866Entry;
 use App\Models\STBC4966Entry;
+use App\Models\STBC4886Entry;
 
 class AdminController extends Controller
 {

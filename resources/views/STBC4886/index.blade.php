@@ -81,7 +81,7 @@
                     @else
                         <div class="text-center py-4">
                             <p>{{ __('No log entries found.') }}</p>
-                            <a href="{{ route('log-entries.create') }}" class="btn btn-primary">{{ __('Create your first entry') }}</a>
+                            <a href="{{ route('STBC4886.create') }}" class="btn btn-primary">{{ __('Create your first entry') }}</a>
                         </div>
                     @endif
                 </div>

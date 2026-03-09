@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\STBC4966Entry;
 use App\Models\User;
 
-class ProjectEntryPolicy
+class STBC4966EntryPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -58,15 +58,12 @@ class ProjectEntryPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, ProjectEntry $projectEntry): bool
+    public function restore(User $user, STBC4966Entry $projectEntry): bool
     {
         return $user->isSupervisor();
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, ProjectEntry $projectEntry): bool
+    public function forceDelete(User $user, STBC4966Entry $projectEntry): bool
     {
         return $user->isSupervisor();
     }

@@ -5,9 +5,8 @@ namespace App\Policies;
 use App\Models\STBC4866Entry;
 use App\Models\User;
 
-class LogEntryPolicy
+class STBC4866EntryPolicy
 {
-    // Model: STBC4866Entry (formerly LogEntry)
 
     /**
      * Determine whether the user can view any models.
@@ -60,15 +59,12 @@ class LogEntryPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, LogEntry $logEntry): bool
+    public function restore(User $user, STBC4866Entry $logEntry): bool
     {
         return $user->isSupervisor();
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, LogEntry $logEntry): bool
+    public function forceDelete(User $user, STBC4866Entry $logEntry): bool
     {
         return $user->isSupervisor();
     }

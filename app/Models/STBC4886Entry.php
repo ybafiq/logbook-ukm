@@ -10,7 +10,7 @@ class STBC4886Entry extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $table = 'log_entries';
+    protected $table = 'stbc4886_entries';
 
     protected $fillable = [
         'user_id',
