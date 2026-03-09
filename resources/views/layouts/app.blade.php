@@ -157,7 +157,7 @@
                             @if(auth()->user()->isStudent())
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('Log Entries') }}
+                                        {{ __('STBC4866') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('STBC4866.index') }}">{{ __('View All') }}</a></li>
@@ -166,7 +166,7 @@
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('Project Entries') }}
+                                        {{ __('STBC4966') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('STBC4966.index') }}">{{ __('View All') }}</a></li>
@@ -178,7 +178,7 @@
                             @if(auth()->user()->isAdmin())
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="logEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('Log Entries') }}
+                                        {{ __('STBC4866') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('STBC4866.index') }}">{{ __('View All') }}</a></li>
@@ -187,7 +187,7 @@
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="projectEntriesDropdown" role="button" data-bs-toggle="dropdown">
-                                        {{ __('Project Entries') }}
+                                        {{ __('STBC4966') }}
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('STBC4966.index') }}">{{ __('View All') }}</a></li>
@@ -208,8 +208,8 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="{{ route('supervisor.dashboard') }}">{{ __('Dashboard') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingEntries') }}">{{ __('Pending Log Entries') }}</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingProjectEntries') }}">{{ __('Pending Project Entries') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingEntries') }}">{{ __('Pending STBC4866 Entries') }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('supervisor.pendingProjectEntries') }}">{{ __('Pending STBC4966 Entries') }}</a></li>
                                     </ul>
                                 </li>
                             @endif

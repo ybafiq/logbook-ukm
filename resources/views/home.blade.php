@@ -34,7 +34,7 @@
                             <div class="card text-center border-primary">
                                 <div class="card-body">
                                     <h3 class="card-title text-primary">{{ $stats['total_entries'] }}</h3>
-                                    <p class="card-text">{{ __('Log Entries') }}</p>
+                                    <p class="card-text">{{ __('STBC4866') }}</p>
                                     <a href="{{ route('STBC4866.index') }}" class="btn btn-primary btn-sm">{{ __('View All') }}</a>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                             <div class="card text-center border-success">
                                 <div class="card-body">
                                     <h3 class="card-title text-success">{{ $stats['total_project_entries'] }}</h3>
-                                    <p class="card-text">{{ __('Project Entries') }}</p>
+                                    <p class="card-text">{{ __('STBC4966') }}</p>
                                     <a href="{{ route('STBC4966.index') }}" class="btn btn-success btn-sm">{{ __('View All') }}</a>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                                 {{ $stats['total_entries'] }}
                                             </div>
                                             <div class="stat-label" style="font-size: 0.8rem; color: #6c757d;">
-                                                {{ __('Log Entries') }}
+                                                {{ __('STBC4866') }}
                                             </div>
                                         </div>
                                         <div class="stat-item text-center">
@@ -98,7 +98,7 @@
                                                 {{ $stats['total_project_entries'] }}
                                             </div>
                                             <div class="stat-label" style="font-size: 0.8rem; color: #6c757d;">
-                                                {{ __('Project Entries') }}
+                                                {{ __('STBC4966') }}
                                             </div>
                                         </div>
                                     </div>
@@ -141,8 +141,8 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap gap-2">
-                                        <a href="{{ route('STBC4866.create') }}" class="btn btn-outline-primary">{{ __('Add Log Entry') }}</a>
-                                        <a href="{{ route('STBC4966.create') }}" class="btn btn-outline-success">{{ __('Add Project Entry') }}</a>
+                                        <a href="{{ route('STBC4866.create') }}" class="btn btn-outline-primary">{{ __('Add STBC4866 Entry') }}</a>
+                                        <a href="{{ route('STBC4966.create') }}" class="btn btn-outline-success">{{ __('Add STBC4966 Entry') }}</a>
                                         @if(auth()->user()->isStudent())
                                             <a href="{{ route('users.showExport') }}" class="btn btn-outline-danger">{{ __('Export PDF') }}</a>
                                         @endif
@@ -160,7 +160,7 @@
                             @if($recentEntries->count() > 0)
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="mb-0">{{ __('Recent Log Entries') }}</h5>
+                                    <h5 class="mb-0">{{ __('Recent STBC4866 Entries') }}</h5>
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="table-responsive">
@@ -193,7 +193,7 @@
                             </div>
                             @else
                             <div class="card">
-                                <div class="card-body text-center text-muted py-4">{{ __('No recent log entries') }}</div>
+                                <div class="card-body text-center text-muted py-4">{{ __('No recent STBC4866 entries') }}</div>
                             </div>
                             @endif
                         </div>
@@ -202,7 +202,7 @@
                             @if($recentProjectEntries->count() > 0)
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="mb-0">{{ __('Recent Project Entries') }}</h5>
+                                    <h5 class="mb-0">{{ __('Recent STBC4966 Entries') }}</h5>
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="table-responsive">
@@ -235,7 +235,7 @@
                             </div>
                             @else
                             <div class="card">
-                                <div class="card-body text-center text-muted py-4">{{ __('No recent project entries') }}</div>
+                                <div class="card-body text-center text-muted py-4">{{ __('No recent STBC4966 entries') }}</div>
                             </div>
                             @endif
                         </div>
@@ -442,7 +442,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const entryChart = new Chart(canvas, {
         type: 'doughnut',
         data: {
-            labels: ['{{ __("Log Entries") }}', '{{ __("Project Entries") }}'],
+            labels: ['{{ __("STBC4866") }}', '{{ __("STBC4966") }}'],
             datasets: [{
                 data: [{{ $stats['total_entries'] }}, {{ $stats['total_project_entries'] }}],
                 backgroundColor: [
