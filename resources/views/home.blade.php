@@ -143,6 +143,8 @@
                                     <div class="d-flex flex-wrap gap-2">
                                         <a href="{{ route('STBC4866.create') }}" class="btn btn-outline-primary">{{ __('Add STBC4866 Entry') }}</a>
                                         <a href="{{ route('STBC4966.create') }}" class="btn btn-outline-success">{{ __('Add STBC4966 Entry') }}</a>
+                                        <a href="{{ route('STBC4886.create') }}" class="btn btn-outline-success">{{ __('Add STBC4886 Entry') }}</a>
+                                        {{-- <a href="{{ route('STBC4996.create') }}" class="btn btn-outline-success">{{ __('Add STBC4996 Entry') }}</a> --}}
                                         @if(auth()->user()->isStudent())
                                             <a href="{{ route('users.showExport') }}" class="btn btn-outline-danger">{{ __('Export PDF') }}</a>
                                         @endif
