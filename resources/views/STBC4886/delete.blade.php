@@ -15,29 +15,29 @@
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label fw-bold">{{ __('Date') }}:</label>
                         <div class="col-sm-9">
-                            <p class="form-control-plaintext">{{ $logEntry->date->format('F d, Y') }}</p>
+                            <p class="form-control-plaintext">{{ $stbc4886Entry->date->format('F d, Y') }}</p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label fw-bold">{{ __('Activity') }}:</label>
                         <div class="col-sm-9">
-                            <p class="form-control-plaintext">{{ Str::limit($logEntry->activity, 100) }}</p>
+                            <p class="form-control-plaintext">{{ Str::limit($stbc4886Entry->activity, 100) }}</p>
                         </div>
                     </div>
 
-                    @if($logEntry->comment)
+                    @if($stbc4886Entry->comment)
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label fw-bold">{{ __('Comment') }}:</label>
                         <div class="col-sm-9">
-                            <p class="form-control-plaintext">{{ Str::limit($logEntry->comment, 100) }}</p>
+                            <p class="form-control-plaintext">{{ Str::limit($stbc4886Entry->comment, 100) }}</p>
                         </div>
                     </div>
                     @endif
 
                     <div class="d-flex justify-content-between">
                         <div>
-                            <form action="{{ route('STBC4886.destroy', $logEntry) }}" method="POST" class="d-inline">
+                            <form action="{{ route('STBC4886.destroy', $stbc4886Entry) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" 
@@ -47,7 +47,7 @@
                             </form>
                         </div>
                         <div>
-                            <a href="{{ route('STBC4886.show', $logEntry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            <a href="{{ route('STBC4886.show', $stbc4886Entry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
                         </div>
                     </div>
                 </div>
