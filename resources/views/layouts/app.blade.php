@@ -142,7 +142,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/home') }}">
                     <!-- <img src="/images/ukm3.png" alt="UKM Logo" class="navbar-logo"> -->
                     {{ config('app.name', 'UKM Logbook') }}
                 </a>
