@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Edit Project Entry') }}</div>
 
                 <div class="card-body">
-                    <form action="{{ route('STBC4966.update', $projectEntry) }}" method="post">
+                    <form action="{{ route('STBC4966.update', $stbc4966Entry) }}" method="post">
                         @csrf
                         @method('POST')
                         
@@ -25,17 +25,17 @@
                         <div class="mb-3">
                             <label for="date" class="form-label">{{ __('Date') }}</label>
                             <input type="date" name="date" id="date" class="form-control" 
-                                   value="{{ old('date', $projectEntry->date->format('Y-m-d')) }}" required>
+                                   value="{{ old('date', $stbc4966Entry->date->format('Y-m-d')) }}" required>
                         </div>
                         
                         <div class="mb-3">
                             <label for="activity" class="form-label">{{ __('Activity') }}</label>
-                            <textarea name="activity" id="activity" class="form-control" rows="4" required>{{ old('activity', $projectEntry->activity) }}</textarea>
+                            <textarea name="activity" id="activity" class="form-control" rows="4" required>{{ old('activity', $stbc4966Entry->activity) }}</textarea>
                         </div>
                         
                         <div class="mb-3">
                             <label for="comment" class="form-label">{{ __('Comment (Optional)') }}</label>
-                            <textarea name="comment" id="comment" class="form-control" rows="3">{{ old('comment', $projectEntry->comment) }}</textarea>
+                            <textarea name="comment" id="comment" class="form-control" rows="3">{{ old('comment', $stbc4966Entry->comment) }}</textarea>
                         </div>
                         
                         <!-- Weekly Reflection Section -->
@@ -43,31 +43,31 @@
                             <div class="card-header">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="include_reflection" 
-                                           {{ old('weekly_reflection_content', $projectEntry->weekly_reflection_content) ? 'checked' : '' }}>
+                                           {{ old('weekly_reflection_content', $stbc4966Entry->weekly_reflection_content) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="include_reflection">
                                         {{ __('Include Suggestion') }}
                                     </label>
                                 </div>
                             </div>
                             <div class="card-body" id="reflection_fields" 
-                                 style="display: {{ old('weekly_reflection_content', $projectEntry->weekly_reflection_content) ? 'block' : 'none' }};">
+                                 style="display: {{ old('weekly_reflection_content', $stbc4966Entry->weekly_reflection_content) ? 'block' : 'none' }};">
                                 <div class="mb-3">
                                     <label for="reflection_week_start" class="form-label">{{ __('Week Starting Date') }}</label>
                                     <input type="date" name="reflection_week_start" id="reflection_week_start" 
                                            class="form-control" 
-                                           value="{{ old('reflection_week_start', $projectEntry->reflection_week_start ? $projectEntry->reflection_week_start->format('Y-m-d') : '') }}">
+                                           value="{{ old('reflection_week_start', $stbc4966Entry->reflection_week_start ? $stbc4966Entry->reflection_week_start->format('Y-m-d') : '') }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="weekly_reflection_content" class="form-label">{{ __('Suggestion for improvement and planning for
                                         the upcoming week') }}</label>
                                     <textarea name="weekly_reflection_content" id="weekly_reflection_content" 
                                               class="form-control" rows="5" 
-                                              placeholder="Reflect on your learning progress, challenges faced, and insights gained this week...">{{ old('weekly_reflection_content', $projectEntry->weekly_reflection_content) }}</textarea>
+                                              placeholder="Reflect on your learning progress, challenges faced, and insights gained this week...">{{ old('weekly_reflection_content', $stbc4966Entry->weekly_reflection_content) }}</textarea>
                                 </div>
-                                @if($projectEntry->reflection_supervisor_signed)
+                                @if($stbc4966Entry->reflection_supervisor_signed)
                                     <div class="alert alert-info">
                                         <i class="fas fa-check-circle"></i>
-                                        Reflection signed by {{ $projectEntry->reflectionSigner->name }} on {{ $projectEntry->reflection_signed_at->format('M d, Y \a\t H:i') }}
+                                        Reflection signed by {{ $stbc4966Entry->reflectionSigner->name }} on {{ $stbc4966Entry->reflection_signed_at->format('M d, Y \a\t H:i') }}
                                     </div>
                                 @endif
                             </div>
@@ -75,7 +75,7 @@
                         
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">{{ __('Update Project Entry') }}</button>
-                            <a href="{{ route('STBC4966.show', $projectEntry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            <a href="{{ route('STBC4966.show', $stbc4966Entry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
                         </div>
                     </form>
                 </div>

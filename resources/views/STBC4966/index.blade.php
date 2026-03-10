@@ -32,21 +32,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($projectEntries as $projectEntry)
+                                    @foreach ($projectEntries as $stbc4966Entry)
                                         <tr>
-                                            <td>{{ $projectEntry->date->format('M d, Y') }}</td>
-                                            <td>{{ Str::limit($projectEntry->activity, 60) }}</td>
-                                            <td>{{ Str::limit($projectEntry->comment, 40) ?: 'N/A' }}</td>
+                                            <td>{{ $stbc4966Entry->date->format('M d, Y') }}</td>
+                                            <td>{{ Str::limit($stbc4966Entry->activity, 60) }}</td>
+                                            <td>{{ Str::limit($stbc4966Entry->comment, 40) ?: 'N/A' }}</td>
                                             <td>
-                                                @if($projectEntry->supervisor_approved)
+                                                @if($stbc4966Entry->supervisor_approved)
                                                     <span class="badge bg-success">Approved</span>
                                                 @else
                                                     <span class="badge bg-warning">Pending</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($projectEntry->weekly_reflection_content)
-                                                    @if($projectEntry->reflection_supervisor_signed)
+                                                @if($stbc4966Entry->weekly_reflection_content)
+                                                    @if($stbc4966Entry->reflection_supervisor_signed)
                                                         <span class="badge bg-success" title="Reflection signed">✓ Signed</span>
                                                     @else
                                                         <span class="badge bg-info" title="Reflection present but not signed">📝 Present</span>
@@ -55,13 +55,13 @@
                                                     <span class="text-muted">N/A</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $projectEntry->approver->name ?? 'N/A' }}</td>
+                                            <td>{{ $stbc4966Entry->approver->name ?? 'N/A' }}</td>
                                             <td>
                                                 <div class="d-flex gap-1">
-                                                    <a href="{{ route('STBC4966.show', $projectEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
-                                                    @if(!$projectEntry->supervisor_approved)
-                                                        <a href="{{ route('STBC4966.edit', $projectEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
-                                                        <a href="{{ route('STBC4966.delete', $projectEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                                                    <a href="{{ route('STBC4966.show', $stbc4966Entry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                                    @if(!$stbc4966Entry->supervisor_approved)
+                                                        <a href="{{ route('STBC4966.edit', $stbc4966Entry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
+                                                        <a href="{{ route('STBC4966.delete', $stbc4966Entry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
                                                     @endif
                                                 </div>
                                             </td>

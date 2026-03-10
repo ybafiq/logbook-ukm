@@ -15,24 +15,24 @@
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label fw-bold">{{ __('Date') }}:</label>
                         <div class="col-sm-9">
-                            <p class="form-control-plaintext">{{ $projectEntry->date->format('F d, Y') }}</p>
+                            <p class="form-control-plaintext">{{ $stbc4966Entry->date->format('F d, Y') }}</p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label fw-bold">{{ __('Activity') }}:</label>
                         <div class="col-sm-9">
-                            <p class="form-control-plaintext">{{ $projectEntry->activity }}</p>
+                            <p class="form-control-plaintext">{{ $stbc4966Entry->activity }}</p>
                         </div>
                     </div>
 
-                    @if($projectEntry->comment)
+                    @if($stbc4966Entry->comment)
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label fw-bold">{{ __('Comment') }}:</label>
                         <div class="col-sm-9">
                             <div class="card">
                                 <div class="card-body">
-                                    <div style="white-space: pre-wrap;">{{ $projectEntry->comment }}</div>
+                                    <div style="white-space: pre-wrap;">{{ $stbc4966Entry->comment }}</div>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div>
-                            <form action="{{ route('STBC4966.destroy', $projectEntry) }}" method="POST" class="d-inline">
+                            <form action="{{ route('STBC4966.destroy', $stbc4966Entry) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" 
@@ -51,7 +51,7 @@
                             </form>
                         </div>
                         <div>
-                            <a href="{{ route('STBC4966.show', $projectEntry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
+                            <a href="{{ route('STBC4966.show', $stbc4966Entry) }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
                         </div>
                     </div>
                 </div>
