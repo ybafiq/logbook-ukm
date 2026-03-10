@@ -584,7 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             const label = context.label || '';
                             const value = context.parsed;
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                            const percentage = total > 0 ? (value / total * 100).toFixed(1) : '0.0';
                             return [
                                 'Count: ' + value,
                                 'Percentage: ' + percentage + '%'
