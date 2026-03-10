@@ -32,7 +32,7 @@
                                                            {{ request('entry_type', 'all') == 'all' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_all">
                                                         <strong>{{ __('All Entries') }}</strong>
-                                                        <br><small class="text-muted">{{ __('Include both log and project entries') }}</small>
+                                                        <br><small class="text-muted">{{ __('Include all entries') }}</small>
                                                     </label>
                                                 </div>
                                             </div>
@@ -41,8 +41,8 @@
                                                     <input class="form-check-input" type="radio" name="entry_type" id="entry_type_log" value="log" 
                                                            {{ request('entry_type') == 'log' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_log">
-                                                        <strong>{{ __('Log Entries Only') }}</strong>
-                                                        <br><small class="text-muted">{{ __('Include only daily log entries') }}</small>
+                                                        <strong>{{ __('STBC4866 Entries Only') }}</strong>
+                                                        <br><small class="text-muted">{{ __('Include only STBC4866 entries') }}</small>
                                                     </label>
                                                 </div>
                                             </div>
@@ -51,8 +51,18 @@
                                                     <input class="form-check-input" type="radio" name="entry_type" id="entry_type_project" value="project" 
                                                            {{ request('entry_type') == 'project' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_project">
-                                                        <strong>{{ __('Project Entries Only') }}</strong>
-                                                        <br><small class="text-muted">{{ __('Include only project-related entries') }}</small>
+                                                        <strong>{{ __('STBC4966 Entries Only') }}</strong>
+                                                        <br><small class="text-muted">{{ __('Include only STBC4966 entries') }}</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_stbc4886" value="stbc4886"
+                                                           {{ request('entry_type') == 'stbc4886' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="entry_type_stbc4886">
+                                                        <strong>{{ __('STBC4886 Entries Only') }}</strong>
+                                                        <br><small class="text-muted">{{ __('Include only STBC4886 entries') }}</small>
                                                     </label>
                                                 </div>
                                             </div>
@@ -99,18 +109,24 @@
                                             <div class="col-md-4">
                                                 <div class="bg-primary text-white rounded p-2">
                                                     <h5 id="log-count">{{ auth()->user()->STBC4866Entries()->count() }}</h5>
-                                                    <small>{{ __('Log Entries') }}</small>
+                                                    <small>{{ __('STBC4866 Entries') }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="bg-success text-white rounded p-2">
                                                     <h5 id="project-count">{{ auth()->user()->STBC4966Entries()->count() }}</h5>
-                                                    <small>{{ __('Project Entries') }}</small>
+                                                    <small>{{ __('STBC4966 Entries') }}</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="bg-warning text-white rounded p-2">
+                                                    <h5 id="project-count">{{ auth()->user()->STBC4886Entries()->count() }}</h5>
+                                                    <small>{{ __('STBC4886 Entries') }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="bg-info text-white rounded p-2">
-                                                    <h5 id="reflection-count">{{ auth()->user()->STBC4866Entries()->whereNotNull('weekly_reflection_content')->count() + auth()->user()->STBC4966Entries()->whereNotNull('weekly_reflection_content')->count() }}</h5>
+                                                    <h5 id="reflection-count">{{ auth()->user()->STBC4866Entries()->whereNotNull('weekly_reflection_content')->count() + auth()->user()->STBC4966Entries()->whereNotNull('weekly_reflection_content')->count() + auth()->user()->STBC4886Entries()->whereNotNull('weekly_reflection_content')->count() }}</h5>
                                                     <small>{{ __('Reflections') }}</small>
                                                 </div>
                                             </div>
