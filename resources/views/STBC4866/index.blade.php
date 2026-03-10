@@ -32,21 +32,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($logEntries as $logEntry)
+                                    @foreach ($logEntries as $stbc4866Entry)
                                         <tr>
-                                            <td>{{ $logEntry->date->format('M d, Y') }}</td>
-                                            <td>{{ Str::limit($logEntry->activity, 50) }}</td>
-                                            <td>{{ Str::limit($logEntry->comment, 30) ?: 'N/A' }}</td>
+                                            <td>{{ $stbc4866Entry->date->format('M d, Y') }}</td>
+                                            <td>{{ Str::limit($stbc4866Entry->activity, 50) }}</td>
+                                            <td>{{ Str::limit($stbc4866Entry->comment, 30) ?: 'N/A' }}</td>
                                             <td>
-                                                @if($logEntry->supervisor_approved)
+                                                @if($stbc4866Entry->supervisor_approved)
                                                     <span class="badge bg-success">Approved</span>
                                                 @else
                                                     <span class="badge bg-warning">Pending</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($logEntry->weekly_reflection_content)
-                                                    @if($logEntry->reflection_supervisor_signed)
+                                                @if($stbc4866Entry->weekly_reflection_content)
+                                                    @if($stbc4866Entry->reflection_supervisor_signed)
                                                         <span class="badge bg-success" title="Reflection signed">✓ Signed</span>
                                                     @else
                                                         <span class="badge bg-info" title="Reflection present but not signed">📝 Present</span>
@@ -55,17 +55,17 @@
                                                     <span class="text-muted">N/A</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $logEntry->approver->name ?? 'N/A' }}</td>
+                                            <td>{{ $stbc4866Entry->approver->name ?? 'N/A' }}</td>
                                             <td>
                                                 <div class="d-flex gap-1">
-                                                    @can('view', $logEntry)
-                                                        <a href="{{ route('STBC4866.show', $logEntry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
+                                                    @can('view', $stbc4866Entry)
+                                                        <a href="{{ route('STBC4866.show', $stbc4866Entry) }}" class="btn btn-sm btn-primary">{{ __('View') }}</a>
                                                     @endcan
-                                                    @can('update', $logEntry)
-                                                        <a href="{{ route('STBC4866.edit', $logEntry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
+                                                    @can('update', $stbc4866Entry)
+                                                        <a href="{{ route('STBC4866.edit', $stbc4866Entry) }}" class="btn btn-sm btn-success">{{ __('Edit') }}</a>
                                                     @endcan
-                                                    @can('delete', $logEntry)
-                                                        <a href="{{ route('STBC4866.delete', $logEntry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
+                                                    @can('delete', $stbc4866Entry)
+                                                        <a href="{{ route('STBC4866.delete', $stbc4866Entry) }}" class="btn btn-sm btn-danger">{{ __('Delete') }}</a>
                                                     @endcan
                                                 </div>
                                             </td>
