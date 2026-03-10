@@ -72,17 +72,6 @@ Route::middleware('auth')->group(function () {
 
 
 
-
-Route::get('project-entries', [STBC4966EntryController::class, 'index'])->name('project-entries.index');
-Route::get('project-entries/create', [STBC4966EntryController::class, 'create'])->name('project-entries.create');
-Route::post('project-entries', [STBC4966EntryController::class, 'store'])->name('project-entries.store');
-Route::get('project-entries/{stbc4966Entry}', [STBC4966EntryController::class, 'show'])->name('project-entries.show');
-Route::get('project-entries/{stbc4966Entry}/edit', [STBC4966EntryController::class, 'edit'])->name('project-entries.edit');
-Route::post('project-entries/{stbc4966Entry}/edit', [STBC4966EntryController::class, 'update'])->name('project-entries.update');
-Route::get('project-entries/{stbc4966Entry}/delete', [STBC4966EntryController::class, 'delete'])->name('project-entries.delete');
-Route::delete('project-entries/{stbc4966Entry}', [STBC4966EntryController::class, 'destroy'])->name('project-entries.destroy');
-
-
 // Supervisor routes
 Route::middleware(['auth', 'role:supervisor'])->group(function () {
     Route::get('supervisor/dashboard', [SupervisorController::class, 'dashboard'])->name('supervisor.dashboard');
