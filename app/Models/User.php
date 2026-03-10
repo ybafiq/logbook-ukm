@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\STBC4866Entry;
 use App\Models\STBC4966Entry;
+use App\Models\STBC4886Entry;
 
 class User extends Authenticatable
 {
@@ -61,6 +62,11 @@ class User extends Authenticatable
     public function STBC4966Entries()
     {
         return $this->hasMany(STBC4966Entry::class);
+    }
+
+    public function STBC4886Entries()
+    {
+        return $this->hasMany(STBC4886Entry::class);
     }
 
     public function isSupervisor() { return $this->role === 'supervisor'; }
