@@ -17,7 +17,7 @@
                         </div>
                     @endif
                     
-                    @if($projectEntries->count() > 0)
+                    @if($STBC4966Entries->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-striped mb-0">
                                 <thead class="table-light">
@@ -32,7 +32,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($projectEntries as $stbc4966Entry)
+                                    @foreach ($STBC4966Entries as $stbc4966Entry)
                                         <tr>
                                             <td>{{ $stbc4966Entry->date->format('M d, Y') }}</td>
                                             <td>{{ Str::limit($stbc4966Entry->activity, 60) }}</td>
@@ -72,7 +72,7 @@
                         </div>
                         
                         <div class="mt-4">
-                            {{ $projectEntries->links('pagination::bootstrap-5') }}
+                            {{ $STBC4966Entries->links('pagination::bootstrap-5') }}
                         </div>
                     @else
                         <div class="text-center py-4">

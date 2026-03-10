@@ -16,11 +16,11 @@ class STBC4886EntryController extends Controller
 
     public function index()
     {
-        $logEntries = STBC4886Entry::where('user_id', auth()->id())
+        $STBC4886Entries = STBC4886Entry::where('user_id', auth()->id())
                              ->orderBy('date', 'desc')
                              ->paginate(10);
         
-        return view('STBC4886.index', compact('logEntries'));
+        return view('STBC4886.index', compact('STBC4886Entries'));
     }
 
     public function create(Request $request)

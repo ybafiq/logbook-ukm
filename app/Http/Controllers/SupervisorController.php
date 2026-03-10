@@ -26,7 +26,7 @@ class SupervisorController extends Controller
                                  ->latest()
                                  ->paginate(10, ['*'], 'entries_page');
         
-        $pendingProjectEntries = STBC4966Entry::where('supervisor_approved', false)
+        $pendingSTBC4966Entries = STBC4966Entry::where('supervisor_approved', false)
                                            ->with('student')
                                            ->latest()
                                            ->paginate(10, ['*'], 'project_entries_page');
@@ -38,12 +38,12 @@ class SupervisorController extends Controller
         
         $stats = [
             'pending_entries' => STBC4866Entry::where('supervisor_approved', false)->count(),
-            'pending_project_entries' => STBC4966Entry::where('supervisor_approved', false)->count(),
+            'pending_stbc4966_entries' => STBC4966Entry::where('supervisor_approved', false)->count(),
             'pending_stbc4886_entries' => STBC4886Entry::where('supervisor_approved', false)->count(),
             'total_students' => User::where('role', 'student')->count(),
         ];
         
-        return view('supervisor.dashboard', compact('pendingEntries', 'pendingProjectEntries', 'pendingStbc4886Entries', 'stats'));
+        return view('supervisor.dashboard', compact('pendingEntries', 'pendingSTBC4966Entries', 'pendingStbc4886Entries', 'stats'));
     }
     
     public function approveEntry(Request $request, STBC4866Entry $entry)
@@ -112,7 +112,7 @@ class SupervisorController extends Controller
         return redirect()->back()->with('success', $message);
     }
     
-    public function approveProjectEntry(Request $request, STBC4966Entry $projectEntry)
+    public function approveProjectEntry(Request $request, STBC4966Entry $stbc4966Entry)
     {
         if (!auth()->user()->isSupervisor()) {
             abort(403, 'Access denied. Supervisor role required.');
@@ -151,7 +151,7 @@ class SupervisorController extends Controller
                 return redirect()->back()->with('error', 'Signature is not a valid PNG image.');
             }
 
-            $imageName = 'signature_' . time() . '_' . $projectEntry->id . '.png';
+            $imageName = 'signature_' . time() . '_' . $stbc4966Entry->id . '.png';
             $path = 'signatures/' . $imageName;
 
             $disk = \Storage::disk('public');
@@ -169,7 +169,7 @@ class SupervisorController extends Controller
             $data['supervisor_signature'] = $path;
         }
 
-        $projectEntry->update($data);
+        $stbc4966Entry->update($data);
 
         $message = $request->filled('signature') 
             ? 'Project entry approved and signed successfully.' 
@@ -199,12 +199,12 @@ class SupervisorController extends Controller
             abort(403, 'Access denied. Supervisor role required.');
         }
         
-        $projectEntries = STBC4966Entry::where('supervisor_approved', false)
+        $stbc4966Entries = STBC4966Entry::where('supervisor_approved', false)
                                     ->with('student')
                                     ->orderBy('date', 'desc')
                                     ->paginate(15);
         
-        return view('supervisor.pending-project-entries', compact('projectEntries'));
+        return view('supervisor.pending-project-entries', compact('stbc4966Entries'));
     }
     
     public function approveStbc4886Entry(Request $request, STBC4886Entry $stbc4886Entry)

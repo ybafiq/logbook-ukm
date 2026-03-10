@@ -18,9 +18,9 @@ class STBC4966EntryPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, STBC4966Entry $projectEntry): bool
+    public function view(User $user, STBC4966Entry $stbc4966Entry): bool
     {
-        return $user->id === $projectEntry->user_id || $user->isSupervisor();
+        return $user->id === $stbc4966Entry->user_id || $user->isSupervisor();
     }
 
     /**
@@ -34,23 +34,23 @@ class STBC4966EntryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, STBC4966Entry $projectEntry): bool
+    public function update(User $user, STBC4966Entry $stbc4966Entry): bool
     {
-        return $user->id === $projectEntry->user_id && !$projectEntry->supervisor_approved;
+        return $user->id === $stbc4966Entry->user_id && !$stbc4966Entry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, STBC4966Entry $projectEntry): bool
+    public function delete(User $user, STBC4966Entry $stbc4966Entry): bool
     {
-        return $user->id === $projectEntry->user_id && !$projectEntry->supervisor_approved;
+        return $user->id === $stbc4966Entry->user_id && !$stbc4966Entry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can approve the model.
      */
-    public function approve(User $user, STBC4966Entry $projectEntry): bool
+    public function approve(User $user, STBC4966Entry $stbc4966Entry): bool
     {
         return $user->isSupervisor();
     }
@@ -58,12 +58,12 @@ class STBC4966EntryPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, STBC4966Entry $projectEntry): bool
+    public function restore(User $user, STBC4966Entry $stbc4966Entry): bool
     {
         return $user->isSupervisor();
     }
 
-    public function forceDelete(User $user, STBC4966Entry $projectEntry): bool
+    public function forceDelete(User $user, STBC4966Entry $stbc4966Entry): bool
     {
         return $user->isSupervisor();
     }

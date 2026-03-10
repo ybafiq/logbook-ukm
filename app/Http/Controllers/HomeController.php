@@ -33,16 +33,16 @@ class HomeController extends Controller
         }
         
         // Calculate reflection statistics from both log entries and project entries
-        $logReflections = $user->logEntries()->whereNotNull('weekly_reflection_content');
-        $projectReflections = $user->projectEntries()->whereNotNull('weekly_reflection_content');
+        $logReflections = $user->STBC4866Entries()->whereNotNull('weekly_reflection_content');
+        $projectReflections = $user->STBC4966Entries()->whereNotNull('weekly_reflection_content');
         
         $stats = [
-            'total_entries' => $user->logEntries()->count(),
-            'approved_entries' => $user->logEntries()->where('supervisor_approved', true)->count(),
-            'pending_entries' => $user->logEntries()->where('supervisor_approved', false)->count(),
-            'total_project_entries' => $user->projectEntries()->count(),
-            'approved_project_entries' => $user->projectEntries()->where('supervisor_approved', true)->count(),
-            'pending_project_entries' => $user->projectEntries()->where('supervisor_approved', false)->count(),
+            'total_entries' => $user->STBC4866Entries()->count(),
+            'approved_entries' => $user->STBC4866Entries()->where('supervisor_approved', true)->count(),
+            'pending_entries' => $user->STBC4866Entries()->where('supervisor_approved', false)->count(),
+            'total_stbc4966_entries' => $user->STBC4966Entries()->count(),
+            'approved_stbc4966_entries' => $user->STBC4966Entries()->where('supervisor_approved', true)->count(),
+            'pending_stbc4966_entries' => $user->STBC4966Entries()->where('supervisor_approved', false)->count(),
             'total_reflections' => $logReflections->count() + $projectReflections->count(),
             'signed_reflections' => $logReflections->where('reflection_supervisor_signed', true)->count() + 
                                    $projectReflections->where('reflection_supervisor_signed', true)->count(),
@@ -50,16 +50,16 @@ class HomeController extends Controller
                                     $projectReflections->where('reflection_supervisor_signed', false)->count(),
         ];
         
-        $recentEntries = $user->logEntries()->latest()->limit(5)->get();
-        $recentProjectEntries = $user->projectEntries()->latest()->limit(5)->get();
+        $recentEntries = $user->STBC4866Entries()->latest()->limit(5)->get();
+        $recentSTBC4966Entries = $user->STBC4966Entries()->latest()->limit(5)->get();
 
         // Prepare last 30 days combined daily counts for a contribution-style chart
         $days = 30;
         $dailyCounts = collect();
         for ($i = $days - 1; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i)->toDateString();
-            $logCount = $user->logEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
-            $projectCount = $user->projectEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $logCount = $user->STBC4866Entries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $projectCount = $user->STBC4966Entries()->whereDate('date', Carbon::today()->subDays($i))->count();
             $dailyCounts[$date] = $logCount + $projectCount;
         }
 
@@ -69,14 +69,14 @@ class HomeController extends Controller
         $start = $end->copy()->startOfWeek(Carbon::SUNDAY)->subWeeks(51);
 
         // Fetch grouped counts for logs and projects in one query each
-        $logGrouped = $user->logEntries()
+        $logGrouped = $user->STBC4866Entries()
             ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->selectRaw("DATE(`date`) as day, COUNT(*) as cnt")
             ->groupBy('day')
             ->pluck('cnt', 'day')
             ->toArray();
 
-        $projGrouped = $user->projectEntries()
+        $projGrouped = $user->STBC4966Entries()
             ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->selectRaw("DATE(`date`) as day, COUNT(*) as cnt")
             ->groupBy('day')
@@ -100,7 +100,7 @@ class HomeController extends Controller
         }
         
         // Get recent reflections from both log entries and project entries
-        $recentLogReflections = $user->logEntries()
+        $recentLogReflections = $user->STBC4866Entries()
             ->whereNotNull('weekly_reflection_content')
             ->latest()
             ->limit(2)
@@ -117,7 +117,7 @@ class HomeController extends Controller
                 ];
             });
             
-        $recentProjectReflections = $user->projectEntries()
+        $recentProjectReflections = $user->STBC4966Entries()
             ->whereNotNull('weekly_reflection_content')
             ->latest()
             ->limit(2)
@@ -138,7 +138,7 @@ class HomeController extends Controller
             ->sortByDesc('created_at')
             ->take(3);
         
-        return view('home', compact('stats', 'recentEntries', 'recentProjectEntries', 'recentReflections', 'dailyCounts', 'contribWeeks', 'contribMax'));
+        return view('home', compact('stats', 'recentEntries', 'recentSTBC4966Entries', 'recentReflections', 'dailyCounts', 'contribWeeks', 'contribMax'));
     }
 
     /**
@@ -151,8 +151,8 @@ class HomeController extends Controller
         $dailyCounts = collect();
         for ($i = $days - 1; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i)->toDateString();
-            $logCount = $user->logEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
-            $projectCount = $user->projectEntries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $logCount = $user->STBC4866Entries()->whereDate('date', Carbon::today()->subDays($i))->count();
+            $projectCount = $user->STBC4966Entries()->whereDate('date', Carbon::today()->subDays($i))->count();
             $dailyCounts[$date] = $logCount + $projectCount;
         }
 

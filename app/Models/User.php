@@ -53,12 +53,12 @@ class User extends Authenticatable
         ];
     }
 
-    public function logEntries()
+    public function STBC4866Entries()
     {
         return $this->hasMany(STBC4866Entry::class);
     }
 
-    public function projectEntries()
+    public function STBC4966Entries()
     {
         return $this->hasMany(STBC4966Entry::class);
     }

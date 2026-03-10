@@ -72,8 +72,8 @@
                                             @endif
                                         </td>
                                         <td>{{ $user->workplace ?: 'N/A' }}</td>
-                                        <td>{{ $user->log_entries_count }}</td>
-                                        <td>{{ $user->project_entries_count }}</td>
+                                        <td>{{ $user->stbc4866_entries_count }}</td>
+                                        <td>{{ $user->stbc4966_entries_count }}</td>
                                         <td>
                                             <div class="d-flex gap-1">
                                                 @can('view', $user)

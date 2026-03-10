@@ -22,13 +22,13 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#log-signatures" type="button">
                                 {{ __('Log Entry Signatures') }} 
-                                <span class="badge bg-primary">{{ $logEntriesWithSignatures->total() }}</span>
+                                <span class="badge bg-primary">{{ $stbc4866EntriesWithSignatures->total() }}</span>
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#project-signatures" type="button">
                                 {{ __('Project Entry Signatures') }} 
-                                <span class="badge bg-primary">{{ $projectEntriesWithSignatures->total() }}</span>
+                                <span class="badge bg-primary">{{ $stbc4966EntriesWithSignatures->total() }}</span>
                             </button>
                         </li>
                     </ul>
@@ -36,7 +36,7 @@
                     <div class="tab-content">
                         <!-- Log Entries Tab -->
                         <div class="tab-pane fade show active" id="log-signatures">
-                            @if($logEntriesWithSignatures->count() > 0)
+                            @if($stbc4866EntriesWithSignatures->count() > 0)
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead class="table-light">
@@ -51,7 +51,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($logEntriesWithSignatures as $entry)
+                                            @foreach($stbc4866EntriesWithSignatures as $entry)
                                             <tr>
                                                 <td>{{ $entry->student->name }}</td>
                                                 <td>{{ $entry->date->format('M d, Y') }}</td>
@@ -82,7 +82,7 @@
                                 </div>
                                 
                                 <div class="mt-3">
-                                    {{ $logEntriesWithSignatures->links() }}
+                                    {{ $stbc4866EntriesWithSignatures->links() }}
                                 </div>
                             @else
                                 <div class="alert alert-info">
@@ -93,7 +93,7 @@
 
                         <!-- Project Entries Tab -->
                         <div class="tab-pane fade" id="project-signatures">
-                            @if($projectEntriesWithSignatures->count() > 0)
+                            @if($stbc4966EntriesWithSignatures->count() > 0)
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead class="table-light">
@@ -108,7 +108,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($projectEntriesWithSignatures as $entry)
+                                            @foreach($stbc4966EntriesWithSignatures as $entry)
                                             <tr>
                                                 <td>{{ $entry->student->name }}</td>
                                                 <td>{{ $entry->date->format('M d, Y') }}</td>
@@ -139,7 +139,7 @@
                                 </div>
                                 
                                 <div class="mt-3">
-                                    {{ $projectEntriesWithSignatures->links() }}
+                                    {{ $stbc4966EntriesWithSignatures->links() }}
                                 </div>
                             @else
                                 <div class="alert alert-info">

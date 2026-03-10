@@ -17,7 +17,7 @@
                         </div>
                     @endif
 
-                    @if($projectEntries->count() > 0)
+                    @if($stbc4966Entries->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-striped mb-0">
                                 <thead class="table-light">
@@ -31,7 +31,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($projectEntries as $entry)
+                                    @foreach($stbc4966Entries as $entry)
                                     <tr>
                                         <td>{{ $entry->student->name }}</td>
                                         <td>{{ $entry->date->format('M d, Y') }}</td>
@@ -54,7 +54,7 @@
                         </div>
                         
                         <div class="mt-4">
-                            {{ $projectEntries->links() }}
+                            {{ $stbc4966Entries->links() }}
                         </div>
                     @else
                         <div class="text-center py-5">

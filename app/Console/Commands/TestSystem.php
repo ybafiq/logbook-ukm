@@ -43,8 +43,8 @@ class TestSystem extends Command
         $student = User::where('role', 'student')->first();
         if ($student) {
             $this->line('  Student: ' . $student->name);
-            $this->line('  Log Entries: ' . $student->logEntries->count());
-            $this->line('  Project Entries: ' . $student->projectEntries->count());
+            $this->line('  Log Entries: ' . $student->STBC4866Entries->count());
+            $this->line('  Project Entries: ' . $student->STBC4966Entries->count());
             $this->line('  Weekly Reflections: ' . $student->weeklyReflections->count());
         }
         
@@ -63,16 +63,16 @@ class TestSystem extends Command
         }
         
         // Test recent entries
-        $logEntry = STBC4866Entry::first();
-        if ($logEntry) {
-            $this->line('  Log entry owner: ' . $logEntry->student->name);
-            $this->line('  Log entry approved: ' . ($logEntry->supervisor_approved ? '✅' : '⏳'));
+        $stbc4866Entry = STBC4866Entry::first();
+        if ($stbc4866Entry) {
+            $this->line('  STBC4866 entry owner: ' . $stbc4866Entry->student->name);
+            $this->line('  STBC4866 entry approved: ' . ($stbc4866Entry->supervisor_approved ? '✅' : '⏳'));
         }
         
-        $projectEntry = STBC4966Entry::first();
-        if ($projectEntry) {
-            $this->line('  Project entry owner: ' . $projectEntry->student->name);
-            $this->line('  Project entry approved: ' . ($projectEntry->supervisor_approved ? '✅' : '⏳'));
+        $stbc4966Entry = STBC4966Entry::first();
+        if ($stbc4966Entry) {
+            $this->line('  STBC4966 entry owner: ' . $stbc4966Entry->student->name);
+            $this->line('  STBC4966 entry approved: ' . ($stbc4966Entry->supervisor_approved ? '✅' : '⏳'));
         }
         
         $reflection = WeeklyReflection::first();

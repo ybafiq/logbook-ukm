@@ -25,17 +25,17 @@ class AdminController extends Controller
         }
         
         // Get all entries with signatures
-        $logEntriesWithSignatures = STBC4866Entry::whereNotNull('supervisor_signature')
+        $stbc4866EntriesWithSignatures = STBC4866Entry::whereNotNull('supervisor_signature')
             ->with(['student', 'approver'])
             ->orderBy('approved_at', 'desc')
             ->paginate(10, ['*'], 'log_page');
             
-        $projectEntriesWithSignatures = STBC4966Entry::whereNotNull('supervisor_signature')
+        $stbc4966EntriesWithSignatures = STBC4966Entry::whereNotNull('supervisor_signature')
             ->with(['student', 'approver'])
             ->orderBy('approved_at', 'desc')
             ->paginate(10, ['*'], 'project_page');
         
-        return view('admin.signatures', compact('logEntriesWithSignatures', 'projectEntriesWithSignatures'));
+        return view('admin.signatures', compact('stbc4866EntriesWithSignatures', 'stbc4966EntriesWithSignatures'));
     }
     
     /**

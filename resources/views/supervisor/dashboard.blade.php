@@ -90,7 +90,7 @@
                         <div class="col-md-4">
                             <div class="card text-center border-success">
                                 <div class="card-body">
-                                    <h3 class="card-title text-success">{{ $stats['pending_project_entries'] }}</h3>
+                                    <h3 class="card-title text-success">{{ $stats['pending_stbc4966_entries'] }}</h3>
                                     <p class="card-text mb-3">{{ __('Pending Projects') }}</p>
                                     <a href="{{ route('supervisor.pendingProjectEntries') }}" class="btn btn-success btn-sm">{{ __('Review') }}</a>
                                 </div>
@@ -108,7 +108,7 @@
                     </div>
 
                     <!-- Recent Pending Entries -->
-                    @if($pendingEntries->count() > 0 || $pendingProjectEntries->count() > 0)
+                    @if($pendingEntries->count() > 0 || $pendingSTBC4966Entries->count() > 0)
                     <div class="row mb-4">
                         @if($pendingEntries->count() > 0)
                         <div class="col-md-6">
@@ -157,7 +157,7 @@
                         </div>
                         @endif
                         
-                        @if($pendingProjectEntries->count() > 0)
+                        @if($pendingSTBC4966Entries->count() > 0)
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
@@ -175,7 +175,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($pendingProjectEntries->take(5) as $entry)
+                                                @foreach($pendingSTBC4966Entries->take(5) as $entry)
                                                 <tr>
                                                     <td>{{ $entry->student->name }}</td>
                                                     <td>{{ $entry->date->format('M d') }}</td>

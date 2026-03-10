@@ -182,7 +182,7 @@
         </thead>
         <tbody>
             @if($entryType === 'log')
-                @forelse($logEntries->sortBy('date') as $entry)
+                @forelse($STBC4866Entries->sortBy('date') as $entry)
                     <tr>
                         <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
                         <td class="activity-col">{{ $entry->activity }}</td>
@@ -196,7 +196,7 @@
                     @endfor
                 @endforelse
             @elseif($entryType === 'project')
-                @forelse($projectEntries->sortBy('date') as $entry)
+                @forelse($STBC4966Entries->sortBy('date') as $entry)
                     <tr>
                         <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
                         <td class="activity-col">{{ $entry->activity }}</td>
@@ -245,13 +245,13 @@
                 // Get the most recent approved entry with signature
                 $signedEntry = null;
                 if ($entryType === 'log' || $entryType === 'all') {
-                    $signedEntry = $logEntries->where('supervisor_approved', true)
+                    $signedEntry = $STBC4866Entries->where('supervisor_approved', true)
                                               ->whereNotNull('supervisor_signature')
                                               ->sortByDesc('approved_at')
                                               ->first();
                 }
                 if (!$signedEntry && ($entryType === 'project' || $entryType === 'all')) {
-                    $signedEntry = $projectEntries->where('supervisor_approved', true)
+                    $signedEntry = $STBC4966Entries->where('supervisor_approved', true)
                                                   ->whereNotNull('supervisor_signature')
                                                   ->sortByDesc('approved_at')
                                                   ->first();

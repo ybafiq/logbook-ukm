@@ -98,19 +98,19 @@
                                         <div class="row text-center">
                                             <div class="col-md-4">
                                                 <div class="bg-primary text-white rounded p-2">
-                                                    <h5 id="log-count">{{ auth()->user()->logEntries()->count() }}</h5>
+                                                    <h5 id="log-count">{{ auth()->user()->STBC4866Entries()->count() }}</h5>
                                                     <small>{{ __('Log Entries') }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="bg-success text-white rounded p-2">
-                                                    <h5 id="project-count">{{ auth()->user()->projectEntries()->count() }}</h5>
+                                                    <h5 id="project-count">{{ auth()->user()->STBC4966Entries()->count() }}</h5>
                                                     <small>{{ __('Project Entries') }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="bg-info text-white rounded p-2">
-                                                    <h5 id="reflection-count">{{ auth()->user()->logEntries()->whereNotNull('weekly_reflection_content')->count() + auth()->user()->projectEntries()->whereNotNull('weekly_reflection_content')->count() }}</h5>
+                                                    <h5 id="reflection-count">{{ auth()->user()->STBC4866Entries()->whereNotNull('weekly_reflection_content')->count() + auth()->user()->STBC4966Entries()->whereNotNull('weekly_reflection_content')->count() }}</h5>
                                                     <small>{{ __('Reflections') }}</small>
                                                 </div>
                                             </div>

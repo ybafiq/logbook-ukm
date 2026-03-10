@@ -42,7 +42,7 @@
                         <div class="col-md-3">
                             <div class="card text-center border-success">
                                 <div class="card-body">
-                                    <h3 class="card-title text-success">{{ $stats['total_project_entries'] }}</h3>
+                                    <h3 class="card-title text-success">{{ $stats['total_stbc4966_entries'] }}</h3>
                                     <p class="card-text">{{ __('STBC4966') }}</p>
                                     <a href="{{ route('STBC4966.index') }}" class="btn btn-success btn-sm">{{ __('View All') }}</a>
                                 </div>
@@ -60,7 +60,7 @@
                         <div class="col-md-3">
                             <div class="card text-center border-warning">
                                 <div class="card-body">
-                                    <h3 class="card-title text-warning">{{ $stats['approved_entries'] + $stats['approved_project_entries'] + $stats['signed_reflections'] }}</h3>
+                                    <h3 class="card-title text-warning">{{ $stats['approved_entries'] + $stats['approved_stbc4966_entries'] + $stats['signed_reflections'] }}</h3>
                                     <p class="card-text">{{ __('Total Approved') }}</p>
                                 </div>
                             </div>
@@ -95,10 +95,18 @@
                                         </div>
                                         <div class="stat-item text-center">
                                             <div class="stat-number" style="font-size: 1.5rem; font-weight: bold; color: var(--ukm-red);">
-                                                {{ $stats['total_project_entries'] }}
+                                                {{ $stats['total_stbc4966_entries'] }}
                                             </div>
                                             <div class="stat-label" style="font-size: 0.8rem; color: #6c757d;">
                                                 {{ __('STBC4966') }}
+                                            </div>
+                                        </div>
+                                        <div class="stat-item text-center">
+                                            <div class="stat-number" style="font-size: 1.5rem; font-weight: bold; color: var(--ukm-red);">
+                                                {{ $stats['total_stbc4966_entries'] }}
+                                            </div>
+                                            <div class="stat-label" style="font-size: 0.8rem; color: #6c757d;">
+                                                {{ __('STBC4886') }}
                                             </div>
                                         </div>
                                     </div>
@@ -156,7 +164,7 @@
                     </div>
 
                     <!-- Recent Activity: Log and Project Entries side-by-side -->
-                    @if($recentEntries->count() > 0 || $recentProjectEntries->count() > 0)
+                    @if($recentEntries->count() > 0 || $recentSTBC4966Entries->count() > 0)
                     <div class="row mb-4">
                         <div class="col-md-6">
                             @if($recentEntries->count() > 0)
@@ -201,7 +209,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            @if($recentProjectEntries->count() > 0)
+                            @if($recentSTBC4966Entries->count() > 0)
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="mb-0">{{ __('Recent STBC4966 Entries') }}</h5>
@@ -217,12 +225,12 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($recentProjectEntries as $projectEntry)
+                                                @foreach($recentSTBC4966Entries as $stbc4966Entry)
                                                 <tr>
-                                                    <td>{{ $projectEntry->date->format('M d') }}</td>
-                                                    <td>{{ Str::limit($projectEntry->activity, 40) }}</td>
+                                                    <td>{{ $stbc4966Entry->date->format('M d') }}</td>
+                                                    <td>{{ Str::limit($stbc4966Entry->activity, 40) }}</td>
                                                     <td>
-                                                        @if($projectEntry->supervisor_approved)
+                                                        @if($stbc4966Entry->supervisor_approved)
                                                             <span class="badge bg-success">Approved</span>
                                                         @else
                                                             <span class="badge bg-warning">Pending</span>
@@ -295,7 +303,7 @@
                     </div>
                     @endif
 
-                    @if($recentEntries->count() == 0 && $recentProjectEntries->count() == 0 && $recentReflections->count() == 0)
+                    @if($recentEntries->count() == 0 && $recentSTBC4966Entries->count() == 0 && $recentReflections->count() == 0)
                     <div class="row">
                         <div class="col-12">
                             <div class="text-center py-5">
@@ -433,10 +441,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('Chart.js loaded:', typeof Chart);
     console.log('Canvas element:', ctx);
-    console.log('Chart data:', [{{ $stats['total_entries'] }}, {{ $stats['total_project_entries'] }}]);
+    console.log('Chart data:', [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}]);
     
     // Check if we have valid data
-    const chartData = [{{ $stats['total_entries'] }}, {{ $stats['total_project_entries'] }}];
+    const chartData = [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}];
     if (chartData.every(val => val === 0)) {
         console.warn('All chart data values are 0, chart may appear empty');
     }
@@ -446,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: ['{{ __("STBC4866") }}', '{{ __("STBC4966") }}'],
             datasets: [{
-                data: [{{ $stats['total_entries'] }}, {{ $stats['total_project_entries'] }}],
+                data: [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}],
                 backgroundColor: [
                     'rgba(27,54,93,0.86)',
                     'rgba(228,27,19,0.86)'

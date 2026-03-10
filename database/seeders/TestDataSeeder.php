@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\LogEntry;
-use App\Models\ProjectEntry;
+use App\Models\STBC4866Entry;
+use App\Models\STBC4966Entry;
 use App\Models\WeeklyReflection;
 use Illuminate\Support\Facades\Hash;
 
@@ -44,14 +44,14 @@ class TestDataSeeder extends Seeder
         );
 
         // Create some test log entries
-        LogEntry::create([
+        STBC4866Entry::create([
             'user_id' => $student->id,
             'date' => now()->subDays(2),
             'activity' => 'Attended morning rounds with Dr. Smith. Observed patient consultations and learned about treatment protocols for diabetes management.',
             'comment' => 'Very educational session. Learned about insulin dosage calculations.',
         ]);
 
-        LogEntry::create([
+        STBC4866Entry::create([
             'user_id' => $student->id,
             'date' => now()->subDays(1),
             'activity' => 'Assisted in emergency department. Observed trauma cases and emergency procedures.',
@@ -59,14 +59,14 @@ class TestDataSeeder extends Seeder
         ]);
 
         // Create some test project entries
-        ProjectEntry::create([
+        STBC4966Entry::create([
             'user_id' => $student->id,
             'date' => now()->subDays(7),
             'activity' => 'Conducted research on diabetes management practices in rural healthcare settings. Collected data from 50 patients and analyzed treatment outcomes.',
             'comment' => 'Found that 60% of patients had better glucose control with community-based interventions.',
         ]);
 
-        ProjectEntry::create([
+        STBC4966Entry::create([
             'user_id' => $student->id,
             'date' => now()->subDays(3),
             'activity' => 'Developed a mobile application prototype to help elderly patients remember their medication schedules. Integrated with calendar and notification systems.',

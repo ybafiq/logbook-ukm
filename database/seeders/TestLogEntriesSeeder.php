@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\LogEntry;
-use App\Models\ProjectEntry;
+use App\Models\STBC4866Entry;
+use App\Models\STBC4966Entry;
 use App\Models\WeeklyReflection;
 use Carbon\Carbon;
 
@@ -35,7 +35,7 @@ class TestLogEntriesSeeder extends Seeder
         ];
         
         foreach ($dates as $date) {
-            LogEntry::create([
+            STBC4866Entry::create([
                 'user_id' => $student->id,
                 'date' => $date,
                 'activity' => 'Daily work activity on ' . $date->format('M d, Y'),
@@ -46,7 +46,7 @@ class TestLogEntriesSeeder extends Seeder
         
         // Create some project entries
         foreach ($dates as $index => $date) {
-            ProjectEntry::create([
+            STBC4966Entry::create([
                 'user_id' => $student->id,
                 'date' => $date->copy()->addDay(), // Different dates to avoid conflicts
                 'activity' => 'Project work ' . ($index + 1) . ': Development phase',

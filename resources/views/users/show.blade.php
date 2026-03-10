@@ -71,7 +71,7 @@
                                 <div class="col-6">
                                     <div class="card text-center">
                                         <div class="card-body">
-                                            <h3 class="card-title text-primary">{{ $user->log_entries_count }}</h3>
+                                            <h3 class="card-title text-primary">{{ $user->stbc4866_entries_count }}</h3>
                                             <p class="card-text">{{ __('Log Entries') }}</p>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                 <div class="col-6">
                                 <div class="card text-center">
                                     <div class="card-body">
-                                        <h3 class="card-title text-success">{{ $user->project_entries_count }}</h3>
+                                        <h3 class="card-title text-success">{{ $user->stbc4966_entries_count }}</h3>
                                         <p class="card-text">{{ __('Project Entries') }}</p>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                     </div>
                     @endif
                     
-                    @if($recentProjectEntries->count() > 0)
+                    @if($recentSTBC4966Entries->count() > 0)
                     <div class="mt-4">
                         <h5>{{ __('Recent Project Entries') }}</h5>
                         <div class="table-responsive">
@@ -133,12 +133,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($recentProjectEntries as $projectEntry)
+                                    @foreach($recentSTBC4966Entries as $stbc4966Entry)
                                     <tr>
-                                        <td>{{ $projectEntry->date->format('M d, Y') }}</td>
-                                        <td>{{ Str::limit($projectEntry->activity, 50) }}</td>
+                                        <td>{{ $stbc4966Entry->date->format('M d, Y') }}</td>
+                                        <td>{{ Str::limit($stbc4966Entry->activity, 50) }}</td>
                                         <td>
-                                            @if($projectEntry->supervisor_approved)
+                                            @if($stbc4966Entry->supervisor_approved)
                                                 <span class="badge bg-success">Approved</span>
                                             @else
                                                 <span class="badge bg-warning">Pending</span>

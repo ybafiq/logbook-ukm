@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\ProjectEntry;
+use App\Models\STBC4966Entry;
 use Carbon\Carbon;
 
 class PendingProjectEntriesSeeder extends Seeder
@@ -30,7 +30,7 @@ class PendingProjectEntriesSeeder extends Seeder
         }
 
         // Create some pending project entries
-        ProjectEntry::create([
+        STBC4966Entry::create([
             'user_id' => $student->id,
             'date' => Carbon::today(),
             'activity' => 'Developed user authentication system with Laravel Breeze',
@@ -38,7 +38,7 @@ class PendingProjectEntriesSeeder extends Seeder
             'supervisor_approved' => false
         ]);
 
-        ProjectEntry::create([
+        STBC4966Entry::create([
             'user_id' => $student->id,
             'date' => Carbon::yesterday(),
             'activity' => 'Created database migrations for project management system',
@@ -46,7 +46,7 @@ class PendingProjectEntriesSeeder extends Seeder
             'supervisor_approved' => false
         ]);
 
-        ProjectEntry::create([
+        STBC4966Entry::create([
             'user_id' => $student->id,
             'date' => Carbon::today()->subDays(2),
             'activity' => 'Implemented responsive UI components using Bootstrap 5',

@@ -19,9 +19,9 @@ class STBC4866EntryPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, STBC4866Entry $logEntry): bool
+    public function view(User $user, STBC4866Entry $stbc4866Entry): bool
     {
-        return $user->id === $logEntry->user_id || $user->isSupervisor();
+        return $user->id === $stbc4866Entry->user_id || $user->isSupervisor();
     }
 
     /**
@@ -35,23 +35,23 @@ class STBC4866EntryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, STBC4866Entry $logEntry): bool
+    public function update(User $user, STBC4866Entry $stbc4866Entry): bool
     {
-        return $user->id === $logEntry->user_id && !$logEntry->supervisor_approved;
+        return $user->id === $stbc4866Entry->user_id && !$stbc4866Entry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, STBC4866Entry $logEntry): bool
+    public function delete(User $user, STBC4866Entry $stbc4866Entry): bool
     {
-        return $user->id === $logEntry->user_id && !$logEntry->supervisor_approved;
+        return $user->id === $stbc4866Entry->user_id && !$stbc4866Entry->supervisor_approved;
     }
 
     /**
      * Determine whether the user can approve the model.
      */
-    public function approve(User $user, STBC4866Entry $logEntry): bool
+    public function approve(User $user, STBC4866Entry $stbc4866Entry): bool
     {
         return $user->isSupervisor();
     }
@@ -59,12 +59,12 @@ class STBC4866EntryPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, STBC4866Entry $logEntry): bool
+    public function restore(User $user, STBC4866Entry $stbc4866Entry): bool
     {
         return $user->isSupervisor();
     }
 
-    public function forceDelete(User $user, STBC4866Entry $logEntry): bool
+    public function forceDelete(User $user, STBC4866Entry $stbc4866Entry): bool
     {
         return $user->isSupervisor();
     }

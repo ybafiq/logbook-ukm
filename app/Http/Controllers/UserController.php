@@ -30,7 +30,7 @@ class UserController extends Controller
         }
         // Admins can see all users (no additional filtering)
         
-        $users = $query->withCount(['logEntries', 'projectEntries'])
+        $users = $query->withCount(['STBC4866Entries', 'STBC4966Entries'])
                       ->orderBy('name')
                       ->paginate(15);
                       
@@ -41,11 +41,11 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
         
-        $user->loadCount(['logEntries', 'projectEntries']);
-        $recentEntries = $user->logEntries()->latest()->limit(5)->get();
-        $recentProjectEntries = $user->projectEntries()->latest()->limit(3)->get();
+        $user->loadCount(['STBC4866Entries', 'STBC4966Entries']);
+        $recentEntries = $user->STBC4866Entries()->latest()->limit(5)->get();
+        $recentSTBC4966Entries = $user->STBC4966Entries()->latest()->limit(3)->get();
         
-        return view('users.show', compact('user', 'recentEntries', 'recentProjectEntries'));
+        return view('users.show', compact('user', 'recentEntries', 'recentSTBC4966Entries'));
     }
     
     public function profile()
@@ -163,7 +163,7 @@ class UserController extends Controller
         $this->authorize('viewTrashed', User::class);
         
         $users = User::onlyTrashed()
-                    ->withCount(['logEntries', 'projectEntries'])
+                    ->withCount(['STBC4866Entries', 'STBC4966Entries'])
                     ->orderBy('deleted_at', 'desc')
                     ->paginate(15);
                     
@@ -210,31 +210,31 @@ class UserController extends Controller
         $entryType = $request->get('entry_type', 'all'); // Default to 'all'
         
         // Initialize collections
-        $logEntries = collect();
-        $projectEntries = collect();
+        $STBC4866Entries = collect();
+        $STBC4966Entries = collect();
         
         // Get log entries based on filter
         if ($entryType === 'all' || $entryType === 'log') {
-            $logEntriesQuery = $user->logEntries()->orderBy('date', 'desc');
+            $STBC4866EntriesQuery = $user->STBC4866Entries()->orderBy('date', 'desc');
             if ($startDate) {
-                $logEntriesQuery->whereDate('date', '>=', $startDate);
+                $STBC4866EntriesQuery->whereDate('date', '>=', $startDate);
             }
             if ($endDate) {
-                $logEntriesQuery->whereDate('date', '<=', $endDate);
+                $STBC4866EntriesQuery->whereDate('date', '<=', $endDate);
             }
-            $logEntries = $logEntriesQuery->get();
+            $STBC4866Entries = $STBC4866EntriesQuery->get();
         }
         
         // Get project entries based on filter
         if ($entryType === 'all' || $entryType === 'project') {
-            $projectEntriesQuery = $user->projectEntries()->orderBy('date', 'desc');
+            $stbc4966EntriesQuery = $user->STBC4966Entries()->orderBy('date', 'desc');
             if ($startDate) {
-                $projectEntriesQuery->whereDate('date', '>=', $startDate);
+                $stbc4966EntriesQuery->whereDate('date', '>=', $startDate);
             }
             if ($endDate) {
-                $projectEntriesQuery->whereDate('date', '<=', $endDate);
+                $stbc4966EntriesQuery->whereDate('date', '<=', $endDate);
             }
-            $projectEntries = $projectEntriesQuery->get();
+            $STBC4966Entries = $stbc4966EntriesQuery->get();
         }
 
         $includeReflection = $request->boolean('include_reflection', false); // default false
@@ -243,8 +243,8 @@ class UserController extends Controller
         // Weekly reflections are now integrated into log and project entries
         // Collect weekly reflections from both log and project entries
         $weeklyReflectionsContents = collect()
-        ->merge($logEntries->pluck('weekly_reflection_content'))
-        ->merge($projectEntries->pluck('weekly_reflection_content'))
+        ->merge($STBC4866Entries->pluck('weekly_reflection_content'))
+        ->merge($STBC4966Entries->pluck('weekly_reflection_content'))
         ->map(fn($text) => ltrim($text))
         ->filter() // removes null or empty values
         ->implode("\n\n");
@@ -267,8 +267,8 @@ class UserController extends Controller
         // Prepare data for PDF
         $data = [
             'user' => $user,
-            'logEntries' => $logEntries,
-            'projectEntries' => $projectEntries,
+            'STBC4866Entries' => $STBC4866Entries,
+            'STBC4966Entries' => $STBC4966Entries,
             'weeklyReflectionsContents' => $weeklyReflectionsContents,
             'startDate' => $startDate,
             'endDate' => $endDate,
