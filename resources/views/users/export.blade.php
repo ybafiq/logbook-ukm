@@ -105,7 +105,7 @@
                                 <div class="card bg-light">
                                     <div class="card-body">
                                         <h6 class="card-title">{{ __('Available Entries') }}</h6>
-                                        <div class="row text-center">
+                                        <div class="row text-center g-3">
                                             <div class="col-md-4">
                                                 <div class="bg-primary text-white rounded p-2">
                                                     <h5 id="log-count">{{ auth()->user()->STBC4866Entries()->count() }}</h5>
