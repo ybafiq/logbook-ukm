@@ -148,6 +148,9 @@
             <h1>STBC4866 Latihan Tempat Kerja Bioinformatik</h1>
             <h2>Templat Buku Log / Student’s Logbook Template</h2>
             <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+        @elseif($entryType === 'stbc4886')
+            <h1>Templat Buku Log/Rekod Aktiviti Mingguan Pelajar / Student’s Logbook/Weekly Activity Record Template</h1>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
         @else
             <h1>STBC4866 & STBC4966 Logbook dan Projek Bioinformatik</h1>
             <h2>Templat Gabungan Buku Log & Projek / Combined Log & Project Template</h2>
@@ -209,9 +212,41 @@
                     </tr>
                     @endfor
                 @endforelse
+            @elseif($entryType === 'stbc4886')
+                @forelse($STBC4886Entries->sortBy('date') as $entry)
+                    <tr>
+                        <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
+                        <td class="activity-col">{{ $entry->activity }}</td>
+                        <td class="comment-col">{{ $entry->comment ?? '' }}</td>
+                    </tr>
+                @empty
+                    @for($i = 0; $i < 8; $i++)
+                    <tr>
+                        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    </tr>
+                    @endfor
+                @endforelse
             @endif
         </tbody>
     </table>
+
+    <!-- SUMMARY SECTION -->
+    <div class="summary-section">
+        <div class="summary-header">
+            @if($entryType === 'stbc4886')
+                Ringkasan pencapaian / Summary of achievements:
+            @endif
+        </div>
+        <div class="summary-content">
+            @if(!empty($weeklyReflectionsContents))
+                <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
+                    {{ ltrim($weeklyReflectionsContents) }}
+                </div>
+            @else
+                <br><br><br><br><br><br><br>
+            @endif
+        </div>
+    </div>
 
     <!-- REFLECTION SECTION -->
     <div class="reflection-section">
