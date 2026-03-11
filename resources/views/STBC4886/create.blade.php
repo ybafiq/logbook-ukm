@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
             reflectionFields.style.display = 'none';
             // Clear the fields when hiding
             document.getElementById('reflection_week_start').value = '';
+            document.getElementById('weekly_summary_content').value = '';
             document.getElementById('weekly_reflection_content').value = '';
         }
     });

@@ -43,19 +43,25 @@
                             <div class="card-header">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="include_reflection" 
-                                           {{ old('weekly_reflection_content', $stbc4886Entry->weekly_reflection_content) ? 'checked' : '' }}>
+                                            {{ old('weekly_summary_content', $stbc4886Entry->weekly_summary_content) || old('weekly_reflection_content', $stbc4886Entry->weekly_reflection_content) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="include_reflection">
                                         {{ __('Include Weekly Reflection') }}
                                     </label>
                                 </div>
                             </div>
                             <div class="card-body" id="reflection_fields" 
-                                 style="display: {{ old('weekly_reflection_content', $stbc4886Entry->weekly_reflection_content) ? 'block' : 'none' }};">
+                                 style="display: {{ old('weekly_summary_content', $stbc4886Entry->weekly_summary_content ?? $stbc4886Entry->weekly_reflection_content) ? 'block' : 'none' }}">
                                 <div class="mb-3">
                                     <label for="reflection_week_start" class="form-label">{{ __('Week Starting Date') }}</label>
                                     <input type="date" name="reflection_week_start" id="reflection_week_start" 
                                            class="form-control" 
                                            value="{{ old('reflection_week_start', $stbc4886Entry->reflection_week_start ? $stbc4886Entry->reflection_week_start->format('Y-m-d') : '') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="weekly_summary_content" class="form-label">{{ __('Summary of Achievements') }}</label>
+                                    <textarea name="weekly_summary_content" id="weekly_summary_content" 
+                                              class="form-control" rows="5" 
+                                              placeholder="Summary of your achievement for this week...">{{ old('weekly_summary_content', $stbc4886Entry->weekly_summary_content) }}</textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="weekly_reflection_content" class="form-label">{{ __('Weekly Reflection Content') }}</label>
@@ -95,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
             reflectionFields.style.display = 'none';
             // Clear the fields when hiding
             document.getElementById('reflection_week_start').value = '';
+            document.getElementById('weekly_summary_content').value = '';
             document.getElementById('weekly_reflection_content').value = '';
         }
     });

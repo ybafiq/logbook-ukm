@@ -212,6 +212,7 @@ class UserController extends Controller
         // Initialize collections
         $STBC4866Entries = collect();
         $STBC4966Entries = collect();
+        $STBC4886Entries = collect();
         
         // Get log entries based on filter
         if ($entryType === 'all' || $entryType === 'log') {
@@ -237,16 +238,33 @@ class UserController extends Controller
             $STBC4966Entries = $stbc4966EntriesQuery->get();
         }
 
+        // Get STBC4886 entries based on filter
+        if ($entryType === 'all' || $entryType === 'stbc4886') {
+            $stbc4886EntriesQuery = $user->STBC4886Entries()->orderBy('date', 'desc');
+            if ($startDate) {
+                $stbc4886EntriesQuery->whereDate('date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $stbc4886EntriesQuery->whereDate('date', '<=', $endDate);
+            }
+            $STBC4886Entries = $stbc4886EntriesQuery->get();
+        }
+
         $includeReflection = $request->boolean('include_reflection', false); // default false
 
-        
-        // Weekly reflections are now integrated into log and project entries
-        // Collect weekly reflections from both log and project entries
+        // Collect weekly reflections from log and project entries
         $weeklyReflectionsContents = collect()
         ->merge($STBC4866Entries->pluck('weekly_reflection_content'))
         ->merge($STBC4966Entries->pluck('weekly_reflection_content'))
+        ->merge($STBC4886Entries->pluck('weekly_reflection_content'))
         ->map(fn($text) => ltrim($text))
-        ->filter() // removes null or empty values
+        ->filter()
+        ->implode("\n\n");
+
+        // Collect summary of achievements from STBC4886 entries
+        $weeklySummaryContents = $STBC4886Entries->pluck('weekly_summary_content')
+        ->map(fn($text) => ltrim($text))
+        ->filter()
         ->implode("\n\n");
 
         
@@ -259,6 +277,9 @@ class UserController extends Controller
             case 'project':
                 $typeLabel = '_project-entries';
                 break;
+            case 'stbc4886':
+                $typeLabel = '_stbc4886-entries';
+                break;
             default:
                 $typeLabel = '_all-entries';
                 break;
@@ -269,7 +290,9 @@ class UserController extends Controller
             'user' => $user,
             'STBC4866Entries' => $STBC4866Entries,
             'STBC4966Entries' => $STBC4966Entries,
+            'STBC4886Entries' => $STBC4886Entries,
             'weeklyReflectionsContents' => $weeklyReflectionsContents,
+            'weeklySummaryContents' => $weeklySummaryContents,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'entryType' => $entryType,

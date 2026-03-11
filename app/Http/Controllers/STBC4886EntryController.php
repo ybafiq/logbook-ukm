@@ -35,6 +35,7 @@ class STBC4886EntryController extends Controller
             'date' => 'required|date',
             'activity' => 'required|string',
             'comment' => 'nullable|string',
+            'weekly_summary_content' => 'nullable|string',
             'weekly_reflection_content' => 'nullable|string',
             'reflection_week_start' => 'nullable|date',
         ]);
@@ -82,6 +83,7 @@ class STBC4886EntryController extends Controller
             'date' => 'required|date',
             'activity' => 'required|string',
             'comment' => 'nullable|string',
+            'weekly_summary_content' => 'nullable|string',
             'weekly_reflection_content' => 'nullable|string',
             'reflection_week_start' => 'nullable|date',
         ]);

@@ -238,7 +238,11 @@
             @endif
         </div>
         <div class="summary-content">
-            @if(!empty($weeklyReflectionsContents))
+            @if($entryType === 'stbc4886' && !empty($weeklySummaryContents))
+                <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
+                    {{ ltrim($weeklySummaryContents) }}
+                </div>
+            @elseif($entryType !== 'stbc4886' && !empty($weeklyReflectionsContents))
                 <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
                     {{ ltrim($weeklyReflectionsContents) }}
                 </div>
@@ -289,6 +293,12 @@
                     $signedEntry = $STBC4966Entries->where('supervisor_approved', true)
                                                   ->whereNotNull('supervisor_signature')
                                                   ->sortByDesc('approved_at')
+                                                  ->first();
+                }
+                if (!$signedEntry && ($entryType === 'stbc4886' || $entryType === 'all')) {
+                    $signedEntry = $STBC4886Entries->where('reflection_supervisor_signed', true)
+                                                  ->whereNotNull('supervisor_signature')
+                                                  ->sortByDesc('reflection_signed_at')
                                                   ->first();
                 }
             @endphp

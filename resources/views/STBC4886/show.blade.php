@@ -85,7 +85,7 @@
                     </div>
                     @endif
 
-                    @if($stbc4886Entry->weekly_reflection_content)
+                    @if($stbc4886Entry->weekly_reflection_content || $stbc4886Entry->weekly_summary_content)
                         <hr>
                         <h5 class="mb-3">{{ __('Weekly Reflection') }}</h5>
                         
@@ -98,6 +98,20 @@
                         </div>
                         @endif
 
+                        @if($stbc4886Entry->weekly_summary_content)
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label fw-bold">{{ __('Summary of Achievements') }}:</label>
+                            <div class="col-sm-9">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="mb-0">{{ nl2br(e($stbc4886Entry->weekly_summary_content)) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
+                        @if($stbc4886Entry->weekly_reflection_content)
                         <div class="row mb-3">
                             <label class="col-sm-3 col-form-label fw-bold">{{ __('Reflection Content') }}:</label>
                             <div class="col-sm-9">
@@ -108,6 +122,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
 
                         <div class="row mb-3">
                             <label class="col-sm-3 col-form-label fw-bold">{{ __('Reflection Status') }}:</label>
