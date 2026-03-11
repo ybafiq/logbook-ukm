@@ -397,9 +397,11 @@
     </div>
     @endif
 
+    @if($entryType !== 'stbc4886')
     <div class="footer-text">
         Untuk kegunaan Pelajar UKM.
     </div>
+    @endif
     @endif
 
 </body>
