@@ -54,6 +54,12 @@
                                            class="form-control" value="{{ old('reflection_week_start') }}">
                                 </div>
                                 <div class="mb-3">
+                                    <label for="weekly_summary_content" class="form-label">{{ __('Summary of Achievements') }}</label>
+                                    <textarea name="weekly_summary_content" id="weekly_summary_content" 
+                                              class="form-control" rows="5" 
+                                              placeholder="Summary of your achievement for this week...">{{ old('weekly_reflection_content') }}</textarea>
+                                </div>
+                                <div class="mb-3">
                                     <label for="weekly_reflection_content" class="form-label">{{ __('Weekly Reflection Content') }}</label>
                                     <textarea name="weekly_reflection_content" id="weekly_reflection_content" 
                                               class="form-control" rows="5" 
