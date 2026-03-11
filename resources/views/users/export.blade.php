@@ -38,8 +38,8 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_log" value="log" 
-                                                           {{ request('entry_type') == 'log' ? 'checked' : '' }}>
+                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_log" value="stbc4866" 
+                                                           {{ request('entry_type') == 'stbc4866' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_log">
                                                         <strong>{{ __('STBC4866 Entries Only') }}</strong>
                                                         <br><small class="text-muted">{{ __('Include only STBC4866 entries') }}</small>
@@ -48,8 +48,8 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_project" value="project" 
-                                                           {{ request('entry_type') == 'project' ? 'checked' : '' }}>
+                                                    <input class="form-check-input" type="radio" name="entry_type" id="entry_type_project" value="stbc4966" 
+                                                           {{ request('entry_type') == 'stbc4966' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="entry_type_project">
                                                         <strong>{{ __('STBC4966 Entries Only') }}</strong>
                                                         <br><small class="text-muted">{{ __('Include only STBC4966 entries') }}</small>

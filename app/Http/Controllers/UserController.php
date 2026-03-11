@@ -215,7 +215,7 @@ class UserController extends Controller
         $STBC4886Entries = collect();
         
         // Get log entries based on filter
-        if ($entryType === 'all' || $entryType === 'log') {
+        if ($entryType === 'all' || $entryType === 'stbc4866') {
             $STBC4866EntriesQuery = $user->STBC4866Entries()->orderBy('date', 'desc');
             if ($startDate) {
                 $STBC4866EntriesQuery->whereDate('date', '>=', $startDate);
@@ -227,7 +227,7 @@ class UserController extends Controller
         }
         
         // Get project entries based on filter
-        if ($entryType === 'all' || $entryType === 'project') {
+        if ($entryType === 'all' || $entryType === 'stbc4966') {
             $stbc4966EntriesQuery = $user->STBC4966Entries()->orderBy('date', 'desc');
             if ($startDate) {
                 $stbc4966EntriesQuery->whereDate('date', '>=', $startDate);
@@ -271,10 +271,10 @@ class UserController extends Controller
         // Generate filename based on filter type
         $typeLabel = '';
         switch ($entryType) {
-            case 'log':
+            case 'stbc4866':
                 $typeLabel = '_log-entries';
                 break;
-            case 'project':
+            case 'stbc4966':
                 $typeLabel = '_project-entries';
                 break;
             case 'stbc4886':

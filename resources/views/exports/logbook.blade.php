@@ -92,17 +92,25 @@
 
         /* === REFLECTION & SUPERVISOR SECTIONS === */
         .reflection-section,
-        .supervisor-section {
+        .supervisor-section,
+        .ulasan-section,
+        .pengesahan-section {
             border: 1px solid #000;
             margin-bottom: 20px;
             page-break-inside: avoid;
         }
         .reflection-header,
-        .supervisor-header {
+        .supervisor-header,
+        .ulasan-header,
+        .pengesahan-header {
             padding: 6px 8px;
             font-size: 11px;
             font-weight: bold;
             border-bottom: 1px solid #000;
+        }
+        .ulasan-header,
+        .pengesahan-header {
+            background-color: #cce5ff;
         }
         .reflection-content {
             padding: 12px;
@@ -110,8 +118,18 @@
             white-space: pre-wrap;
             word-break: break-word;
         }
-        .supervisor-content {
+        .supervisor-content,
+        .ulasan-content,
+        .pengesahan-content {
             padding: 12px;
+        }
+        .ulasan-content {
+            min-height: 80px;
+            background-color: #e8f4ff;
+        }
+        .pengesahan-content {
+            min-height: 80px;
+            background-color: #e8f4ff;
         }
 
         /* === FOOTER === */
@@ -140,17 +158,19 @@
 
     <!-- HEADER -->
     <div class="header"> 
-        @if($entryType === 'project')
+        @if($entryType === 'project' || $entryType === 'stbc4966')
             <h1>STBC4966 Bioinformatik Dalam Industri</h1>
-            <h2>Templat Buku Log / Student’s Logbook Template</h2>
+            <h2>Templat Buku Log / Student's Logbook Template</h2>
             <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
-        @elseif($entryType === 'log')
+        @elseif($entryType === 'log' || $entryType === 'stbc4866')
             <h1>STBC4866 Latihan Tempat Kerja Bioinformatik</h1>
             <h2>Templat Buku Log / Student’s Logbook Template</h2>
             <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
         @elseif($entryType === 'stbc4886')
-            <h1>Templat Buku Log/Rekod Aktiviti Mingguan Pelajar / Student’s Logbook/Weekly Activity Record Template</h1>
-            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by industrial supervisor every 3 weeks)</p>
+            <h1>Templat Buku Log/Rekod Aktiviti Mingguan Pelajar / Student’s Logbook/Weekly</h1> 
+            <h1>Activity Record Template</h1>
+            <p>(Untuk disemak oleh penyelia industri pada setiap tiga minggu / To be checked by</p> 
+            <p>industrial supervisor every 3 weeks)</p>
         @else
             <h1>STBC4866 & STBC4966 Logbook dan Projek Bioinformatik</h1>
             <h2>Templat Gabungan Buku Log & Projek / Combined Log & Project Template</h2>
@@ -159,6 +179,7 @@
     </div>
 
     <!-- STUDENT INFO -->
+    @if($entryType !== 'stbc4886')
     <div class="student-info">
         <div class="info-line">
             Nama Pelajar / <i>Name of Student:</i>
@@ -173,6 +194,7 @@
             <span class="underline">{{ $user->workplace ?? ' ' }}</span>
         </div>
     </div>
+    @endif
 
     <!-- LOGBOOK TABLE -->
     <table class="logbook-table">
@@ -184,7 +206,7 @@
             </tr>
         </thead>
         <tbody>
-            @if($entryType === 'log')
+            @if($entryType === 'log' || $entryType === 'stbc4866')
                 @forelse($STBC4866Entries->sortBy('date') as $entry)
                     <tr>
                         <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
@@ -198,7 +220,7 @@
                     </tr>
                     @endfor
                 @endforelse
-            @elseif($entryType === 'project')
+            @elseif($entryType === 'project' || $entryType === 'stbc4966')
                 @forelse($STBC4966Entries->sortBy('date') as $entry)
                     <tr>
                         <td class="date-col">{{ \Carbon\Carbon::parse($entry->date)->format('d/m/Y') }}</td>
@@ -230,40 +252,38 @@
         </tbody>
     </table>
 
-    <!-- SUMMARY SECTION -->
-    <div class="summary-section">
-        <div class="summary-header">
-            @if($entryType === 'stbc4886')
-                Ringkasan pencapaian / Summary of achievements:
-            @endif
+    <!-- SUMMARY SECTION (STBC4886 only) -->
+    @if($entryType === 'stbc4886')
+    <div class="reflection-section">
+        <div class="reflection-header">
+            Ringkasan pencapaian / <i>Summary of achievements:</i>
         </div>
-        <div class="summary-content">
-            @if($entryType === 'stbc4886' && !empty($weeklySummaryContents))
-                <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
+        <div class="reflection-content">
+            @if(!empty($weeklySummaryContents))
+                <div style="white-space: pre-wrap; font-size: 11px; line-height: 1.6;">
                     {{ ltrim($weeklySummaryContents) }}
-                </div>
-            @elseif($entryType !== 'stbc4886' && !empty($weeklyReflectionsContents))
-                <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
-                    {{ ltrim($weeklyReflectionsContents) }}
                 </div>
             @else
                 <br><br><br><br><br><br><br>
             @endif
         </div>
     </div>
+    @endif
 
     <!-- REFLECTION SECTION -->
     <div class="reflection-section">
         <div class="reflection-header">
-            @if($entryType === 'project')
-                Cadangan penambahbaikan dan perancangan / Suggestion for improvement and planning for the upcoming week:
+            @if($entryType === 'project' || $entryType === 'stbc4966')
+                Cadangan penambahbaikan dan perancangan / <i>Suggestion for improvement and planning for the upcoming week:</i>
+            @elseif($entryType === 'stbc4886')
+                Refleksi Minggu / <i>Weekly reflection:</i>
             @else
-                Refleksi Mingguan / Weekly Reflection:
+                Refleksi Mingguan / <i>Weekly Reflection:</i>
             @endif
         </div>
         <div class="reflection-content">
             @if(!empty($weeklyReflectionsContents))
-                <div style="white-space: pre-wrap; font-size: 12px; line-height: 1.6;">
+                <div style="white-space: pre-wrap; font-size: 11px; line-height: 1.6;">
                     {{ ltrim($weeklyReflectionsContents) }}
                 </div>
             @else
@@ -273,7 +293,50 @@
     </div>
 
     @if($includeReflection)
-    <!-- SUPERVISOR SECTION -->
+    @if($entryType === 'stbc4886')
+    <!-- ULASAN SECTION (STBC4886) -->
+    <div class="ulasan-section">
+        <div class="ulasan-header">
+            Ulasan Penyelia Agensi / <i>Comments from Industrial Supervisor</i>
+        </div>
+        <div class="ulasan-content">
+            @php
+                $signedEntry4886 = $STBC4886Entries->where('reflection_supervisor_signed', true)
+                                                   ->whereNotNull('supervisor_signature')
+                                                   ->sortByDesc('reflection_signed_at')
+                                                   ->first();
+            @endphp
+            @if($signedEntry4886 && $signedEntry4886->supervisor_comment)
+                <div style="white-space: pre-wrap; font-size: 11px;">{{ $signedEntry4886->supervisor_comment }}</div>
+            @else
+                <br><br><br><br>
+            @endif
+        </div>
+    </div>
+
+    <!-- PENGESAHAN SECTION (STBC4886) -->
+    <div class="pengesahan-section">
+        <div class="pengesahan-header">
+            Pengesahan/Tandatangan oleh Penyelia Agensi / <i>Verification/Signature of Industrial Supervisor</i>
+        </div>
+        <div class="pengesahan-content">
+            @if($signedEntry4886 && $signedEntry4886->supervisor_signature)
+                <div style="text-align: center; margin: 10px 0;">
+                    <img src="{{ public_path('storage/' . $signedEntry4886->supervisor_signature) }}"
+                         alt="Supervisor Signature"
+                         style="max-width: 280px; max-height: 90px;">
+                </div>
+                <div style="font-size: 11px; margin-top: 8px;">
+                    <strong>Tarikh / Date:</strong>
+                    {{ $signedEntry4886->reflection_signed_at ? $signedEntry4886->reflection_signed_at->format('d/m/Y') : '' }}
+                </div>
+            @else
+                <br><br><br><br><br>
+            @endif
+        </div>
+    </div>
+    @else
+    <!-- SUPERVISOR SECTION (STBC4866 / STBC4966 / all) -->
     <div class="supervisor-section">
         <div class="supervisor-header">
             Cop dan tandatangan penyelia industri (setiap 3 minggu) /
@@ -283,22 +346,16 @@
             @php
                 // Get the most recent approved entry with signature
                 $signedEntry = null;
-                if ($entryType === 'log' || $entryType === 'all') {
+                if ($entryType === 'log' || $entryType === 'stbc4866' || $entryType === 'all') {
                     $signedEntry = $STBC4866Entries->where('supervisor_approved', true)
                                               ->whereNotNull('supervisor_signature')
                                               ->sortByDesc('approved_at')
                                               ->first();
                 }
-                if (!$signedEntry && ($entryType === 'project' || $entryType === 'all')) {
+                if (!$signedEntry && ($entryType === 'project' || $entryType === 'stbc4966' || $entryType === 'all')) {
                     $signedEntry = $STBC4966Entries->where('supervisor_approved', true)
                                                   ->whereNotNull('supervisor_signature')
                                                   ->sortByDesc('approved_at')
-                                                  ->first();
-                }
-                if (!$signedEntry && ($entryType === 'stbc4886' || $entryType === 'all')) {
-                    $signedEntry = $STBC4886Entries->where('reflection_supervisor_signed', true)
-                                                  ->whereNotNull('supervisor_signature')
-                                                  ->sortByDesc('reflection_signed_at')
                                                   ->first();
                 }
             @endphp
@@ -338,6 +395,7 @@
             @endif
         </div>
     </div>
+    @endif
 
     <div class="footer-text">
         Untuk kegunaan Pelajar UKM.
