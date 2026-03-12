@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-7">
             <div class="card">
-                <div class="card-header">{{ __('Create Log Entry') }}</div>
+                <div class="card-header">{{ __('Create STBC4866 Entry') }}</div>
 
                 <div class="card-body">
                     <form action="{{ route('STBC4866.store') }}" method="post">
