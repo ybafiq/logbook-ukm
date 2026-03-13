@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('stbc4886_entries', function (Blueprint $table) {
+        Schema::create('stbc4966_entries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('date');
@@ -20,18 +23,20 @@ return new class extends Migration
             $table->string('supervisor_signature')->nullable();
             $table->text('supervisor_comment')->nullable();
             $table->text('weekly_reflection_content')->nullable();
-            $table->text('weekly_summary_content')->nullable();
             $table->date('reflection_week_start')->nullable();
             $table->boolean('reflection_supervisor_signed')->default(false);
             $table->foreignId('reflection_signed_by')->nullable()->constrained('users');
             $table->timestamp('reflection_signed_at')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('stbc4886_entries');
+        Schema::dropIfExists('stbc4966_entries');
     }
 };
