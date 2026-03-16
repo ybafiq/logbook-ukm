@@ -17,6 +17,7 @@ class STBC4866Entry extends Model
         'date',
         'activity',
         'comment',
+        'image_path',
         'supervisor_approved',
         'approved_by',
         'approved_at',
