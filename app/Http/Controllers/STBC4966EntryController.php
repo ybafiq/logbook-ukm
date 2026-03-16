@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\STBC4966Entry;
 use App\Models\User;
 use App\Notifications\NewEntrySubmitted;
@@ -35,22 +36,28 @@ class STBC4966EntryController extends Controller
             'date' => 'required|date',
             'activity' => 'required|string',
             'comment' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'weekly_reflection_content' => 'nullable|string',
             'reflection_week_start' => 'nullable|date',
         ]);
-        
+
         if (auth()->user()->isStudent()) {
             $existingEntry = STBC4966Entry::where('user_id', auth()->id())
                                        ->whereDate('date', $data['date'])
                                        ->first();
-            
+
             if ($existingEntry) {
                 return redirect()->back()
                                  ->withInput()
                                  ->withErrors(['date' => 'You can only create one project entry per day. You already have an entry for ' . $data['date'] . '.']);
             }
         }
-        
+
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('entry-images', 'public');
+        }
+        unset($data['image']);
+
         $data['user_id'] = auth()->id();
         $entry = STBC4966Entry::create($data);
     
@@ -83,23 +90,32 @@ class STBC4966EntryController extends Controller
             'date' => 'required|date',
             'activity' => 'required|string',
             'comment' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'weekly_reflection_content' => 'nullable|string',
             'reflection_week_start' => 'nullable|date',
         ]);
-        
+
         if (auth()->user()->isStudent() && $stbc4966Entry->date->format('Y-m-d') !== $data['date']) {
             $existingEntry = STBC4966Entry::where('user_id', auth()->id())
                                        ->whereDate('date', $data['date'])
                                        ->where('id', '!=', $stbc4966Entry->id)
                                        ->first();
-            
+
             if ($existingEntry) {
                 return redirect()->back()
                                  ->withInput()
                                  ->withErrors(['date' => 'You can only have one project entry per day. You already have an entry for ' . $data['date'] . '.']);
             }
         }
-        
+
+        if ($request->hasFile('image')) {
+            if ($stbc4966Entry->image_path) {
+                Storage::disk('public')->delete($stbc4966Entry->image_path);
+            }
+            $data['image_path'] = $request->file('image')->store('entry-images', 'public');
+        }
+        unset($data['image']);
+
         $stbc4966Entry->update($data);
         
         return redirect()->route('STBC4966.index')

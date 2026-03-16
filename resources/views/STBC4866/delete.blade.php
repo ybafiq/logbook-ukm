@@ -35,6 +35,15 @@
                     </div>
                     @endif
 
+                    @if($stbc4866Entry->image_path)
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label fw-bold">{{ __('Image') }}:</label>
+                        <div class="col-sm-9">
+                            <img src="{{ asset('storage/' . $stbc4866Entry->image_path) }}" alt="Entry image" class="img-thumbnail" style="max-height: 150px;">
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="d-flex justify-content-between">
                         <div>
                             <form action="{{ route('STBC4866.destroy', $stbc4866Entry) }}" method="POST" class="d-inline">

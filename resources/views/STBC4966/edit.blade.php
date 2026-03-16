@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Edit Project Entry') }}</div>
 
                 <div class="card-body">
-                    <form action="{{ route('STBC4966.update', $stbc4966Entry) }}" method="post">
+                    <form action="{{ route('STBC4966.update', $stbc4966Entry) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         
@@ -37,7 +37,40 @@
                             <label for="comment" class="form-label">{{ __('Comment (Optional)') }}</label>
                             <textarea name="comment" id="comment" class="form-control" rows="3">{{ old('comment', $stbc4966Entry->comment) }}</textarea>
                         </div>
-                        
+
+                        <!-- Image Section -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="include_image"
+                                           {{ ($stbc4966Entry->image_path || old('_include_image')) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="include_image">
+                                        {{ __('Include Image') }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body" id="image_fields"
+                                 style="display: {{ ($stbc4966Entry->image_path || old('_include_image')) ? 'block' : 'none' }};">
+                                @if($stbc4966Entry->image_path)
+                                    <div class="mb-2">
+                                        <p class="form-text">{{ __('Current image:') }}</p>
+                                        <img src="{{ asset('storage/' . $stbc4966Entry->image_path) }}"
+                                             alt="Entry image" class="img-thumbnail" style="max-height: 200px;">
+                                    </div>
+                                @endif
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">
+                                        {{ $stbc4966Entry->image_path ? __('Replace Image') : __('Image') }}
+                                    </label>
+                                    <input type="file" name="image" id="image" class="form-control" accept="image/jpeg,image/png,image/jpg,image/gif">
+                                    <div class="form-text">{{ __('Accepted formats: JPG, PNG, GIF. Max size: 2MB.') }}</div>
+                                    @error('image')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Weekly Reflection Section -->
                         <div class="card mb-3">
                             <div class="card-header">
@@ -86,9 +119,21 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const imageCheckbox = document.getElementById('include_image');
+    const imageFields = document.getElementById('image_fields');
+
+    imageCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            imageFields.style.display = 'block';
+        } else {
+            imageFields.style.display = 'none';
+            document.getElementById('image').value = '';
+        }
+    });
+
     const reflectionCheckbox = document.getElementById('include_reflection');
     const reflectionFields = document.getElementById('reflection_fields');
-    
+
     reflectionCheckbox.addEventListener('change', function() {
         if (this.checked) {
             reflectionFields.style.display = 'block';

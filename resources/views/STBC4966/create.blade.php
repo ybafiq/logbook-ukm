@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Create STBC4966 Entry') }}</div>
 
                 <div class="card-body">
-                    <form action="{{ route('STBC4966.store') }}" method="post">
+                    <form action="{{ route('STBC4966.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         
                         @if($errors->any())
@@ -36,7 +36,30 @@
                             <label for="comment" class="form-label">{{ __('Comment (Optional)') }}</label>
                             <textarea name="comment" id="comment" class="form-control" rows="3">{{ old('comment') }}</textarea>
                         </div>
-                        
+
+                        <!-- Image Section -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="include_image"
+                                           {{ old('_include_image') ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="include_image">
+                                        {{ __('Include Image') }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body" id="image_fields" style="display: {{ old('_include_image') ? 'block' : 'none' }};">
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">{{ __('Image') }}</label>
+                                    <input type="file" name="image" id="image" class="form-control" accept="image/jpeg,image/png,image/jpg,image/gif">
+                                    <div class="form-text">{{ __('Accepted formats: JPG, PNG, GIF. Max size: 2MB.') }}</div>
+                                    @error('image')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Weekly Reflection Section -->
                         <div class="card mb-3">
                             <div class="card-header">
@@ -77,9 +100,21 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const imageCheckbox = document.getElementById('include_image');
+    const imageFields = document.getElementById('image_fields');
+
+    imageCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            imageFields.style.display = 'block';
+        } else {
+            imageFields.style.display = 'none';
+            document.getElementById('image').value = '';
+        }
+    });
+
     const reflectionCheckbox = document.getElementById('include_reflection');
     const reflectionFields = document.getElementById('reflection_fields');
-    
+
     reflectionCheckbox.addEventListener('change', function() {
         if (this.checked) {
             reflectionFields.style.display = 'block';
