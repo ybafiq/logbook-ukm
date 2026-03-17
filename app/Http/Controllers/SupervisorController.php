@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\STBC4866Entry;
 use App\Models\STBC4966Entry;
 use App\Models\STBC4886Entry;
+use App\Models\STBC4996Entry;
 use App\Models\User;
 
 class SupervisorController extends Controller
@@ -40,6 +41,7 @@ class SupervisorController extends Controller
             'pending_entries' => STBC4866Entry::where('supervisor_approved', false)->count(),
             'pending_stbc4966_entries' => STBC4966Entry::where('supervisor_approved', false)->count(),
             'pending_stbc4886_entries' => STBC4886Entry::where('supervisor_approved', false)->count(),
+            'pending_stbc4996_entries' => STBC4996Entry::where('supervisor_approved', false)->count(),
             'total_students' => User::where('role', 'student')->count(),
         ];
         
@@ -264,6 +266,67 @@ class SupervisorController extends Controller
         $message = $request->filled('signature')
             ? 'STBC4886 entry approved and signed successfully.'
             : 'STBC4886 entry approved successfully.';
+
+        return redirect()->back()->with('success', $message);
+    }
+
+    public function approveStbc4996Entry(Request $request, STBC4996Entry $stbc4996Entry)
+    {
+        if (!auth()->user()->isSupervisor()) {
+            abort(403, 'Access denied. Supervisor role required.');
+        }
+
+        $request->validate([
+            'supervisor_comment' => 'nullable|string',
+            'signature' => 'nullable|string',
+        ]);
+
+        $data = [
+            'supervisor_approved' => true,
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'supervisor_comment' => $request->input('supervisor_comment')
+        ];
+
+        if ($request->filled('signature')) {
+            $signatureData = $request->input('signature');
+
+            if (!preg_match('/^data:image\/png;base64,/', $signatureData)) {
+                return redirect()->back()->with('error', 'Signature must be a PNG data URL.');
+            }
+
+            $image = preg_replace('/^data:image\/png;base64,/', '', $signatureData);
+            $image = str_replace(' ', '+', $image);
+            $decoded = base64_decode($image, true);
+
+            if ($decoded === false) {
+                return redirect()->back()->with('error', 'Invalid base64 signature data.');
+            }
+
+            if (substr($decoded, 0, 8) !== "\x89PNG\x0D\x0A\x1A\x0A") {
+                return redirect()->back()->with('error', 'Signature is not a valid PNG image.');
+            }
+
+            $imageName = 'signature_' . time() . '_' . $stbc4996Entry->id . '.png';
+            $path = 'signatures/' . $imageName;
+            $disk = \Storage::disk('public');
+
+            if (!$disk->exists('signatures')) {
+                $disk->makeDirectory('signatures');
+            }
+
+            if (!$disk->put($path, $decoded)) {
+                return redirect()->back()->with('error', 'Failed to save signature file.');
+            }
+
+            $data['supervisor_signature'] = $path;
+        }
+
+        $stbc4996Entry->update($data);
+
+        $message = $request->filled('signature')
+            ? 'STBC4996 entry approved and signed successfully.'
+            : 'STBC4996 entry approved successfully.';
 
         return redirect()->back()->with('success', $message);
     }

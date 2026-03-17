@@ -67,6 +67,15 @@
                             </div>
                         </div> --}}
                         <div class="col-md-3">
+                            <div class="card text-center border-warning">
+                                <div class="card-body">
+                                    <h3 class="card-title text-warning">{{ $stats['total_stbc4996_entries'] }}</h3>
+                                    <p class="card-text">{{ __('STBC4996') }}</p>
+                                    <a href="{{ route('STBC4996.index') }}" class="btn btn-warning btn-sm">{{ __('View All') }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="card text-center border-info">
                                 <div class="card-body">
                                     <h3 class="card-title text-info">{{ $stats['total_reflections'] }}</h3>
@@ -78,7 +87,7 @@
                         <div class="col-md-3">
                             <div class="card text-center border-warning">
                                 <div class="card-body">
-                                    <h3 class="card-title text-warning">{{ $stats['approved_entries'] + $stats['approved_stbc4966_entries'] + $stats['signed_reflections'] }}</h3>
+                                    <h3 class="card-title text-warning">{{ $stats['approved_entries'] + $stats['approved_stbc4966_entries'] + $stats['approved_stbc4996_entries'] + $stats['signed_reflections'] }}</h3>
                                     <p class="card-text">{{ __('Total Approved') }}</p>
                                 </div>
                             </div>
@@ -127,6 +136,14 @@
                                                 {{ __('STBC4886') }}
                                             </div>
                                         </div>
+                                        <div class="stat-item text-center">
+                                            <div class="stat-number" style="font-size: 1.5rem; font-weight: bold; color: #ffc107;">
+                                                {{ $stats['total_stbc4996_entries'] }}
+                                            </div>
+                                            <div class="stat-label" style="font-size: 0.8rem; color: #6c757d;">
+                                                {{ __('STBC4996') }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -170,7 +187,7 @@
                                         <a href="{{ route('STBC4866.create') }}" class="btn btn-outline-primary">{{ __('Add STBC4866 Entry') }}</a>
                                         <a href="{{ route('STBC4966.create') }}" class="btn btn-outline-success">{{ __('Add STBC4966 Entry') }}</a>
                                         <a href="{{ route('STBC4886.create') }}" class="btn btn-outline-success">{{ __('Add STBC4886 Entry') }}</a>
-                                        {{-- <a href="{{ route('STBC4996.create') }}" class="btn btn-outline-success">{{ __('Add STBC4996 Entry') }}</a> --}}
+                                        <a href="{{ route('STBC4996.create') }}" class="btn btn-outline-warning">{{ __('Add STBC4996 Entry') }}</a>
                                         @if(auth()->user()->isStudent())
                                             <a href="{{ route('users.showExport') }}" class="btn btn-outline-danger">{{ __('Export PDF') }}</a>
                                         @endif
@@ -182,7 +199,7 @@
                     </div>
 
                     <!-- Recent Activity: Log and Project Entries side-by-side -->
-                    @if($recentEntries->count() > 0 || $recentSTBC4966Entries->count() > 0 || $recentSTBC4886Entries->count() > 0)
+                    @if($recentEntries->count() > 0 || $recentSTBC4966Entries->count() > 0 || $recentSTBC4886Entries->count() > 0 || $recentSTBC4996Entries->count() > 0)
                     <div class="row mb-4 g-2">
                         <div class="col-md-6">
                             @if($recentEntries->count() > 0)
@@ -308,6 +325,47 @@
                             </div>
                             @endif
                         </div>
+                        <div class="col-md-6">
+                            @if($recentSTBC4996Entries->count() > 0)
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">{{ __('Recent STBC4996 Entries') }}</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>{{ __('Date') }}</th>
+                                                    <th>{{ __('Activity') }}</th>
+                                                    <th>{{ __('Status') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($recentSTBC4996Entries as $stbc4996Entry)
+                                                <tr>
+                                                    <td>{{ $stbc4996Entry->date->format('M d') }}</td>
+                                                    <td>{{ Str::limit($stbc4996Entry->activity, 40) }}</td>
+                                                    <td>
+                                                        @if($stbc4996Entry->supervisor_approved)
+                                                            <span class="badge bg-success">Approved</span>
+                                                        @else
+                                                            <span class="badge bg-warning">Pending</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
+                            <div class="card">
+                                <div class="card-body text-center text-muted py-4">{{ __('No recent STBC4996 entries') }}</div>
+                            </div>
+                            @endif
+                        </div>
                     </div>
                     @endif
 
@@ -362,7 +420,7 @@
                     </div>
                     @endif
 
-                    @if($recentEntries->count() == 0 && $recentSTBC4966Entries->count() == 0 && $recentReflections->count() == 0)
+                    @if($recentEntries->count() == 0 && $recentSTBC4966Entries->count() == 0 && $recentSTBC4996Entries->count() == 0 && $recentReflections->count() == 0)
                     <div class="row">
                         <div class="col-12">
                             <div class="text-center py-5">
@@ -500,10 +558,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('Chart.js loaded:', typeof Chart);
     console.log('Canvas element:', ctx);
-    console.log('Chart data:', [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}, {{ $stats['total_stbc4886_entries'] }}]);
-    
+    console.log('Chart data:', [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}, {{ $stats['total_stbc4886_entries'] }}, {{ $stats['total_stbc4996_entries'] }}]);
+
     // Check if we have valid data
-    const chartData = [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}, {{ $stats['total_stbc4886_entries'] }}];
+    const chartData = [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}, {{ $stats['total_stbc4886_entries'] }}, {{ $stats['total_stbc4996_entries'] }}];
     if (chartData.every(val => val === 0)) {
         console.warn('All chart data values are 0, chart may appear empty');
     }
@@ -511,23 +569,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const entryChart = new Chart(canvas, {
         type: 'doughnut',
         data: {
-            labels: ['{{ __("STBC4866") }}', '{{ __("STBC4966") }}', '{{ __("STBC4886") }}'],
+            labels: ['{{ __("STBC4866") }}', '{{ __("STBC4966") }}', '{{ __("STBC4886") }}', '{{ __("STBC4996") }}'],
             datasets: [{
-                data: [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}, {{ $stats['total_stbc4886_entries'] }}],
+                data: [{{ $stats['total_entries'] }}, {{ $stats['total_stbc4966_entries'] }}, {{ $stats['total_stbc4886_entries'] }}, {{ $stats['total_stbc4996_entries'] }}],
                 backgroundColor: [
                     'rgba(27,54,93,0.86)',
                     'rgba(228,27,19,0.86)',
-                    'rgba(255,193,7,0.86)'
+                    'rgba(255,193,7,0.86)',
+                    'rgba(25,135,84,0.86)'
                 ],
                 borderColor: [
+                    '#ffffff',
                     '#ffffff',
                     '#ffffff',
                     '#ffffff'
                 ],
                 borderWidth: 2,
                 hoverBorderWidth: 3,
-                hoverBorderColor: ['rgba(255,209,0,0.95)','rgba(255,209,0,0.95)','rgba(255,209,0,0.95)'],
-                hoverBackgroundColor: ['rgba(27,70,110,0.95)','rgba(255,60,30,0.95)','rgba(255,160,0,0.95)']
+                hoverBorderColor: ['rgba(255,209,0,0.95)','rgba(255,209,0,0.95)','rgba(255,209,0,0.95)','rgba(255,209,0,0.95)'],
+                hoverBackgroundColor: ['rgba(27,70,110,0.95)','rgba(255,60,30,0.95)','rgba(255,160,0,0.95)','rgba(20,110,70,0.95)']
             }]
         },
         options: {
@@ -548,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         },
                         color: '#495057',
                         generateLabels: function(chart) {
-                            const colors = ['#1B365D', '#E41B13', '#FFC107'];
+                            const colors = ['#1B365D', '#E41B13', '#FFC107', '#198754'];
                             const data = chart.data;
                             return data.labels.map((label, i) => ({
                                 text: label,

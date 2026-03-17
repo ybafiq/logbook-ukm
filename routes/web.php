@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\STBC4866EntryController;
 use App\Http\Controllers\STBC4966EntryController;
 use App\Http\Controllers\STBC4886EntryController;
+use App\Http\Controllers\STBC4996EntryController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\MergePdfController;
 
@@ -44,6 +45,15 @@ Route::post('STBC4886/{stbc4886Entry}/edit', [STBC4886EntryController::class, 'u
 Route::get('STBC4886/{stbc4886Entry}/delete', [STBC4886EntryController::class, 'delete'])->name('STBC4886.delete');
 Route::delete('STBC4886/{stbc4886Entry}', [STBC4886EntryController::class, 'destroy'])->name('STBC4886.destroy');
 
+Route::get('STBC4996', [STBC4996EntryController::class, 'index'])->name('STBC4996.index');
+Route::get('STBC4996/create', [STBC4996EntryController::class, 'create'])->name('STBC4996.create');
+Route::post('STBC4996', [STBC4996EntryController::class, 'store'])->name('STBC4996.store');
+Route::get('STBC4996/{stbc4996Entry}', [STBC4996EntryController::class, 'show'])->name('STBC4996.show');
+Route::get('STBC4996/{stbc4996Entry}/edit', [STBC4996EntryController::class, 'edit'])->name('STBC4996.edit');
+Route::post('STBC4996/{stbc4996Entry}/edit', [STBC4996EntryController::class, 'update'])->name('STBC4996.update');
+Route::get('STBC4996/{stbc4996Entry}/delete', [STBC4996EntryController::class, 'delete'])->name('STBC4996.delete');
+Route::delete('STBC4996/{stbc4996Entry}', [STBC4996EntryController::class, 'destroy'])->name('STBC4996.destroy');
+
 // User routes with role-based access
 Route::middleware('auth')->group(function () {
     Route::get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
@@ -81,6 +91,7 @@ Route::middleware(['auth', 'role:supervisor'])->group(function () {
     Route::post('supervisor/approve-entry/{entry}', [SupervisorController::class, 'approveEntry'])->name('supervisor.approveEntry');
     Route::post('supervisor/approve-project-entry/{stbc4966Entry}', [SupervisorController::class, 'approveProjectEntry'])->name('supervisor.approveProjectEntry');
     Route::post('supervisor/approve-stbc4886-entry/{stbc4886Entry}', [SupervisorController::class, 'approveStbc4886Entry'])->name('supervisor.approveStbc4886Entry');
+    Route::post('supervisor/approve-stbc4996-entry/{stbc4996Entry}', [SupervisorController::class, 'approveStbc4996Entry'])->name('supervisor.approveStbc4996Entry');
     Route::post('supervisor/mark-all-read', [SupervisorController::class, 'markAllRead'])->name('supervisor.markAllRead');
 });
 

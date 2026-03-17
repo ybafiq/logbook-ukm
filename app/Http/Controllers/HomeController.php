@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\STBC4866Entry;
 use App\Models\STBC4966Entry;
+use App\Models\STBC4996Entry;
 use Carbon\Carbon;
 
 class HomeController extends Controller
@@ -46,6 +47,9 @@ class HomeController extends Controller
             'total_stbc4886_entries' => $user->STBC4886Entries()->count(),
             'approved_stbc4886_entries' => $user->STBC4886Entries()->where('supervisor_approved', true)->count(),
             'pending_stbc4886_entries' => $user->STBC4886Entries()->where('supervisor_approved', false)->count(),
+            'total_stbc4996_entries' => $user->STBC4996Entries()->count(),
+            'approved_stbc4996_entries' => $user->STBC4996Entries()->where('supervisor_approved', true)->count(),
+            'pending_stbc4996_entries' => $user->STBC4996Entries()->where('supervisor_approved', false)->count(),
             'total_reflections' => $logReflections->count() + $projectReflections->count(),
             'signed_reflections' => $logReflections->where('reflection_supervisor_signed', true)->count() + 
                                    $projectReflections->where('reflection_supervisor_signed', true)->count(),
@@ -56,6 +60,7 @@ class HomeController extends Controller
         $recentEntries = $user->STBC4866Entries()->latest()->limit(5)->get();
         $recentSTBC4966Entries = $user->STBC4966Entries()->latest()->limit(5)->get();
         $recentSTBC4886Entries = $user->STBC4886Entries()->latest()->limit(5)->get();
+        $recentSTBC4996Entries = $user->STBC4996Entries()->latest()->limit(5)->get();
 
         // Prepare last 30 days combined daily counts for a contribution-style chart
         $days = 30;
@@ -142,7 +147,7 @@ class HomeController extends Controller
             ->sortByDesc('created_at')
             ->take(3);
         
-        return view('home', compact('stats', 'recentEntries', 'recentSTBC4966Entries', 'recentSTBC4886Entries', 'recentReflections', 'dailyCounts', 'contribWeeks', 'contribMax'));
+        return view('home', compact('stats', 'recentEntries', 'recentSTBC4966Entries', 'recentSTBC4886Entries', 'recentSTBC4996Entries', 'recentReflections', 'dailyCounts', 'contribWeeks', 'contribMax'));
     }
 
     /**
